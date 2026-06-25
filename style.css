@@ -445,12 +445,20 @@ body.reduce-motion * {
 
 .course-item{
     background:#30435f;
-
-    padding:15px;
-
+    padding:15px 20px;
     margin:10px 0;
-
     border-radius:10px;
+    cursor: pointer;
+    transition: .3s;
+    border: 1px solid rgba(255,255,255,.1);
+    font-weight: 500;
+}
+
+.course-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.3);
+    border-color: rgba(255,153,0,.4);
+    color: #ff9900;
 }
 
 .placement-grid,
@@ -878,6 +886,12 @@ body.light-theme .course-item {
     background: rgba(255,255,255,0.75) !important;
     color: #232f3e !important;
     border: 1px solid rgba(255,255,255,0.9) !important;
+}
+
+body.light-theme .course-item:hover {
+    border-color: rgba(35,47,62,0.4) !important;
+    color: #232f3e !important;
+    box-shadow: 0 8px 20px rgba(35,47,62,0.15) !important;
 }
 
 body.light-theme .placement-card,

@@ -573,6 +573,13 @@ closeContacts.addEventListener("click", function(){
 
 });
 
+// Close contacts overlay when clicking outside the modal box
+contactsOverlay.addEventListener("click", function(e) {
+    if (e.target === contactsOverlay) {
+        contactsOverlay.style.display = "none";
+    }
+});
+
 document
 .getElementById("sendContactMessage")
 .addEventListener("click", function(){
@@ -906,7 +913,26 @@ function handleUserQuery(query) {
 }
 
 // Event listeners
-chatbotToggle.addEventListener("click", openChatbot);
+// Toggle chatbot open/close when clicking the bottom-right button
+chatbotToggle.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (chatbotPanel.classList.contains("active")) {
+        closeChatbot();
+    } else {
+        openChatbot();
+    }
+});
+
+// Close chatbot when clicking anywhere outside the panel (and not on the toggle button)
+document.addEventListener("click", function(e) {
+    if (
+        chatbotPanel.classList.contains("active") &&
+        !chatbotPanel.contains(e.target) &&
+        !chatbotToggle.contains(e.target)
+    ) {
+        closeChatbot();
+    }
+});
 chatbotClose.addEventListener("click", closeChatbot);
 
 chatbotSend.addEventListener("click", function () {
@@ -923,6 +949,7 @@ chatbotInput.addEventListener("keydown", function (e) {
 // Open chatbot from the nav link (Chatbot button in top nav)
 document.querySelector('[data-i18n="chatbot"]')?.addEventListener("click", function (e) {
     e.preventDefault();
+    e.stopPropagation();
     openChatbot();
 });
 
