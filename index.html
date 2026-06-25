@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS School Portal</title>
+
+<link rel="stylesheet" href="style.css">
+<style>
+/* Shift chatbot bubble and panel further right to avoid content overlap */
+.chatbot-toggle {
+    right: 28px !important;
+    bottom: 28px !important;
+}
+.chatbot-panel {
+    right: 28px !important;
+}
+
+/* === VIDEO BACKGROUND CARDS SECTION === */
+section.cards {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: 500px;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 30px !important;
+    padding: 80px 50px 50px 50px !important;
+}
+
+/* The video element */
+.cards-video-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* Dark tint overlay — standard "hero video" dimming */
+.cards-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 1;
+}
+
+/* Cards sit above video layers */
+section.cards .card {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0 !important;
+    width: 220px !important;
+    max-width: 220px !important;
+    background: rgba(35, 55, 80, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="sticky-nav">
+
+    <header class="top-nav">
+
+        <div class="logo">
+
+    <img src="Amazon-Web-Services-AWS-Logo.png" alt="AWS">
+
+    <span class="site-title">
+        Amazon T-Level Hub
+    </span>
+
+</div>
+
+        <nav>
+            <a href="#" id="homeBtn" data-i18n="home">Home</a>
+            <a href="application.html" data-i18n="apply">Application</a>
+            <a href="resources.html" data-i18n="resources">Resources</a>
+            <a href="#" data-i18n="chatbot">Chatbot</a>
+            <a href="#" id="settingsBtn" data-i18n="settings">Settings</a>
+            <a href="#" id="contactsBtn" data-i18n="contacts">Contacts</a>
+        </nav>
+        
+    </header>
+
+<div class="category-bar-wrapper">
+    <section class="category-bar">
+        <a href="#students" data-i18n="students">Students</a>
+        <a href="#teachers" data-i18n="teachers">Teachers & Schools</a>
+        <a href="#parents" data-i18n="parents">Parents & Guardians</a>
+        <a href="#accessibility" data-i18n="accessibility">Accessibility</a>
+        <a href="#administration" data-i18n="administration">Administration</a>
+    </section>
+</div>
+    
+</div>
+
+<!-- CARDS -->
+<section class="cards">
+<video class="cards-video-bg" autoplay muted loop playsinline>
+    <source src="hero-bg.mp4" type="video/mp4">
+</video>
+<div class="cards-video-overlay"></div>
+
+    <div class="card">
+        <h3 data-i18n="tlevelCourses">T-Level Courses</h3>
+        <p data-i18n="cardDescCourses">
+            Explore available T-Level qualifications,
+            course content and progression pathways.
+        </p>
+    
+        <button onclick="scrollToSection('courses')" data-i18n="learnMore">
+            Learn More
+        </button>
+    </div>
+
+    <div class="card">
+        <h3 data-i18n="industryPlacements">Industry Placements</h3>
+        <p data-i18n="cardDescPlacements">
+            Discover current placement opportunities
+            and gain valuable workplace experience.
+        </p>
+
+        <button onclick="scrollToSection('placements')" data-i18n="learnMore">
+            Learn More
+        </button>
+    </div>
+
+    <div class="card">
+        <h3 data-i18n="careerOpportunities">Career Opportunities</h3>
+        <p data-i18n="cardDescCareers">
+            Learn about careers available after
+            completing your chosen T-Level.
+        </p>
+
+        <button onclick="scrollToSection('careers')" data-i18n="learnMore">
+            Learn More
+        </button>
+    </div>
+
+</section>
+
+<section id="courses" class="info-section">
+
+    <h2 data-i18n="tlevelCourses">T-Level Courses</h2>
+
+    <input
+        type="text"
+        id="courseSearch"
+        placeholder="Search T-Level courses..."
+        class="search-box"
+        data-i18n-placeholder="searchPlaceholder"
+    >
+
+    <div id="courseResults">
+
+        <div class="course-item" data-i18n="courseDigitalProd">Digital Production, Design and Development</div>
+
+        <div class="course-item" data-i18n="courseDigitalSupport">Digital Support Services</div>
+
+        <div class="course-item" data-i18n="courseDigitalBusiness">Digital Business Services</div>
+
+        <div class="course-item" data-i18n="courseEducation">Education and Childcare</div>
+
+        <div class="course-item" data-i18n="courseHealth">Health</div>
+
+        <div class="course-item" data-i18n="courseHealthcareScience">Healthcare Science</div>
+
+        <div class="course-item" data-i18n="courseBuildingServices">Building Services Engineering</div>
+
+        <div class="course-item" data-i18n="courseDesignSurveying">Design, Surveying and Planning</div>
+
+        <div class="course-item" data-i18n="courseAccounting">Accounting</div>
+
+        <div class="course-item" data-i18n="courseFinance">Finance</div>
+
+    </div>
+
+</section>
+
+<section id="placements" class="info-section">
+
+    <h2 data-i18n="industryPlacements">Industry Placements</h2>
+
+    <div class="placement-grid">
+
+        <div class="placement-card">
+            <h3 data-i18n="placementCloudTitle">AWS Cloud Support Placement</h3>
+            <p data-i18n="placementCloudDesc">Gain experience supporting cloud infrastructure and AWS services.</p>
+            <span data-i18n="placementCloudLocation">Location: London</span>
+        </div>
+
+        <div class="placement-card">
+            <h3 data-i18n="placementDevTitle">Junior Software Developer</h3>
+            <p data-i18n="placementDevDesc">Work with development teams building real-world applications.</p>
+            <span data-i18n="placementDevLocation">Location: Manchester</span>
+        </div>
+
+        <div class="placement-card">
+            <h3 data-i18n="placementCyberTitle">Cyber Security Assistant</h3>
+            <p data-i18n="placementCyberDesc">Learn about security monitoring and threat detection.</p>
+            <span data-i18n="placementCyberLocation">Location: Birmingham</span>
+        </div>
+
+        <div class="placement-card">
+            <h3 data-i18n="placementHelpdeskTitle">IT Helpdesk Technician</h3>
+            <p data-i18n="placementHelpdeskDesc">Support users and maintain IT systems.</p>
+            <span data-i18n="placementHelpdeskLocation">Location: Leeds</span>
+        </div>
+
+    </div>
+
+</section>
+
+<section id="careers" class="info-section">
+
+    <h2 data-i18n="careerOpportunities">Career Opportunities</h2>
+
+    <div class="career-grid">
+
+        <div class="career-card">
+            <h3 data-i18n="careerSoftwareTitle">Software Developer</h3>
+            <p data-i18n="careerSoftwareSalary">Average Salary: £30,000 - £60,000</p>
+            <p data-i18n="careerSoftwareTlevel">Relevant T-Level: Digital Production, Design & Development</p>
+        </div>
+
+        <div class="career-card">
+            <h3 data-i18n="careerCloudTitle">Cloud Engineer</h3>
+            <p data-i18n="careerCloudSalary">Average Salary: £35,000 - £70,000</p>
+            <p data-i18n="careerCloudTlevel">Relevant T-Level: Digital Support Services</p>
+        </div>
+
+        <div class="career-card">
+            <h3 data-i18n="careerCyberTitle">Cyber Security Analyst</h3>
+            <p data-i18n="careerCyberSalary">Average Salary: £35,000 - £65,000</p>
+            <p data-i18n="careerCyberTlevel">Relevant T-Level: Digital Business Services</p>
+        </div>
+
+        <div class="career-card">
+            <h3 data-i18n="careerTeachingTitle">Teaching Assistant</h3>
+            <p data-i18n="careerTeachingSalary">Average Salary: £20,000 - £30,000</p>
+            <p data-i18n="careerTeachingTlevel">Relevant T-Level: Education & Childcare</p>
+        </div>
+
+        <div class="career-card">
+            <h3 data-i18n="careerHealthcareTitle">Healthcare Assistant</h3>
+            <p data-i18n="careerHealthcareSalary">Average Salary: £22,000 - £35,000</p>
+            <p data-i18n="careerHealthcareTlevel">Relevant T-Level: Health</p>
+        </div>
+
+        <div class="career-card">
+            <h3 data-i18n="careerLabTitle">Laboratory Technician</h3>
+            <p data-i18n="careerLabSalary">Average Salary: £25,000 - £40,000</p>
+            <p data-i18n="careerLabTlevel">Relevant T-Level: Healthcare Science</p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- INFORMATION SECTIONS -->
+<section id="students" class="info-section" style="display:flex; align-items:center; gap:80px; padding:200px 80px 120px 80px;">
+    <div style="flex:1; min-width:0;">
+        <h2 data-i18n="headingStudents" style="font-size:36px; margin-bottom:25px; color:#ff9900; max-width:800px;">Students</h2>
+        <p class="info-text" data-i18n-html="textStudents">
+            T-Levels are a new kind of qualification from England that combine
+            classroom learning with a <u>substantial industry placement</u>,
+            giving students <u>real workplace experience</u> long before they
+            graduate. For German students used to systems like the Abitur or
+            vocational Ausbildung, T-Levels offer a similar blend of practical
+            and academic learning, but with a <u>direct route into UK industries</u>
+            such as digital technology, healthcare, construction, and engineering.
+            This section helps students explore which T-Level pathway matches
+            their interests, see what a typical placement looks like, and
+            understand how the qualification could <u>open doors to study or
+            work opportunities in the UK</u>.
+        </p>
+    </div>
+    <div style="flex:1; min-width:0; position:relative; border-radius:16px; overflow:hidden; min-height:340px; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+        <video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.75);">
+            <source src="students.mp4" type="video/mp4">
+        </video>
+    </div>
+</section>
+
+<section id="teachers" class="info-section" style="display:flex; align-items:center; gap:80px; padding:200px 80px 120px 80px;">
+    <div style="flex:1; min-width:0; position:relative; border-radius:16px; overflow:hidden; min-height:340px; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+        <video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.75);">
+            <source src="teachers.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div style="flex:1; min-width:0;">
+        <h2 data-i18n="headingTeachers" style="font-size:36px; margin-bottom:25px; color:#ff9900;">Teachers & Schools</h2>
+        <p class="info-text" data-i18n-html="textTeachers">
+            This section is designed for German schools and educators who may be
+            advising students on <u>international study options</u> for the first
+            time. It provides curriculum outlines, comparisons between T-Levels
+            and familiar German qualifications, and practical guidance on how
+            schools can support students interested in applying. Teachers will
+            also find resources to help explain the <u>placement structure</u>
+            to students and parents, along with information on how schools can
+            establish a relationship as a <u>recognized partner institution</u>.
+        </p>
+    </div>
+</section>
+
+<section id="parents" class="info-section" style="display:flex; align-items:center; gap:80px; padding:200px 80px 120px 80px;">
+    <div style="flex:1; min-width:0;">
+        <h2 data-i18n="headingParents" style="font-size:36px; margin-bottom:25px; color:#ff9900;">Parents & Guardians</h2>
+        <p class="info-text" data-i18n-html="textParents">
+            Many German parents will not have encountered T-Levels before, so
+            this section focuses on building trust and clarity around what the
+            qualification involves, how it's recognized, and what kind of
+            support structure exists around a placement abroad. It explains
+            practical concerns such as <u>safeguarding</u>, <u>supervision during
+            industry placements</u>, and how progress is communicated back to
+            families, helping parents feel confident that their child is entering
+            a <u>well-structured and supported program</u> rather than an
+            unfamiliar gap-year alternative.
+        </p>
+    </div>
+    <div style="flex:1; min-width:0; position:relative; border-radius:16px; overflow:hidden; min-height:340px; box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+        <video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.75);">
+            <source src="parents&guardians.mp4" type="video/mp4">
+        </video>
+    </div>
+</section>
+
+<section id="accessibility" class="info-section">
+    <h2 data-i18n="headingAccessibility">Accessibility</h2>
+    <p class="info-text" data-i18n-html="textAccessibility">
+        Since this portal serves an international audience navigating an
+        unfamiliar education system, accessibility features are built in to
+        remove language and usability barriers from the start. This includes
+        a <u>German-language toggle</u> so families can read everything in
+        their native language, <u>adjustable font sizing</u> for visual
+        comfort, <u>high-contrast display options</u>, and screen-reader-friendly
+        navigation. The goal is to make sure no student or parent is excluded
+        from understanding their options simply because the system is new or
+        the interface wasn't designed with them in mind.
+    </p>
+</section>
+
+<section id="administration" class="info-section">
+    <h2 data-i18n="headingAdministration">Administration</h2>
+    <p class="info-text" data-i18n-html="textAdministration">
+        This section is intended for Amazon staff responsible for running
+        and maintaining the T-Level portal rather than for students, parents,
+        or schools. From here, administrators can <u>manage website content</u>,
+        updating course listings, placement opportunities, and translated
+        text as the program grows. Administrators can also <u>access submitted
+        forms</u>, reviewing applications, placement enquiries, and contact
+        requests as they come in from students, parents, and partner schools.
+        Finally, administrators can <u>generate reports</u> summarizing
+        engagement, placement uptake, and course interest, giving the team
+        visibility into how the program is performing across Germany and
+        where outreach efforts may need to be adjusted.
+    </p>
+</section>
+
+<footer class="site-footer">
+
+    <div class="footer-links">
+
+        <div class="footer-col">
+            <h4 data-i18n="footerGetToKnow">Get to Know T-Levels</h4>
+            <a href="#" data-i18n="footerAbout">About T-Levels</a>
+            <a href="#" data-i18n="footerWhyChoose">Why Choose T-Levels</a>
+            <a href="#" data-i18n="footerSuccess">Success Stories</a>
+            <a href="#" data-i18n="footerNews">News & Updates</a>
+        </div>
+
+        <div class="footer-col">
+            <h4 data-i18n="footerForSchools">For Schools & Teachers</h4>
+            <a href="#" data-i18n="footerPartner">Partner With Us</a>
+            <a href="#" data-i18n="footerCurriculum">Curriculum Resources</a>
+            <a href="#" data-i18n="footerSchoolVisit">Book a School Visit</a>
+            <a href="#" data-i18n="footerToolkit">Teacher Toolkit</a>
+        </div>
+
+        <div class="footer-col">
+            <h4 data-i18n="footerPlacements">Industry Placements</h4>
+            <a href="#" data-i18n="footerPlacementPartner">Become a Placement Partner</a>
+            <a href="#" data-i18n="footerGuidelines">Placement Guidelines</a>
+            <a href="#" data-i18n="footerEmployerStories">Employer Success Stories</a>
+            <a href="#" data-i18n="footerFunding">Funding & Incentives</a>
+        </div>
+
+        <div class="footer-col">
+            <h4 data-i18n="footerSupport">Support</h4>
+            <a href="#" data-i18n="footerFAQs">FAQs</a>
+            <a href="#" data-i18n="footerAppGuide">Application Guide</a>
+            <a href="#" data-i18n="footerAdvisor">Contact an Advisor</a>
+            <a href="#" data-i18n="footerHelp">Help Centre</a>
+        </div>
+
+    </div>
+
+    <div class="footer-brand-bar">
+        <img src="Amazon-Web-Services-AWS-Logo.png" alt="AWS" class="footer-aws-logo">
+        <div class="footer-logo" data-i18n="footerPortal">T-Level Portal</div>
+    
+        <div class="footer-selectors">
+            <select id="footerLangSelect" aria-label="Language">
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+            </select>
+    
+            <select aria-label="Region">
+                <option>Germany</option>
+                <option>United Kingdom</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="footer-routes">
+        <div class="footer-col"><h4 data-i18n="footerDigital">Digital</h4><p data-i18n="footerDigitalDesc">Software, data & infrastructure</p></div>
+        <div class="footer-col"><h4 data-i18n="footerConstruction">Construction</h4><p data-i18n="footerConstructionDesc">Design, surveying & building services</p></div>
+        <div class="footer-col"><h4 data-i18n="footerHealthScience">Health & Science</h4><p data-i18n="footerHealthScienceDesc">Healthcare & laboratory routes</p></div>
+        <div class="footer-col"><h4 data-i18n="footerEngineering">Engineering</h4><p data-i18n="footerEngineeringDesc">Manufacturing & control</p></div>
+        <div class="footer-col"><h4 data-i18n="footerBusiness">Business</h4><p data-i18n="footerBusinessDesc">Management & administration</p></div>
+        <div class="footer-col"><h4 data-i18n="footerEducationChildcare">Education & Childcare</h4><p data-i18n="footerEducationChildcareDesc">Early years & teaching support</p></div>
+        <div class="footer-col"><h4 data-i18n="footerLegalFinance">Legal & Finance</h4><p data-i18n="footerLegalFinanceDesc">Accounting & legal services</p></div>
+    </div>
+
+    <div class="footer-legal">
+        <a href="#" data-i18n="footerConditions">Conditions of Use</a>
+        <a href="#" data-i18n="footerPrivacy">Privacy Notice</a>
+        <a href="#" data-i18n="footerAccessibility">Accessibility Statement</a>
+        <p data-i18n="footerCopyright">© 2026 T-Level Portal. For guidance only — not an official government resource.</p>
+    </div>
+
+</footer>
+<!-- ===== CHATBOT ===== -->
+<div class="chatbot-toggle" id="chatbotToggle" title="Ask a question">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
+        <path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
+    </svg>
+</div>
+
+<div class="chatbot-panel" id="chatbotPanel">
+    <div class="chatbot-header">
+        <span class="chatbot-title" data-i18n="chatbotTitle">T-Level Assistant</span>
+        <button id="chatbotClose">&times;</button>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages">
+        <div class="chatbot-message bot" id="chatbotWelcomeMessage" data-i18n="chatbotWelcome">
+            Hello! I'm the T-Level assistant. Ask me anything about T-Level courses, industry placements, careers, applications, and more.
+        </div>
+        <div id="quickReplies" style="display:flex;flex-direction:column;gap:8px;padding:0 20px 12px;"></div>
+    </div>
+    <div class="chatbot-input-area">
+        <input type="text" id="chatbotInput" placeholder="Type your question..." autocomplete="off" data-i18n-placeholder="chatbotInputPlaceholder">
+        <button id="chatbotSend" title="Send">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="modal-overlay" id="settingsOverlay">
+    <div class="modal-box">
+
+        <div class="modal-header">
+            <h2 data-i18n="settingsTitle">Settings</h2>
+            <button class="modal-close" id="closeSettings">&times;</button>
+        </div>
+
+        <div class="modal-section">
+            <h3 data-i18n="settingsLanguage">Language</h3>
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+            </select>
+        </div>
+
+        <div class="modal-section">
+            <h3 data-i18n="settingsFontSize">Font Size</h3>
+            <div class="font-controls">
+                <button id="fontDecrease">−</button>
+                <button id="fontReset" data-i18n="settingsFontReset">Reset</button>
+                <button id="fontIncrease">+</button>
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <h3 data-i18n="settingsAccessibility">Accessibility</h3>
+            <label class="toggle-row">
+                <input type="checkbox" id="highContrastToggle">
+                <span data-i18n="settingsHighContrast">High contrast mode</span>
+            </label>
+            <label class="toggle-row">
+                <input type="checkbox" id="underlineLinksToggle">
+                <span data-i18n="settingsUnderlineLinks">Underline all links</span>
+            </label>
+            <label class="toggle-row">
+                <input type="checkbox" id="reduceMotionToggle">
+                <span data-i18n="settingsReduceMotion">Reduce motion/animations</span>
+            </label>
+            <label class="toggle-row">
+                <input type="checkbox" id="lightThemeToggle">
+                <span>Light theme (AWS style)</span>
+            </label>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-overlay" id="contactsOverlay">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+            <h2 data-i18n="contactsTitle">Contact Us</h2>
+
+            <button class="modal-close" id="closeContacts">
+                &times;
+            </button>
+        </div>
+
+        <div class="modal-section">
+
+            <label data-i18n="contactsEmail">Email Address</label>
+
+            <input
+                type="email"
+                id="contactEmail"
+                placeholder="Enter your email address"
+                data-i18n-placeholder="contactsEmailPlaceholder"
+            >
+
+        </div>
+
+        <div class="modal-section">
+
+            <label data-i18n="contactsSubject">Subject</label>
+
+            <input
+                type="text"
+                id="contactSubject"
+                placeholder="What is your question about?"
+                data-i18n-placeholder="contactsSubjectPlaceholder"
+            >
+
+        </div>
+
+        <div class="modal-section">
+
+            <label data-i18n="contactsMessage">Message</label>
+
+            <textarea
+                id="contactMessage"
+                rows="6"
+                placeholder="Ask a question about T-Levels, industry placements, career pathways, applications, or support..."
+                data-i18n-placeholder="contactsMessagePlaceholder"
+            ></textarea>
+
+        </div>
+
+        <div class="modal-section">
+
+            <button id="sendContactMessage" data-i18n="contactsSubmit">
+                Submit Enquiry
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+
+</body>
+</html>

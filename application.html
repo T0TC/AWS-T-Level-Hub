@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply – Amazon T-Level Hub</title>
+<style>
+:root {
+    --aws-orange: #ff9900;
+    --aws-navy: #232f3e;
+    --aws-blue: #146eb4;
+    --aws-light: #f2f3f3;
+    --aws-gray: #d5dbdb;
+    --aws-mid: #30435f;
+    --aws-dark: #1f3045;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 85px; font-size: 100%; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--aws-dark);
+    color: white;
+    min-height: 100vh;
+}
+
+/* NAV */
+.top-nav {
+    background: var(--aws-orange);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo img { height: 50px; width: auto; }
+.site-title { font-size: 28px; font-weight: 700; color: white; }
+
+.top-nav nav { display: flex; align-items: center; gap: 35px; }
+.top-nav nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 600;
+    transition: .3s;
+}
+.top-nav nav a:hover, .top-nav nav a.active { color: var(--aws-navy); }
+
+/* HERO */
+.hero {
+    background: linear-gradient(135deg, #1a2738 0%, #243348 60%, #2d3f56 100%);
+    padding: 70px 40px 60px;
+    text-align: center;
+    border-bottom: 3px solid var(--aws-orange);
+}
+
+.hero-tag {
+    display: inline-block;
+    background: rgba(255,153,0,.18);
+    color: var(--aws-orange);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,153,0,.3);
+}
+
+.hero h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.hero h1 span { color: var(--aws-orange); }
+
+.hero p {
+    font-size: 18px;
+    color: #a8b8cc;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* STEPS BAR */
+.steps-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    padding: 36px 40px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    position: relative;
+}
+
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,.15);
+    z-index: 0;
+}
+
+.step.done:not(:last-child)::after { background: var(--aws-orange); }
+
+.step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.1);
+    border: 2px solid rgba(255,255,255,.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    position: relative;
+    z-index: 1;
+    transition: .3s;
+}
+
+.step.active .step-num {
+    background: var(--aws-orange);
+    border-color: var(--aws-orange);
+    color: white;
+}
+
+.step.done .step-num {
+    background: #2e7d32;
+    border-color: #2e7d32;
+    color: white;
+}
+
+.step-label {
+    font-size: 12px;
+    color: #8899aa;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.step.active .step-label { color: var(--aws-orange); font-weight: 600; }
+
+/* FORM LAYOUT */
+.form-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 40px 60px;
+}
+
+@media (max-width: 900px) {
+    .form-layout { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+}
+
+/* FORM PAGES */
+.form-page { display: none; }
+.form-page.active { display: block; }
+
+.form-card {
+    background: #243348;
+    border-radius: 16px;
+    padding: 36px;
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.form-card h2 {
+    font-size: 22px;
+    margin-bottom: 6px;
+    color: white;
+}
+
+.form-card .section-desc {
+    color: #8899aa;
+    font-size: 14px;
+    margin-bottom: 28px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+@media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field.full { grid-column: 1 / -1; }
+
+.field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #c0d0e0;
+    letter-spacing: .3px;
+}
+
+.field label .req { color: var(--aws-orange); margin-left: 2px; }
+
+.field input,
+.field select,
+.field textarea {
+    background: #1a2738;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: white;
+    font-size: 15px;
+    transition: border-color .2s;
+    outline: none;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.field input::placeholder,
+.field textarea::placeholder { color: #5a6a7a; }
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: var(--aws-orange);
+    box-shadow: 0 0 0 3px rgba(255,153,0,.12);
+}
+
+.field select option { background: #1a2738; }
+
+.field textarea { resize: vertical; min-height: 100px; }
+
+/* COURSE SELECTOR */
+.course-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+@media (max-width: 600px) { .course-grid { grid-template-columns: 1fr; } }
+
+.course-option { display: none; }
+
+.course-option + label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #1a2738;
+    border: 2px solid rgba(255,255,255,.1);
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.course-option + label:hover { border-color: rgba(255,153,0,.4); }
+.course-option:checked + label { border-color: var(--aws-orange); background: rgba(255,153,0,.08); }
+
+.course-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.course-info { flex: 1; }
+.course-name { font-size: 13px; font-weight: 700; color: white; line-height: 1.3; }
+.course-sector { font-size: 11px; color: #7a8a9a; margin-top: 3px; }
+
+/* CHECKBOXES */
+.checkbox-group { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+
+.check-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #c0d0e0;
+    cursor: pointer;
+}
+
+.check-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--aws-orange);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* ELIGIBILITY NOTICE */
+.eligibility-box {
+    background: rgba(255,153,0,.08);
+    border: 1px solid rgba(255,153,0,.3);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #c0d0e0;
+}
+
+.eligibility-box strong { color: var(--aws-orange); }
+
+/* NAV BUTTONS */
+.form-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    gap: 12px;
+}
+
+.btn {
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: .2s;
+}
+
+.btn-primary {
+    background: var(--aws-orange);
+    color: white;
+}
+
+.btn-primary:hover { background: #e68a00; transform: translateY(-1px); }
+
+.btn-secondary {
+    background: transparent;
+    color: #8899aa;
+    border: 1px solid rgba(255,255,255,.15);
+}
+
+.btn-secondary:hover { color: white; border-color: rgba(255,255,255,.3); }
+
+/* SIDEBAR */
+.sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+.sidebar-card {
+    background: #243348;
+    border-radius: 14px;
+    padding: 22px;
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.sidebar-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--aws-orange);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.course-preview {
+    background: #1a2738;
+    border-radius: 10px;
+    padding: 14px;
+    min-height: 80px;
+    font-size: 14px;
+    color: #8899aa;
+    line-height: 1.5;
+    transition: .3s;
+}
+
+.course-preview.has-content { color: #c0d0e0; }
+
+.course-preview strong { color: var(--aws-orange); display: block; margin-bottom: 6px; font-size: 15px; }
+
+.timeline-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+
+.timeline-list li {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: #a0b0c0;
+    line-height: 1.4;
+}
+
+.timeline-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--aws-orange);
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.contact-item {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    color: #a0b0c0;
+    margin-bottom: 10px;
+    align-items: flex-start;
+}
+
+.contact-icon { font-size: 16px; flex-shrink: 0; }
+
+/* SUCCESS */
+.success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.success-screen.active { display: block; }
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(46,125,50,.2);
+    border: 3px solid #4caf50;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 36px;
+}
+
+.success-screen h2 { font-size: 28px; margin-bottom: 12px; }
+.success-screen p { color: #8899aa; font-size: 16px; max-width: 440px; margin: 0 auto 28px; line-height: 1.6; }
+
+.ref-box {
+    display: inline-block;
+    background: rgba(255,153,0,.1);
+    border: 1px solid rgba(255,153,0,.3);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: monospace;
+    font-size: 18px;
+    color: var(--aws-orange);
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+
+.next-steps {
+    text-align: left;
+    background: #243348;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.next-steps h3 { color: var(--aws-orange); margin-bottom: 14px; font-size: 16px; }
+
+.next-steps li {
+    color: #a0b0c0;
+    font-size: 14px;
+    margin-bottom: 8px;
+    margin-left: 18px;
+    line-height: 1.5;
+}
+
+/* FOOTER */
+.site-footer {
+    background: var(--aws-navy);
+    text-align: center;
+    padding: 28px;
+    font-size: 13px;
+    color: #6a7a8a;
+}
+
+.site-footer a { color: var(--aws-orange); text-decoration: none; }
+
+/* Validation */
+.field.error input,
+.field.error select,
+.field.error textarea { border-color: #e53935; }
+.field .error-msg { font-size: 12px; color: #ef9a9a; margin-top: 2px; display: none; }
+.field.error .error-msg { display: block; }
+
+/* ===== LIGHT THEME ===== */
+body.light-theme {
+    background: linear-gradient(135deg, #f8e8ff 0%, #ffe8f0 30%, #e8f0ff 70%, #f0f8ff 100%) !important;
+    background-attachment: fixed !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .top-nav {
+    background: #232f3e !important;
+}
+
+body.light-theme .top-nav nav a {
+    color: #ffffff !important;
+}
+
+body.light-theme .top-nav nav a:hover {
+    color: #b0b8c1 !important;
+}
+
+body.light-theme .hero {
+    background: transparent !important;
+    border-bottom: 3px solid #232f3e !important;
+}
+
+body.light-theme .hero h1 { color: #232f3e !important; }
+body.light-theme .hero h1 span { color: #232f3e !important; }
+body.light-theme .hero p { color: #444444 !important; }
+body.light-theme .hero-tag {
+    background: rgba(35,47,62,0.1) !important;
+    color: #232f3e !important;
+    border-color: rgba(35,47,62,0.3) !important;
+}
+
+body.light-theme .form-card {
+    background: rgba(255,255,255,0.75) !important;
+    backdrop-filter: blur(8px) !important;
+    border-color: rgba(255,255,255,0.9) !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .form-card h2 { color: #232f3e !important; }
+body.light-theme .form-card .section-desc { color: #555555 !important; }
+
+body.light-theme .field label { color: #232f3e !important; }
+
+body.light-theme .field input,
+body.light-theme .field select,
+body.light-theme .field textarea {
+    background: rgba(255,255,255,0.9) !important;
+    border-color: #cccccc !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .field input:focus,
+body.light-theme .field select:focus,
+body.light-theme .field textarea:focus {
+    border-color: #232f3e !important;
+    box-shadow: 0 0 0 3px rgba(35,47,62,0.12) !important;
+}
+
+body.light-theme .field input::placeholder,
+body.light-theme .field textarea::placeholder { color: #888888 !important; }
+
+body.light-theme .field select option { background: #ffffff !important; color: #232f3e !important; }
+
+body.light-theme .course-option + label {
+    background: rgba(255,255,255,0.8) !important;
+    border-color: rgba(35,47,62,0.2) !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .course-option + label:hover { border-color: rgba(35,47,62,0.5) !important; }
+body.light-theme .course-option:checked + label {
+    border-color: #232f3e !important;
+    background: rgba(35,47,62,0.08) !important;
+}
+
+body.light-theme .course-name { color: #232f3e !important; }
+body.light-theme .course-sector { color: #666666 !important; }
+
+body.light-theme .check-row { color: #232f3e !important; }
+
+body.light-theme .eligibility-box {
+    background: rgba(35,47,62,0.06) !important;
+    border-color: rgba(35,47,62,0.2) !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .eligibility-box strong { color: #232f3e !important; }
+
+body.light-theme .btn-primary {
+    background: #232f3e !important;
+    color: #ffffff !important;
+}
+
+body.light-theme .btn-primary:hover { background: #1a252f !important; }
+
+body.light-theme .btn-secondary {
+    color: #555555 !important;
+    border-color: #cccccc !important;
+}
+
+body.light-theme .btn-secondary:hover { color: #232f3e !important; border-color: #232f3e !important; }
+
+body.light-theme .sidebar-card {
+    background: rgba(255,255,255,0.75) !important;
+    backdrop-filter: blur(8px) !important;
+    border-color: rgba(255,255,255,0.9) !important;
+}
+
+body.light-theme .sidebar-card h3 { color: #232f3e !important; }
+
+body.light-theme .course-preview {
+    background: rgba(255,255,255,0.6) !important;
+    color: #555555 !important;
+}
+
+body.light-theme .course-preview.has-content { color: #232f3e !important; }
+body.light-theme .course-preview strong { color: #232f3e !important; }
+
+body.light-theme .timeline-list li { color: #444444 !important; }
+body.light-theme .timeline-dot { background: #232f3e !important; }
+
+body.light-theme .contact-item { color: #444444 !important; }
+
+body.light-theme .step-num {
+    background: rgba(35,47,62,0.1) !important;
+    border-color: rgba(35,47,62,0.2) !important;
+}
+
+body.light-theme .step.active .step-num {
+    background: #232f3e !important;
+    border-color: #232f3e !important;
+}
+
+body.light-theme .step.done .step-num {
+    background: #2e7d32 !important;
+    border-color: #2e7d32 !important;
+}
+
+body.light-theme .step-label { color: #666666 !important; }
+body.light-theme .step.active .step-label { color: #232f3e !important; }
+
+body.light-theme .site-footer {
+    background: #232f3e !important;
+    color: #ffffff !important;
+}
+
+/* Dark mode gradient */
+body:not(.light-theme) {
+    background: linear-gradient(135deg, #1a1a2e 0%, #1f3045 30%, #162032 60%, #1a2a3a 100%) !important;
+    background-attachment: fixed !important;
+}
+
+body:not(.light-theme) .form-card,
+body:not(.light-theme) .sidebar-card {
+    background: rgba(36, 51, 72, 0.85) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+body.light-theme .course-icon svg {
+    stroke: #2d3f56 !important;
+}
+
+body.light-theme .contact-icon svg {
+    stroke: #2d3f56 !important;
+}
+
+body:not(.light-theme) .course-icon svg {
+    stroke: #ff9900 !important;
+}
+
+body:not(.light-theme) .contact-icon svg {
+    stroke: #ff9900 !important;
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+    <div class="logo">
+        <img src="Amazon-Web-Services-AWS-Logo.png" alt="AWS">
+        <span class="site-title">Amazon T-Level Hub</span>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="application.html" class="active">Application</a>
+        <a href="resources.html">Resources</a>
+        <a href="index.html#chatbot">Chatbot</a>
+        <a href="#" id="settingsBtn">Settings</a>
+        <a href="#" id="contactsNavBtn">Contacts</a>
+    </nav>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-tag">T-Level Application</div>
+    <h1>Apply for Your <span>T-Level Placement</span></h1>
+    <p>Complete the form below to register your interest in an Amazon industry placement. Applications take around 10 minutes.</p>
+</section>
+
+<!-- STEPS -->
+<div class="steps-bar" id="stepsBar">
+    <div class="step active" id="step-ind-1">
+        <div class="step-num">1</div>
+        <div class="step-label">Your Details</div>
+    </div>
+    <div class="step" id="step-ind-2">
+        <div class="step-num">2</div>
+        <div class="step-label">T-Level Course</div>
+    </div>
+    <div class="step" id="step-ind-3">
+        <div class="step-num">3</div>
+        <div class="step-label">Placement Choices</div>
+    </div>
+    <div class="step" id="step-ind-4">
+        <div class="step-num">4</div>
+        <div class="step-label">Supporting Info</div>
+    </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="form-layout">
+    <main>
+
+        <!-- PAGE 1: Personal Details -->
+        <div class="form-page active" id="page-1">
+            <div class="form-card">
+                <h2>Your Personal Details</h2>
+                <p class="section-desc">Tell us about yourself. All fields marked <span style="color:var(--aws-orange)">*</span> are required.</p>
+
+                <div class="form-grid">
+                    <div class="field" id="f-firstname">
+                        <label>First Name <span class="req">*</span></label>
+                        <input type="text" id="firstname" placeholder="e.g. Lena">
+                        <span class="error-msg">Please enter your first name</span>
+                    </div>
+                    <div class="field" id="f-lastname">
+                        <label>Last Name <span class="req">*</span></label>
+                        <input type="text" id="lastname" placeholder="e.g. Müller">
+                        <span class="error-msg">Please enter your last name</span>
+                    </div>
+                    <div class="field" id="f-dob">
+                        <label>Date of Birth <span class="req">*</span></label>
+                        <input type="date" id="dob">
+                        <span class="error-msg">Please enter your date of birth</span>
+                    </div>
+                    <div class="field" id="f-nationality">
+                        <label>Nationality <span class="req">*</span></label>
+                        <select id="nationality">
+                            <option value="">Select nationality…</option>
+                            <option>German</option>
+                            <option>British</option>
+                            <option>Austrian</option>
+                            <option>Swiss</option>
+                            <option>French</option>
+                            <option>Polish</option>
+                            <option>Italian</option>
+                            <option>Spanish</option>
+                            <option>Other EU</option>
+                            <option>Other</option>
+                        </select>
+                        <span class="error-msg">Please select your nationality</span>
+                    </div>
+                    <div class="field full" id="f-email">
+                        <label>Email Address <span class="req">*</span></label>
+                        <input type="email" id="email" placeholder="e.g. lena.mueller@school.de">
+                        <span class="error-msg">Please enter a valid email address</span>
+                    </div>
+                    <div class="field" id="f-phone">
+                        <label>Phone Number</label>
+                        <input type="tel" id="phone" placeholder="e.g. +49 151 00000000">
+                    </div>
+                    <div class="field" id="f-country">
+                        <label>Country of Residence <span class="req">*</span></label>
+                        <select id="country">
+                            <option value="">Select country…</option>
+                            <option>Germany</option>
+                            <option>United Kingdom</option>
+                            <option>Austria</option>
+                            <option>Switzerland</option>
+                            <option>Other</option>
+                        </select>
+                        <span class="error-msg">Please select your country</span>
+                    </div>
+                    <div class="field" id="f-school">
+                        <label>Current School / Institution <span class="req">*</span></label>
+                        <input type="text" id="school" placeholder="e.g. Heinrich-Heine-Gymnasium">
+                        <span class="error-msg">Please enter your school name</span>
+                    </div>
+                    <div class="field full" id="f-year">
+                        <label>Current Year of Study <span class="req">*</span></label>
+                        <select id="year">
+                            <option value="">Select year…</option>
+                            <option>Year 10 / Klasse 10</option>
+                            <option>Year 11 / Klasse 11 (GCSE year)</option>
+                            <option>Year 12 / Klasse 12</option>
+                            <option>Year 13 / Klasse 13</option>
+                            <option>Post-16 / Already finished school</option>
+                        </select>
+                        <span class="error-msg">Please select your year of study</span>
+                    </div>
+                </div>
+
+                <div class="eligibility-box">
+                    <strong>Eligibility note:</strong> T-Levels are open to students aged 16–19. You'll typically need 5 GCSEs at grade 4+ (or equivalent) including English and Maths. International students require a suitable UK study visa.
+                </div>
+
+                <div class="form-nav">
+                    <span></span>
+                    <button class="btn btn-primary" onclick="goToPage(2)">Next: Choose Your Course →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: Course Selection -->
+        <div class="form-page" id="page-2">
+            <div class="form-card">
+                <h2>Choose Your T-Level Course</h2>
+                <p class="section-desc">Select the T-Level pathway you'd like to pursue. Only one selection is allowed.</p>
+
+                <div class="course-grid" id="courseGrid">
+
+                    <input type="radio" name="tlevel" id="c1" class="course-option" value="Digital Production, Design and Development"
+                           data-desc="Covers software development, data analytics, and digital design. Leads to careers in software engineering, UX design, and data science."
+                           data-sector="Digital">
+                    <label for="c1"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="2" y="3" width="20" height="14" rx="0"/><polyline points="8 21 12 17 16 21"/><line x1="2" y1="17" x2="22" y2="17"/></svg></span>
+                        <div class="course-info"><div class="course-name">Digital Production, Design & Development</div><div class="course-sector">Digital</div></div></label>
+
+                    <input type="radio" name="tlevel" id="c2" class="course-option" value="Digital Support Services"
+                           data-desc="IT infrastructure, networking, cyber security, and cloud computing. Ideal for roles like IT technician or network engineer."
+                           data-sector="Digital">
+                    <label for="c2"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+                        <div class="course-info"><div class="course-name">Digital Support Services</div><div class="course-sector">Digital</div></div></label>
+
+                    <input type="radio" name="tlevel" id="c3" class="course-option" value="Digital Business Services"
+                           data-desc="Data management, business analysis, and digital transformation. Great for careers in data analytics and business intelligence."
+                           data-sector="Digital">
+                    <label for="c3"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></span>
+                        <div class="course-info"><div class="course-name">Digital Business Services</div><div class="course-sector">Digital</div></div></label>
+
+                    <input type="radio" name="tlevel" id="c4" class="course-option" value="Education and Childcare"
+                           data-desc="Early years education, teaching assistance, and childcare management with both classroom and practical placement."
+                           data-sector="Education">
+                    <label for="c4"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+                        <div class="course-info"><div class="course-name">Education & Childcare</div><div class="course-sector">Education</div></div></label>
+
+                    <input type="radio" name="tlevel" id="c5" class="course-option" value="Health"
+                           data-desc="Core healthcare concepts, anatomy, and patient care. Designed for those pursuing nursing, paramedicine, or healthcare support."
+                           data-sector="Health & Science">
+                    <label for="c5"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                        <div class="course-info"><div class="course-name">Health</div><div class="course-sector">Health & Science</div></div></label>
+
+                    <input type="radio" name="tlevel" id="c6" class="course-option" value="Healthcare Science"
+                           data-desc="Laboratory sciences, medical physics, and physiological sciences. Ideal for lab technician and clinical scientist roles."
+                           data-sector="Health & Science">
+                    <label for="c6"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M9 3H5v11l7 7 7-7V3h-4"/><line x1="9" y1="3" x2="15" y2="3"/><path d="M5 11h14"/></svg></span>
+                        <div class="course-info"><div class="course-name">Healthcare Science</div><div class="course-sector">Health & Science</div></div></label>
+
+                    <input type="radio" name="tlevel" id="c7" class="course-option" value="Building Services Engineering"
+                           data-desc="Heating, ventilation, air conditioning, lighting, and energy systems. Prepare for careers in sustainable construction."
+                           data-sector="Construction">
+                    <label for="c7"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="2" y="7" width="20" height="14" rx="0"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></span>
+                        <div class="course-info"><div class="course-name">Building Services Engineering</div><div class="course-sector">Construction</div></div></label>
+
+                    <input type="radio" name="tlevel" id="c8" class="course-option" value="Design, Surveying and Planning"
+                           data-desc="Civil engineering, surveying, building design, and planning. Great for construction and property careers."
+                           data-sector="Construction">
+                    <label for="c8"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><polygon points="3 21 21 21 12 3 3 21"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="21" x2="12" y2="12"/></svg></span>
+                        <div class="course-info"><div class="course-name">Design, Surveying & Planning</div><div class="course-sector">Construction</div></div></label>
+
+                    <input type="radio" name="tlevel" id="c9" class="course-option" value="Accounting"
+                           data-desc="Financial accounting, management accounting, taxation, and bookkeeping. Preparing you for careers in finance and accountancy."
+                           data-sector="Legal & Finance">
+                    <label for="c9"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></span>
+                        <div class="course-info"><div class="course-name">Accounting</div><div class="course-sector">Legal & Finance</div></div></label>
+
+                    <input type="radio" name="tlevel" id="c10" class="course-option" value="Finance"
+                           data-desc="Financial services, investment management, insurance, and risk. Opens doors to banking and financial planning careers."
+                           data-sector="Legal & Finance">
+                    <label for="c10"><span class="course-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
+                        <div class="course-info"><div class="course-name">Finance</div><div class="course-sector">Legal & Finance</div></div></label>
+
+                </div>
+
+                <div id="courseError" style="display:none;color:#ef9a9a;font-size:13px;margin-top:10px;">⚠ Please select a T-Level course to continue.</div>
+
+                <div class="form-nav">
+                    <button class="btn btn-secondary" onclick="goToPage(1)">← Back</button>
+                    <button class="btn btn-primary" onclick="goToPage(3)">Next: Placement Preferences →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 3: Placement Preferences -->
+        <div class="form-page" id="page-3">
+            <div class="form-card">
+                <h2>Placement Preferences</h2>
+                <p class="section-desc">Tell us about your preferred placement location and timing.</p>
+
+                <div class="form-grid">
+                    <div class="field full" id="f-location">
+                        <label>Preferred Placement Location <span class="req">*</span></label>
+                        <select id="location">
+                            <option value="">Select a location…</option>
+                            <option>London</option>
+                            <option>Manchester</option>
+                            <option>Birmingham</option>
+                            <option>Leeds</option>
+                            <option>Edinburgh</option>
+                            <option>Bristol</option>
+                            <option>No preference</option>
+                        </select>
+                        <span class="error-msg">Please select a preferred location</span>
+                    </div>
+
+                    <div class="field" id="f-start">
+                        <label>Preferred Start Date <span class="req">*</span></label>
+                        <select id="start">
+                            <option value="">Select…</option>
+                            <option>September 2026</option>
+                            <option>January 2027</option>
+                            <option>April 2027</option>
+                            <option>September 2027</option>
+                            <option>Flexible</option>
+                        </select>
+                        <span class="error-msg">Please select a start date</span>
+                    </div>
+
+                    <div class="field" id="f-duration">
+                        <label>Preferred Duration</label>
+                        <select id="duration">
+                            <option value="">Select…</option>
+                            <option>Minimum (45 days)</option>
+                            <option>60–90 days</option>
+                            <option>Full academic term</option>
+                            <option>Full year</option>
+                        </select>
+                    </div>
+
+                    <div class="field full">
+                        <label>Additional Placement Requirements</label>
+                        <div class="checkbox-group">
+                            <label class="check-row"><input type="checkbox" id="req-accommodation"> Accommodation assistance needed</label>
+                            <label class="check-row"><input type="checkbox" id="req-transport"> Travel / transport support needed</label>
+                            <label class="check-row"><input type="checkbox" id="req-visa"> Visa / immigration guidance needed</label>
+                            <label class="check-row"><input type="checkbox" id="req-language"> English language support requested</label>
+                        </div>
+                    </div>
+
+                    <div class="field full">
+                        <label>How did you hear about Amazon T-Levels?</label>
+                        <select id="heardFrom">
+                            <option value="">Select…</option>
+                            <option>School / Teacher</option>
+                            <option>Parent or family member</option>
+                            <option>Amazon website</option>
+                            <option>Social media</option>
+                            <option>Gov.uk / T-Levels website</option>
+                            <option>Career fair or event</option>
+                            <option>Friend / peer</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-nav">
+                    <button class="btn btn-secondary" onclick="goToPage(2)">← Back</button>
+                    <button class="btn btn-primary" onclick="goToPage(4)">Next: Supporting Info →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 4: Supporting Info -->
+        <div class="form-page" id="page-4">
+            <div class="form-card">
+                <h2>Supporting Information</h2>
+                <p class="section-desc">Help us understand your motivation and any additional needs.</p>
+
+                <div class="form-grid">
+                    <div class="field full" id="f-motivation">
+                        <label>Why do you want to do this T-Level placement? <span class="req">*</span></label>
+                        <textarea id="motivation" rows="5" placeholder="Tell us what motivates you, what you hope to learn, and why you've chosen this particular pathway…"></textarea>
+                        <span class="error-msg">Please tell us about your motivation</span>
+                    </div>
+
+                    <div class="field full">
+                        <label>Relevant Skills or Experience (optional)</label>
+                        <textarea id="skills" rows="4" placeholder="Any coding, volunteering, part-time work, or school projects relevant to your chosen T-Level…"></textarea>
+                    </div>
+
+                    <div class="field full">
+                        <label>Additional Needs or Adjustments</label>
+                        <textarea id="needs" rows="3" placeholder="Tell us about any learning differences, disabilities, or reasonable adjustments we should be aware of…"></textarea>
+                    </div>
+
+                    <div class="field full">
+                        <label style="font-size:14px;margin-bottom:10px;display:block;">Declarations <span class="req">*</span></label>
+                        <div class="checkbox-group" id="f-declarations">
+                            <label class="check-row"><input type="checkbox" id="dec1"> I confirm that the information provided is accurate and complete</label>
+                            <label class="check-row"><input type="checkbox" id="dec2"> I agree to the T-Level Hub Privacy Notice and Terms of Use</label>
+                            <label class="check-row"><input type="checkbox" id="dec3"> I consent to Amazon contacting me about my application</label>
+                        </div>
+                        <span id="decError" style="display:none;color:#ef9a9a;font-size:12px;margin-top:6px;">⚠ Please confirm all declarations to proceed.</span>
+                    </div>
+                </div>
+
+                <div class="form-nav">
+                    <button class="btn btn-secondary" onclick="goToPage(3)">← Back</button>
+                    <button class="btn btn-primary" onclick="submitApplication()">Submit Application ✓</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="success-screen" id="successScreen">
+            <div class="success-icon">✓</div>
+            <h2>Application Submitted!</h2>
+            <p>Thank you for applying to the Amazon T-Level Hub. We've received your application and will be in touch within 5–7 working days.</p>
+            <div class="ref-box" id="refCode">TLH-XXXXXX</div>
+            <p style="color:#6a7a8a;font-size:13px;margin-bottom:24px;">Keep this reference number safe — you'll need it if you contact us about your application.</p>
+            <div class="next-steps">
+                <h3>What happens next?</h3>
+                <ol>
+                    <li>We'll review your application and verify your eligibility (3–5 days)</li>
+                    <li>You'll receive an email with next steps and a skills assessment</li>
+                    <li>Successful candidates are invited to a virtual interview</li>
+                    <li>Placement offers are made to successful applicants</li>
+                    <li>Pre-placement onboarding begins 4–6 weeks before your start date</li>
+                </ol>
+            </div>
+            <br>
+            <a href="index.html" class="btn btn-primary" style="display:inline-block;text-decoration:none;margin-top:10px;">← Return to Hub</a>
+        </div>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-card">
+            <h3>Selected Course</h3>
+            <div class="course-preview" id="coursePreview">
+                No course selected yet. Choose on the next step.
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <h3>Application Timeline</h3>
+            <ul class="timeline-list">
+                <li><span class="timeline-dot"></span>Applications open now – rolling intake</li>
+                <li><span class="timeline-dot"></span>Eligibility checks within 5 working days</li>
+                <li><span class="timeline-dot"></span>Virtual interviews: July – August 2026</li>
+                <li><span class="timeline-dot"></span>Placement start: September 2026 or January 2027</li>
+                <li><span class="timeline-dot"></span>Minimum placement: 45 days / 315 hours</li>
+            </ul>
+        </div>
+
+        <div class="sidebar-card">
+            <h3>Need Help?</h3>
+            <div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> tlevel@amazon.co.uk</div>
+<div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16.92z"/></svg></span> 0800 000 1234 (Mon–Fri, 9am–5pm)</div>
+<div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> Available in English & Deutsch</div>
+<div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span> Live chat via the Chatbot on the Hub homepage</div>
+        </div>
+
+    </aside>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <p>© 2026 Amazon T-Level Hub. For guidance only — not an official government resource. &nbsp;|&nbsp; <a href="index.html">Back to Hub</a></p>
+</footer>
+
+<script>
+let currentPage = 1;
+const totalPages = 4;
+
+// Course descriptions
+document.querySelectorAll('.course-option').forEach(radio => {
+    radio.addEventListener('change', updateCoursePreview);
+});
+
+function updateCoursePreview() {
+    const checked = document.querySelector('.course-option:checked');
+    const preview = document.getElementById('coursePreview');
+    if (checked) {
+        preview.classList.add('has-content');
+        preview.innerHTML = `<strong>${checked.value}</strong>${checked.dataset.desc}`;
+    } else {
+        preview.classList.remove('has-content');
+        preview.textContent = 'No course selected yet. Choose on the next step.';
+    }
+}
+
+function goToPage(n) {
+    // Validate before advancing
+    if (n > currentPage) {
+        if (!validatePage(currentPage)) return;
+    }
+
+    document.getElementById(`page-${currentPage}`).classList.remove('active');
+    document.getElementById(`step-ind-${currentPage}`).classList.remove('active');
+    document.getElementById(`step-ind-${currentPage}`).classList.add('done');
+
+    currentPage = n;
+    document.getElementById(`page-${currentPage}`).classList.remove('done');
+    document.getElementById(`page-${currentPage}`).classList.add('active');
+    document.getElementById(`step-ind-${currentPage}`).classList.remove('done');
+    document.getElementById(`step-ind-${currentPage}`).classList.add('active');
+
+    // Remove done from current and future
+    for (let i = n; i <= totalPages; i++) {
+        const s = document.getElementById(`step-ind-${i}`);
+        if (s) { s.classList.remove('done'); }
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validatePage(p) {
+    if (p === 1) {
+        const fields = [
+            { id: 'firstname', fid: 'f-firstname' },
+            { id: 'lastname', fid: 'f-lastname' },
+            { id: 'dob', fid: 'f-dob' },
+            { id: 'nationality', fid: 'f-nationality' },
+            { id: 'email', fid: 'f-email' },
+            { id: 'country', fid: 'f-country' },
+            { id: 'school', fid: 'f-school' },
+            { id: 'year', fid: 'f-year' },
+        ];
+        let valid = true;
+        fields.forEach(f => {
+            const el = document.getElementById(f.id);
+            const fe = document.getElementById(f.fid);
+            if (!el.value.trim()) {
+                fe.classList.add('error');
+                valid = false;
+            } else {
+                fe.classList.remove('error');
+            }
+        });
+        // Email format
+        const email = document.getElementById('email');
+        const fe = document.getElementById('f-email');
+        if (email.value && !/\S+@\S+\.\S+/.test(email.value)) {
+            fe.classList.add('error');
+            valid = false;
+        }
+        return valid;
+    }
+
+    if (p === 2) {
+        const checked = document.querySelector('.course-option:checked');
+        const errEl = document.getElementById('courseError');
+        if (!checked) { errEl.style.display = 'block'; return false; }
+        errEl.style.display = 'none';
+        return true;
+    }
+
+    if (p === 3) {
+        let valid = true;
+        ['location', 'start'].forEach(id => {
+            const el = document.getElementById(id);
+            const fe = document.getElementById('f-' + id);
+            if (!el.value) { fe.classList.add('error'); valid = false; }
+            else { fe.classList.remove('error'); }
+        });
+        return valid;
+    }
+
+    if (p === 4) {
+        let valid = true;
+        const mot = document.getElementById('motivation');
+        const mf = document.getElementById('f-motivation');
+        if (!mot.value.trim()) { mf.classList.add('error'); valid = false; }
+        else { mf.classList.remove('error'); }
+        return valid;
+    }
+
+    return true;
+}
+
+function submitApplication() {
+    if (!validatePage(4)) return;
+
+    const dec1 = document.getElementById('dec1').checked;
+    const dec2 = document.getElementById('dec2').checked;
+    const dec3 = document.getElementById('dec3').checked;
+    const decErr = document.getElementById('decError');
+
+    if (!dec1 || !dec2 || !dec3) {
+        decErr.style.display = 'block';
+        return;
+    }
+    decErr.style.display = 'none';
+
+    // Hide form pages, show success
+    document.getElementById('page-4').classList.remove('active');
+    document.getElementById('stepsBar').style.display = 'none';
+
+    const ref = 'TLH-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+    document.getElementById('refCode').textContent = ref;
+    document.getElementById('successScreen').classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+<!-- ===== CONTACTS MODAL ===== -->
+<div class="modal-overlay" id="contactsOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:2000;justify-content:center;align-items:center;">
+    <div class="modal-box" style="background:#ffffff;color:#232f3e;width:90%;max-width:420px;border-radius:8px;padding:25px 30px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d5dbdb;padding-bottom:12px;margin-bottom:15px;">
+            <h2 style="margin:0;font-size:20px;">Contact Us</h2>
+            <button id="closeContacts" style="background:none;border:none;font-size:26px;cursor:pointer;color:#232f3e;line-height:1;">&times;</button>
+        </div>
+        <div style="margin-bottom:16px;">
+            <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Email Address</label>
+            <input type="email" id="contactEmail" placeholder="Enter your email address"
+                style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;">
+        </div>
+        <div style="margin-bottom:16px;">
+            <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Subject</label>
+            <input type="text" id="contactSubject" placeholder="What is your question about?"
+                style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;">
+        </div>
+        <div style="margin-bottom:16px;">
+            <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Message</label>
+            <textarea id="contactMessage" rows="5" placeholder="Ask a question about T-Levels, industry placements, career pathways, applications, or support..."
+                style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;resize:vertical;font-family:Arial,sans-serif;"></textarea>
+        </div>
+        <div>
+            <button id="sendContactMessage"
+                style="background:#ff9900;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:15px;transition:.3s;">
+                Submit Enquiry
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="modal-overlay" id="settingsOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:2000;justify-content:center;align-items:center;">
+    <div style="background:#ffffff;color:#232f3e;width:90%;max-width:420px;border-radius:8px;padding:25px 30px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d5dbdb;padding-bottom:12px;margin-bottom:15px;">
+            <h2 style="margin:0;font-size:20px;">Settings</h2>
+            <button id="closeSettings" style="background:none;border:none;font-size:26px;cursor:pointer;color:#232f3e;line-height:1;">&times;</button>
+        </div>
+        <div style="margin-bottom:20px;">
+            <h3 style="font-size:16px;margin-bottom:10px;">Font Size</h3>
+            <div style="display:flex;gap:10px;">
+                <button id="fontDecrease" style="min-width:70px;padding:8px 12px;border-radius:6px;cursor:pointer;border:1px solid #ccc;">−</button>
+                <button id="fontReset" style="min-width:70px;padding:8px 12px;border-radius:6px;cursor:pointer;border:1px solid #ccc;">Reset</button>
+                <button id="fontIncrease" style="min-width:70px;padding:8px 12px;border-radius:6px;cursor:pointer;border:1px solid #ccc;">+</button>
+            </div>
+        </div>
+        <div style="margin-bottom:20px;">
+            <h3 style="font-size:16px;margin-bottom:10px;">Accessibility</h3>
+            <label style="display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;">
+                <input type="checkbox" id="highContrastToggle" style="width:18px;height:18px;"> High contrast mode
+            </label>
+            <label style="display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;">
+                <input type="checkbox" id="underlineLinksToggle" style="width:18px;height:18px;"> Underline all links
+            </label>
+            <label style="display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:10px;">
+                <input type="checkbox" id="reduceMotionToggle" style="width:18px;height:18px;"> Reduce motion/animations
+            </label>
+            <label style="display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;">
+                <input type="checkbox" id="lightThemeToggle" style="width:18px;height:18px;"> Light theme (AWS style)
+            </label>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===== APPLICATION MODALS (Settings + Contacts) =====
+(function() {
+    // ---- Settings Modal ----
+    var settingsOverlay = document.getElementById('settingsOverlay');
+    var settingsBtn = document.getElementById('settingsBtn');
+    var closeSettings = document.getElementById('closeSettings');
+
+    if (settingsBtn && settingsOverlay) {
+        settingsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            settingsOverlay.style.display = 'flex';
+        });
+    }
+
+    if (closeSettings && settingsOverlay) {
+        closeSettings.addEventListener('click', function() {
+            settingsOverlay.style.display = 'none';
+        });
+    }
+
+    if (settingsOverlay) {
+        settingsOverlay.addEventListener('click', function(e) {
+            if (e.target === settingsOverlay) settingsOverlay.style.display = 'none';
+        });
+    }
+
+    // Font size
+    var currentFontSize = parseInt(localStorage.getItem('fontSize')) || 100;
+
+    function applyFontSize() {
+        var scale = currentFontSize / 100;
+        document.body.style.zoom = scale;
+        localStorage.setItem('fontSize', currentFontSize);
+    }
+
+applyFontSize();
+
+    var fontInc = document.getElementById('fontIncrease');
+    var fontDec = document.getElementById('fontDecrease');
+    var fontRst = document.getElementById('fontReset');
+
+    if (fontInc) {
+    fontInc.addEventListener('click', function() {
+        if (currentFontSize < 150) { currentFontSize += 10; }
+        applyFontSize();
+    });
+}
+
+if (fontDec) {
+    fontDec.addEventListener('click', function() {
+        if (currentFontSize > 70) { currentFontSize -= 10; }
+        applyFontSize();
+    });
+}
+
+if (fontRst) {
+    fontRst.addEventListener('click', function() {
+        currentFontSize = 100;
+        applyFontSize();
+    });
+}
+
+    // Accessibility toggles
+    var hcToggle = document.getElementById('highContrastToggle');
+    var ulToggle = document.getElementById('underlineLinksToggle');
+    var rmToggle = document.getElementById('reduceMotionToggle');
+
+    // Light theme
+var ltToggle = document.getElementById('lightThemeToggle');
+if (ltToggle) {
+    ltToggle.checked = localStorage.getItem('light-theme') === 'true';
+    document.body.classList.toggle('light-theme', ltToggle.checked);
+    ltToggle.addEventListener('change', function() {
+        document.body.classList.toggle('light-theme', this.checked);
+        localStorage.setItem('light-theme', this.checked);
+    });
+}
+
+// Dark gradient
+var lt = localStorage.getItem('light-theme') === 'true';
+if (!lt) document.body.classList.remove('light-theme');
+
+    function applyClass(cls, on) {
+        document.body.classList.toggle(cls, on);
+        localStorage.setItem(cls, on);
+    }
+
+    if (hcToggle) {
+        hcToggle.checked = localStorage.getItem('high-contrast') === 'true';
+        applyClass('high-contrast', hcToggle.checked);
+        hcToggle.addEventListener('change', function() { applyClass('high-contrast', this.checked); });
+    }
+
+    if (ulToggle) {
+        ulToggle.checked = localStorage.getItem('underline-links') === 'true';
+        applyClass('underline-links', ulToggle.checked);
+        ulToggle.addEventListener('change', function() { applyClass('underline-links', this.checked); });
+    }
+
+    if (rmToggle) {
+        rmToggle.checked = localStorage.getItem('reduce-motion') === 'true';
+        applyClass('reduce-motion', rmToggle.checked);
+        rmToggle.addEventListener('change', function() { applyClass('reduce-motion', this.checked); });
+    }
+
+    // ---- Contacts Modal ----
+    var contactsOverlay = document.getElementById('contactsOverlay');
+    var contactsNavBtn = document.getElementById('contactsNavBtn');
+    var closeContacts = document.getElementById('closeContacts');
+    var sendBtn = document.getElementById('sendContactMessage');
+
+    if (contactsNavBtn && contactsOverlay) {
+        contactsNavBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            contactsOverlay.style.display = 'flex';
+        });
+    }
+
+    if (closeContacts && contactsOverlay) {
+        closeContacts.addEventListener('click', function() {
+            contactsOverlay.style.display = 'none';
+        });
+    }
+
+    if (contactsOverlay) {
+        contactsOverlay.addEventListener('click', function(e) {
+            if (e.target === contactsOverlay) contactsOverlay.style.display = 'none';
+        });
+    }
+
+    if (sendBtn) {
+        sendBtn.addEventListener('click', function() {
+            var email = document.getElementById('contactEmail').value;
+            var subject = document.getElementById('contactSubject').value;
+            var message = document.getElementById('contactMessage').value;
+            if (!email || !subject || !message) {
+                alert('Please complete all fields.');
+                return;
+            }
+            alert('Thank you for your enquiry. A member of the T-Level support team will contact you shortly.');
+            contactsOverlay.style.display = 'none';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactSubject').value = '';
+            document.getElementById('contactMessage').value = '';
+        });
+    }
+    // Apply light theme on page load
+(function() {
+    if (localStorage.getItem('light-theme') === 'true') {
+        document.body.classList.add('light-theme');
+    }
+})();
+
+})();
+</script>
+
+</body>
+</html>
