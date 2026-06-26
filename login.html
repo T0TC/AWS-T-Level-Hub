@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS T-Level Portal — Sign In</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== LOGIN PAGE ROOT ===== */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a2e 0%, #1f3045 30%, #162032 60%, #1a2a3a 100%);
+    background-attachment: fixed;
+}
+
+body.light-theme.login-page,
+body.light-theme .login-page {
+    background: linear-gradient(135deg, #f8e8ff 0%, #ffe8f0 30%, #e8f0ff 70%, #f0f8ff 100%) !important;
+    background-attachment: fixed !important;
+}
+
+/* Subtle decorative orbs */
+.login-page::after {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 153, 0, 0.08) 0%, transparent 70%);
+    top: -200px;
+    right: -200px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ===== MAIN LOGIN CONTAINER ===== */
+.login-container {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    min-height: 580px;
+    border-radius: 24px;
+    background: rgba(48, 67, 95, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+body.light-theme .login-container {
+    background: rgba(255, 255, 255, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 8px 32px rgba(35, 47, 62, 0.12) !important;
+}
+
+/* ===== LEFT PANEL — Role Selection ===== */
+.login-roles {
+    width: 300px;
+    min-width: 300px;
+    padding: 40px 28px;
+    background: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+body.light-theme .login-roles {
+    background: rgba(35, 47, 62, 0.05) !important;
+    border-right: 1px solid rgba(35, 47, 62, 0.1) !important;
+}
+
+.login-roles-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 24px;
+}
+
+body.light-theme .login-roles-title {
+    color: rgba(35, 47, 62, 0.5) !important;
+}
+
+.role-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+    justify-content: space-evenly;
+    align-items: stretch;
+}
+
+.role-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.role-btn:hover {
+    background: rgba(255, 153, 0, 0.08);
+    border-color: rgba(255, 153, 0, 0.25);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+.role-btn.active {
+    background: rgba(255, 153, 0, 0.12);
+    border-color: #ff9900;
+    color: #ff9900;
+    box-shadow: 0 0 20px rgba(255, 153, 0, 0.08);
+}
+
+body.light-theme .role-btn {
+    color: rgba(35, 47, 62, 0.7) !important;
+    border-color: rgba(35, 47, 62, 0.1) !important;
+}
+
+body.light-theme .role-btn:hover {
+    background: rgba(35, 47, 62, 0.06) !important;
+    border-color: rgba(35, 47, 62, 0.2) !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .role-btn.active {
+    background: rgba(35, 47, 62, 0.5) !important;
+    border-color: rgba(35, 47, 62, 0.5) !important;
+    color: #ffffff !important;
+}
+
+.role-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.role-btn.active .role-icon {
+    background: rgba(255, 153, 0, 0.15);
+}
+
+body.light-theme .role-icon {
+    background: rgba(35, 47, 62, 0.06) !important;
+}
+
+body.light-theme .role-btn.active .role-icon {
+    background: rgba(35, 47, 62, 0.3) !important;
+}
+
+.role-btn .role-label {
+    font-size: 14px;
+}
+
+.role-btn .role-sub {
+    font-size: 11px;
+    opacity: 0.5;
+    margin-top: 2px;
+}
+
+/* ===== RIGHT PANEL — Auth Forms ===== */
+.login-auth {
+    flex: 1;
+    padding: 48px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Auth header with logo */
+.auth-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.auth-header img {
+    height: 36px;
+    width: auto;
+}
+
+.auth-header span {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+}
+
+body.light-theme .auth-header span {
+    color: #232f3e !important;
+}
+
+/* Tab switcher (Login / Register) */
+.auth-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 28px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 4px;
+    width: fit-content;
+}
+
+body.light-theme .auth-tabs {
+    background: rgba(35, 47, 62, 0.06) !important;
+}
+
+.auth-tab {
+    padding: 10px 28px;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    font-family: Arial, sans-serif;
+}
+
+.auth-tab.active {
+    background: #ff9900;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+}
+
+.auth-tab:not(.active):hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.light-theme .auth-tab {
+    color: rgba(35, 47, 62, 0.4) !important;
+}
+
+body.light-theme .auth-tab:not(.active):hover {
+    color: rgba(35, 47, 62, 0.7) !important;
+}
+
+body.light-theme .auth-tab.active {
+    background: #232f3e !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(35, 47, 62, 0.2) !important;
+}
+
+/* Auth forms */
+.auth-form {
+    display: none;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.auth-form.active {
+    display: flex;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.3px;
+}
+
+body.light-theme .form-group label {
+    color: rgba(35, 47, 62, 0.7) !important;
+}
+
+.form-group input {
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.25s ease;
+    font-family: Arial, sans-serif;
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.form-group input:focus {
+    border-color: #ff9900;
+    box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.08);
+}
+
+body.light-theme .form-group input {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-color: rgba(35, 47, 62, 0.15) !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .form-group input::placeholder {
+    color: rgba(35, 47, 62, 0.3) !important;
+}
+
+body.light-theme .form-group input:focus {
+    border-color: #232f3e !important;
+    box-shadow: 0 0 0 3px rgba(35, 47, 62, 0.08) !important;
+}
+
+.password-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forgot-link {
+    font-size: 12px;
+    color: #ff9900;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.forgot-link:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+body.light-theme .forgot-link {
+    color: #232f3e !important;
+}
+
+.auth-submit-btn {
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    background: #ff9900;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin-top: 6px;
+    font-family: Arial, sans-serif;
+}
+
+.auth-submit-btn:hover {
+    background: #e68a00;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 153, 0, 0.3);
+}
+
+body.light-theme .auth-submit-btn {
+    background: #232f3e !important;
+}
+
+body.light-theme .auth-submit-btn:hover {
+    background: #1a252f !important;
+    box-shadow: 0 6px 20px rgba(35, 47, 62, 0.2) !important;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 12px;
+    margin: 4px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+body.light-theme .auth-divider {
+    color: rgba(35, 47, 62, 0.3) !important;
+}
+
+body.light-theme .auth-divider::before,
+body.light-theme .auth-divider::after {
+    background: rgba(35, 47, 62, 0.1) !important;
+}
+
+.sso-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.sso-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: Arial, sans-serif;
+}
+
+.sso-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+body.light-theme .sso-btn {
+    border-color: rgba(35, 47, 62, 0.12) !important;
+    color: rgba(35, 47, 62, 0.6) !important;
+}
+
+body.light-theme .sso-btn:hover {
+    background: rgba(35, 47, 62, 0.04) !important;
+    border-color: rgba(35, 47, 62, 0.2) !important;
+    color: #232f3e !important;
+}
+
+/* Skip / guest link */
+.guest-link {
+    text-align: center;
+    margin-top: 6px;
+}
+
+.guest-link a {
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+}
+
+.guest-link a:hover {
+    color: #ff9900;
+}
+
+body.light-theme .guest-link a {
+    color: rgba(35, 47, 62, 0.4) !important;
+}
+
+body.light-theme .guest-link a:hover {
+    color: #232f3e !important;
+}
+
+/* Selected role indicator */
+.selected-role-display {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.3);
+    margin-bottom: 8px;
+}
+
+body.light-theme .selected-role-display {
+    color: rgba(35, 47, 62, 0.4) !important;
+}
+
+.selected-role-name {
+    color: #ff9900;
+    font-weight: 600;
+}
+
+body.light-theme .selected-role-name {
+    color: #232f3e !important;
+}
+
+/* ===== SETTINGS GEAR (top right) ===== */
+.settings-gear-corner {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-gear-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    background: rgba(48, 67, 95, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    transition: all 0.3s ease;
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.settings-gear-btn:hover {
+    transform: scale(1.08);
+    border-color: rgba(255, 153, 0, 0.4);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+body.light-theme .settings-gear-btn {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-color: rgba(35, 47, 62, 0.15) !important;
+    color: #232f3e !important;
+    box-shadow: 0 4px 16px rgba(35, 47, 62, 0.1) !important;
+}
+
+body.light-theme .settings-gear-btn:hover {
+    border-color: rgba(35, 47, 62, 0.3) !important;
+}
+
+/* ===== LOGIN PAGE SETTINGS MODAL ===== */
+.login-settings-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 6000;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-settings-modal.active {
+    display: flex;
+}
+
+.login-settings-box {
+    background: rgba(48, 67, 95, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: 90%;
+    max-width: 440px;
+    border-radius: 20px;
+    padding: 28px 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+}
+
+body.light-theme .login-settings-box {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(35, 47, 62, 0.12) !important;
+    color: #232f3e !important;
+    box-shadow: 0 20px 60px rgba(35, 47, 62, 0.15) !important;
+}
+
+.login-settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+
+body.light-theme .login-settings-header {
+    border-bottom-color: rgba(35, 47, 62, 0.12) !important;
+}
+
+.login-settings-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+body.light-theme .login-settings-header h2 {
+    color: #232f3e !important;
+}
+
+.login-settings-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.2s;
+}
+
+.login-settings-close:hover {
+    color: #ffffff;
+}
+
+body.light-theme .login-settings-close {
+    color: rgba(35, 47, 62, 0.4) !important;
+}
+
+body.light-theme .login-settings-close:hover {
+    color: #232f3e !important;
+}
+
+.login-settings-section {
+    margin-bottom: 22px;
+}
+
+.login-settings-section:last-child {
+    margin-bottom: 0;
+}
+
+.login-settings-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+body.light-theme .login-settings-section h3 {
+    color: rgba(35, 47, 62, 0.5) !important;
+}
+
+.login-settings-section select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+}
+
+body.light-theme .login-settings-section select {
+    background: rgba(35, 47, 62, 0.06) !important;
+    border-color: rgba(35, 47, 62, 0.15) !important;
+    color: #232f3e !important;
+}
+
+.login-font-controls {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.login-font-controls button {
+    min-width: 70px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    transition: all 0.2s;
+}
+
+.login-font-controls button:hover {
+    background: rgba(255, 153, 0, 0.15);
+    border-color: rgba(255, 153, 0, 0.3);
+}
+
+body.light-theme .login-font-controls button {
+    background: rgba(35, 47, 62, 0.06) !important;
+    border-color: rgba(35, 47, 62, 0.12) !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .login-font-controls button:hover {
+    background: rgba(35, 47, 62, 0.1) !important;
+}
+
+.login-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.login-toggle-row input[type="checkbox"] {
+    margin: 0;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: #ff9900;
+}
+
+body.light-theme .login-toggle-row input[type="checkbox"] {
+    accent-color: #232f3e;
+}
+
+.login-toggle-row span {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.light-theme .login-toggle-row span {
+    color: rgba(35, 47, 62, 0.8) !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 820px) {
+    .login-container {
+        flex-direction: column;
+        max-width: 480px;
+    }
+    .login-roles {
+        width: 100%;
+        min-width: unset;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 24px 20px;
+    }
+    .role-options {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .role-btn {
+        flex: 1;
+        min-width: 120px;
+        flex-direction: column;
+        text-align: center;
+        padding: 14px 12px;
+    }
+    .role-btn .role-sub {
+        display: none;
+    }
+    .login-auth {
+        padding: 32px 24px;
+    }
+    .login-page {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-auth {
+        padding: 24px 16px;
+    }
+    .auth-tab {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    .sso-buttons {
+        flex-direction: column;
+    }
+    .role-btn {
+        min-width: 80px;
+        padding: 10px 8px;
+    }
+    .role-btn .role-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+    }
+    .role-btn .role-label {
+        font-size: 12px;
+    }
+    .login-settings-box {
+        padding: 20px 18px;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="login-page">
+
+<!-- ===== SETTINGS GEAR — TOP RIGHT ===== -->
+<div class="settings-gear-corner">
+    <button class="settings-gear-btn" id="settingsGearBtn" title="Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="login-settings-modal" id="loginSettingsModal">
+    <div class="login-settings-box">
+        <div class="login-settings-header">
+            <h2>Settings</h2>
+            <button class="login-settings-close" id="loginSettingsClose">&times;</button>
+        </div>
+
+        <!-- Language -->
+        <div class="login-settings-section">
+            <h3>Language</h3>
+            <select id="loginLangSelect">
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+                <option value="hi">हिन्दी</option>
+                <option value="es">Español</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+
+        <!-- Font Size -->
+        <div class="login-settings-section">
+            <h3>Font Size</h3>
+            <div class="login-font-controls">
+                <button id="loginFontDecrease">−</button>
+                <button id="loginFontReset">Reset</button>
+                <button id="loginFontIncrease">+</button>
+            </div>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="login-settings-section">
+            <h3>Accessibility</h3>
+            <label class="login-toggle-row">
+                <input type="checkbox" id="loginHighContrast">
+                <span>High contrast mode</span>
+            </label>
+            <label class="login-toggle-row">
+                <input type="checkbox" id="loginUnderlineLinks">
+                <span>Underline all links</span>
+            </label>
+            <label class="login-toggle-row">
+                <input type="checkbox" id="loginReduceMotion">
+                <span>Reduce motion/animations</span>
+            </label>
+            <label class="login-toggle-row">
+                <input type="checkbox" id="loginLightTheme">
+                <span>Light theme</span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MAIN LOGIN CONTAINER ===== -->
+<div class="login-container">
+
+    <!-- LEFT: Role Selection -->
+    <div class="login-roles">
+        <div class="login-roles-title">I am a...</div>
+        <div class="role-options">
+            <button class="role-btn active" data-role="student">
+                <div class="role-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                </div>
+                <div>
+                    <div class="role-label">Student</div>
+                    <div class="role-sub">Explore T-Levels & apply</div>
+                </div>
+            </button>
+            <button class="role-btn" data-role="teacher">
+                <div class="role-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </div>
+                <div>
+                    <div class="role-label">Teacher</div>
+                    <div class="role-sub">Curriculum & guidance</div>
+                </div>
+            </button>
+            <button class="role-btn" data-role="parent">
+                <div class="role-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div>
+                    <div class="role-label">Parent</div>
+                    <div class="role-sub">Support your child</div>
+                </div>
+            </button>
+            <button class="role-btn" data-role="administrator">
+                <div class="role-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </div>
+                <div>
+                    <div class="role-label">Administrator</div>
+                    <div class="role-sub">Manage the portal</div>
+                </div>
+            </button>
+        </div>
+        <div style="margin-top: auto; padding-top: 20px;">
+            <div style="font-size:11px; color: rgba(255,255,255,0.2); line-height:1.5; text-align:center;">
+                Select your role to get started
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Auth Forms -->
+    <div class="login-auth">
+
+        <div class="auth-header">
+            <img src="Amazon-Web-Services-AWS-Logo.png" alt="AWS">
+            <span>T-Level Portal</span>
+        </div>
+
+        <!-- Tab switcher -->
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login">Sign In</button>
+            <button class="auth-tab" data-tab="register">Create Account</button>
+        </div>
+
+        <!-- Selected role hint -->
+        <div class="selected-role-display">
+            Signing in as <span class="selected-role-name" id="selectedRoleDisplay">Student</span>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form class="auth-form active" id="loginForm" autocomplete="off">
+            <div class="form-group">
+                <label for="loginEmail">Email Address</label>
+                <input type="email" id="loginEmail" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <div class="password-row">
+                    <label for="loginPassword">Password</label>
+                    <a class="forgot-link" href="#" id="forgotLink">Forgot password?</a>
+                </div>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="auth-submit-btn" id="loginSubmitBtn">Sign In</button>
+
+            <div class="auth-divider">or continue with</div>
+
+            <div class="sso-buttons">
+                <button type="button" class="sso-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    Google
+                </button>
+                <button type="button" class="sso-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </button>
+                <button type="button" class="sso-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 23 23" fill="none"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="12" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="12" width="10" height="10" fill="#00A4EF"/><rect x="12" y="12" width="10" height="10" fill="#FFB900"/></svg>
+                    Microsoft
+                </button>
+            </div>
+
+            <div class="guest-link">
+                <a href="index.html" id="guestContinue">Continue as guest →</a>
+            </div>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form class="auth-form" id="registerForm" autocomplete="off">
+            <div class="form-group">
+                <label for="regName">Full Name</label>
+                <input type="text" id="regName" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="regEmail">Email Address</label>
+                <input type="email" id="regEmail" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="regPassword">Password</label>
+                <input type="password" id="regPassword" placeholder="Create a password (min. 8 chars)" required>
+            </div>
+            <div class="form-group">
+                <label for="regConfirm">Confirm Password</label>
+                <input type="password" id="regConfirm" placeholder="Confirm your password" required>
+            </div>
+            <button type="submit" class="auth-submit-btn" id="registerSubmitBtn">Create Account</button>
+
+            <div class="auth-divider">or continue with</div>
+
+            <div class="sso-buttons">
+                <button type="button" class="sso-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    Google
+                </button>
+                <button type="button" class="sso-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </button>
+                <button type="button" class="sso-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 23 23" fill="none"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="12" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="12" width="10" height="10" fill="#00A4EF"/><rect x="12" y="12" width="10" height="10" fill="#FFB900"/></svg>
+                    Microsoft
+                </button>
+            </div>
+
+            <div class="guest-link">
+                <a href="index.html" id="guestContinue2">Continue as guest →</a>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+// ===== LOGIN PAGE TRANSLATIONS =====
+const loginTranslations = {
+    en: {
+        settingsTitle: "Settings",
+        settingsLang: "Language",
+        settingsFont: "Font Size",
+        settingsFontReset: "Reset",
+        settingsAccess: "Accessibility",
+        settingsHC: "High contrast mode",
+        settingsUL: "Underline all links",
+        settingsRM: "Reduce motion/animations",
+        settingsLT: "Light theme",
+        rolesTitle: "I am a...",
+        roleStudent: "Student",
+        roleStudentSub: "Explore T-Levels & apply",
+        roleTeacher: "Teacher",
+        roleTeacherSub: "Curriculum & guidance",
+        roleParent: "Parent",
+        roleParentSub: "Support your child",
+        roleAdmin: "Administrator",
+        roleAdminSub: "Manage the portal",
+        roleFooter: "Select your role to get started",
+        portalName: "T-Level Portal",
+        tabLogin: "Sign In",
+        tabRegister: "Create Account",
+        signingInAs: "Signing in as",
+        loginEmail: "Email Address",
+        loginEmailPlace: "you@example.com",
+        loginPassword: "Password",
+        loginPasswordPlace: "Enter your password",
+        forgotPass: "Forgot password?",
+        loginBtn: "Sign In",
+        orContinue: "or continue with",
+        guestLink: "Continue as guest →",
+        regName: "Full Name",
+        regNamePlace: "John Doe",
+        regEmail: "Email Address",
+        regEmailPlace: "you@example.com",
+        regPassword: "Password",
+        regPasswordPlace: "Create a password (min. 8 chars)",
+        regConfirm: "Confirm Password",
+        regConfirmPlace: "Confirm your password",
+        regBtn: "Create Account",
+        forgotAlert: "A password reset link will be sent to your registered email address.",
+        loginAlert: "Please enter both email and password.",
+        regAlertFill: "Please fill in all fields.",
+        regAlertLength: "Password must be at least 8 characters long.",
+        regAlertMatch: "Passwords do not match."
+    },
+    de: {
+        settingsTitle: "Einstellungen",
+        settingsLang: "Sprache",
+        settingsFont: "Schriftgröße",
+        settingsFontReset: "Zurücksetzen",
+        settingsAccess: "Barrierefreiheit",
+        settingsHC: "Kontrastmodus",
+        settingsUL: "Alle Links unterstreichen",
+        settingsRM: "Bewegung/Animationen reduzieren",
+        settingsLT: "Helles Design",
+        rolesTitle: "Ich bin...",
+        roleStudent: "Schüler",
+        roleStudentSub: "T-Levels entdecken & bewerben",
+        roleTeacher: "Lehrer",
+        roleTeacherSub: "Lehrplan & Beratung",
+        roleParent: "Eltern",
+        roleParentSub: "Ihr Kind unterstützen",
+        roleAdmin: "Verwaltung",
+        roleAdminSub: "Portal verwalten",
+        roleFooter: "Wählen Sie Ihre Rolle",
+        portalName: "T-Level-Portal",
+        tabLogin: "Anmelden",
+        tabRegister: "Konto Erstellen",
+        signingInAs: "Angemeldet als",
+        loginEmail: "E-Mail-Adresse",
+        loginEmailPlace: "ihre@email.de",
+        loginPassword: "Passwort",
+        loginPasswordPlace: "Ihr Passwort eingeben",
+        forgotPass: "Passwort vergessen?",
+        loginBtn: "Anmelden",
+        orContinue: "oder fortfahren mit",
+        guestLink: "Als Gast fortfahren →",
+        regName: "Vollständiger Name",
+        regNamePlace: "Max Mustermann",
+        regEmail: "E-Mail-Adresse",
+        regEmailPlace: "max@email.de",
+        regPassword: "Passwort",
+        regPasswordPlace: "Passwort erstellen (min. 8 Zeichen)",
+        regConfirm: "Passwort bestätigen",
+        regConfirmPlace: "Passwort bestätigen",
+        regBtn: "Konto Erstellen",
+        forgotAlert: "Ein Link zum Zurücksetzen des Passworts wird an Ihre registrierte E-Mail-Adresse gesendet.",
+        loginAlert: "Bitte geben Sie sowohl E-Mail als auch Passwort ein.",
+        regAlertFill: "Bitte füllen Sie alle Felder aus.",
+        regAlertLength: "Das Passwort muss mindestens 8 Zeichen lang sein.",
+        regAlertMatch: "Die Passwörter stimmen nicht überein."
+    },
+    hi: {
+        settingsTitle: "सेटिंग्स",
+        settingsLang: "भाषा",
+        settingsFont: "फ़ॉन्ट आकार",
+        settingsFontReset: "रीसेट",
+        settingsAccess: "पहुंच-योग्यता",
+        settingsHC: "उच्च कंट्रास्ट मोड",
+        settingsUL: "सभी लिंक को रेखांकित करें",
+        settingsRM: "गति/एनिमेशन कम करें",
+        settingsLT: "लाइट थीम",
+        rolesTitle: "मैं हूँ...",
+        roleStudent: "छात्र",
+        roleStudentSub: "T-Levels खोजें और आवेदन करें",
+        roleTeacher: "शिक्षक",
+        roleTeacherSub: "पाठ्यक्रम और मार्गदर्शन",
+        roleParent: "अभिभावक",
+        roleParentSub: "अपने बच्चे का समर्थन करें",
+        roleAdmin: "प्रशासक",
+        roleAdminSub: "पोर्टल प्रबंधित करें",
+        roleFooter: "आरंभ करने के लिए अपनी भूमिका चुनें",
+        portalName: "T-Level पोर्टल",
+        tabLogin: "साइन इन",
+        tabRegister: "खाता बनाएं",
+        signingInAs: "में साइन इन",
+        loginEmail: "ईमेल पता",
+        loginEmailPlace: "आप@example.com",
+        loginPassword: "पासवर्ड",
+        loginPasswordPlace: "अपना पासवर्ड दर्ज करें",
+        forgotPass: "पासवर्ड भूल गए?",
+        loginBtn: "साइन इन",
+        orContinue: "या इसके साथ जारी रखें",
+        guestLink: "अतिथि के रूप में जारी रखें →",
+        regName: "पूरा नाम",
+        regNamePlace: "जॉन डो",
+        regEmail: "ईमेल पता",
+        regEmailPlace: "आप@example.com",
+        regPassword: "पासवर्ड",
+        regPasswordPlace: "पासवर्ड बनाएं (न्यूनतम 8 वर्ण)",
+        regConfirm: "पासवर्ड की पुष्टि करें",
+        regConfirmPlace: "अपने पासवर्ड की पुष्टि करें",
+        regBtn: "खाता बनाएं",
+        forgotAlert: "आपके पंजीकृत ईमेल पते पर एक पासवर्ड रीसेट लिंक भेजा जाएगा।",
+        loginAlert: "कृपया ईमेल और पासवर्ड दोनों दर्ज करें।",
+        regAlertFill: "कृपया सभी फ़ील्ड भरें।",
+        regAlertLength: "पासवर्ड कम से कम 8 वर्ण लंबा होना चाहिए।",
+        regAlertMatch: "पासवर्ड मेल नहीं खाते।"
+    },
+    es: {
+        settingsTitle: "Ajustes",
+        settingsLang: "Idioma",
+        settingsFont: "Tamaño de Fuente",
+        settingsFontReset: "Restablecer",
+        settingsAccess: "Accesibilidad",
+        settingsHC: "Modo de alto contraste",
+        settingsUL: "Subrayar todos los enlaces",
+        settingsRM: "Reducir movimiento/animaciones",
+        settingsLT: "Tema claro",
+        rolesTitle: "Yo soy...",
+        roleStudent: "Estudiante",
+        roleStudentSub: "Explorar T-Levels y postularse",
+        roleTeacher: "Profesor",
+        roleTeacherSub: "Currículo y orientación",
+        roleParent: "Padre",
+        roleParentSub: "Apoyar a su hijo",
+        roleAdmin: "Administrador",
+        roleAdminSub: "Gestionar el portal",
+        roleFooter: "Seleccione su rol para comenzar",
+        portalName: "Portal T-Level",
+        tabLogin: "Iniciar Sesión",
+        tabRegister: "Crear Cuenta",
+        signingInAs: "Iniciando sesión como",
+        loginEmail: "Correo Electrónico",
+        loginEmailPlace: "usted@ejemplo.com",
+        loginPassword: "Contraseña",
+        loginPasswordPlace: "Ingrese su contraseña",
+        forgotPass: "¿Olvidó su contraseña?",
+        loginBtn: "Iniciar Sesión",
+        orContinue: "o continuar con",
+        guestLink: "Continuar como invitado →",
+        regName: "Nombre Completo",
+        regNamePlace: "Juan Pérez",
+        regEmail: "Correo Electrónico",
+        regEmailPlace: "juan@ejemplo.com",
+        regPassword: "Contraseña",
+        regPasswordPlace: "Cree una contraseña (mín. 8 caracteres)",
+        regConfirm: "Confirmar Contraseña",
+        regConfirmPlace: "Confirme su contraseña",
+        regBtn: "Crear Cuenta",
+        forgotAlert: "Se enviará un enlace de restablecimiento de contraseña a su correo electrónico registrado.",
+        loginAlert: "Por favor ingrese correo electrónico y contraseña.",
+        regAlertFill: "Por favor complete todos los campos.",
+        regAlertLength: "La contraseña debe tener al menos 8 caracteres.",
+        regAlertMatch: "Las contraseñas no coinciden."
+    },
+    ar: {
+        settingsTitle: "الإعدادات",
+        settingsLang: "اللغة",
+        settingsFont: "حجم الخط",
+        settingsFontReset: "إعادة تعيين",
+        settingsAccess: "إمكانية الوصول",
+        settingsHC: "وضع التباين العالي",
+        settingsUL: "تسطير جميع الروابط",
+        settingsRM: "تقليل الحركة/الرسوم المتحركة",
+        settingsLT: "السمة الفاتحة",
+        rolesTitle: "أنا...",
+        roleStudent: "طالب",
+        roleStudentSub: "استكشف T-Levels وتقدم",
+        roleTeacher: "معلم",
+        roleTeacherSub: "المناهج والإرشاد",
+        roleParent: "ولي أمر",
+        roleParentSub: "ادعم طفلك",
+        roleAdmin: "مدير",
+        roleAdminSub: "إدارة البوابة",
+        roleFooter: "اختر دورك للبدء",
+        portalName: "بوابة T-Level",
+        tabLogin: "تسجيل الدخول",
+        tabRegister: "إنشاء حساب",
+        signingInAs: "تسجيل الدخول كـ",
+        loginEmail: "البريد الإلكتروني",
+        loginEmailPlace: "you@example.com",
+        loginPassword: "كلمة المرور",
+        loginPasswordPlace: "أدخل كلمة المرور",
+        forgotPass: "نسيت كلمة المرور؟",
+        loginBtn: "تسجيل الدخول",
+        orContinue: "أو المتابعة باستخدام",
+        guestLink: "المتابعة كضيف ←",
+        regName: "الاسم الكامل",
+        regNamePlace: "أحمد محمد",
+        regEmail: "البريد الإلكتروني",
+        regEmailPlace: "ahmed@example.com",
+        regPassword: "كلمة المرور",
+        regPasswordPlace: "إنشاء كلمة مرور (8 أحرف على الأقل)",
+        regConfirm: "تأكيد كلمة المرور",
+        regConfirmPlace: "تأكيد كلمة المرور",
+        regBtn: "إنشاء حساب",
+        forgotAlert: "سيتم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني المسجل.",
+        loginAlert: "يرجى إدخال البريد الإلكتروني وكلمة المرور.",
+        regAlertFill: "يرجى ملء جميع الحقول.",
+        regAlertLength: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
+        regAlertMatch: "كلمتا المرور غير متطابقتين."
+    }
+};
+
+// ===== APPLY LANGUAGE TO LOGIN PAGE =====
+function applyLoginLanguage(lang) {
+    const t = loginTranslations[lang] || loginTranslations.en;
+
+    // Settings modal
+    const settingsTitleEl = document.querySelector('.login-settings-header h2');
+    if (settingsTitleEl) settingsTitleEl.textContent = t.settingsTitle;
+
+    document.querySelectorAll('.login-settings-section h3')[0].textContent = t.settingsLang;
+    document.querySelectorAll('.login-settings-section h3')[1].textContent = t.settingsFont;
+    document.querySelectorAll('.login-settings-section h3')[2].textContent = t.settingsAccess;
+
+    const resetBtn = document.getElementById('loginFontReset');
+    if (resetBtn) resetBtn.textContent = t.settingsFontReset;
+
+    const toggleLabels = document.querySelectorAll('.login-settings-section .login-toggle-row span');
+    if (toggleLabels[0]) toggleLabels[0].textContent = t.settingsHC;
+    if (toggleLabels[1]) toggleLabels[1].textContent = t.settingsUL;
+    if (toggleLabels[2]) toggleLabels[2].textContent = t.settingsRM;
+    if (toggleLabels[3]) toggleLabels[3].textContent = t.settingsLT;
+
+    // Role sidebar
+    const rolesTitle = document.querySelector('.login-roles-title');
+    if (rolesTitle) rolesTitle.textContent = t.rolesTitle;
+
+    const roleLabels = document.querySelectorAll('.role-btn .role-label');
+    if (roleLabels[0]) roleLabels[0].textContent = t.roleStudent;
+    if (roleLabels[1]) roleLabels[1].textContent = t.roleTeacher;
+    if (roleLabels[2]) roleLabels[2].textContent = t.roleParent;
+    if (roleLabels[3]) roleLabels[3].textContent = t.roleAdmin;
+
+    const roleSubs = document.querySelectorAll('.role-btn .role-sub');
+    if (roleSubs[0]) roleSubs[0].textContent = t.roleStudentSub;
+    if (roleSubs[1]) roleSubs[1].textContent = t.roleTeacherSub;
+    if (roleSubs[2]) roleSubs[2].textContent = t.roleParentSub;
+    if (roleSubs[3]) roleSubs[3].textContent = t.roleAdminSub;
+
+    const roleFooter = document.querySelector('.login-roles > div:last-child div');
+    if (roleFooter) roleFooter.textContent = t.roleFooter;
+
+    // Portal name
+    const portalNameEl = document.querySelector('.auth-header span');
+    if (portalNameEl) portalNameEl.textContent = t.portalName;
+
+    // Tab switcher
+    const tabs = document.querySelectorAll('.auth-tab');
+    if (tabs[0]) tabs[0].textContent = t.tabLogin;
+    if (tabs[1]) tabs[1].textContent = t.tabRegister;
+
+    // Selected role display
+    const signingInEl = document.querySelector('.selected-role-display');
+    if (signingInEl) {
+        const roleNameSpan = document.getElementById('selectedRoleDisplay');
+        const currentRole = roleNameSpan ? roleNameSpan.textContent : '';
+        signingInEl.innerHTML = t.signingInAs + ' <span class="selected-role-name" id="selectedRoleDisplay">' + currentRole + '</span>';
+    }
+
+    // Login form
+    const loginLabels = document.querySelectorAll('#loginForm .form-group label');
+    if (loginLabels[0]) loginLabels[0].textContent = t.loginEmail;
+    if (loginLabels[1]) loginLabels[1].textContent = t.loginPassword;
+
+    const loginEmailInput = document.getElementById('loginEmail');
+    if (loginEmailInput) loginEmailInput.placeholder = t.loginEmailPlace;
+
+    const loginPassInput = document.getElementById('loginPassword');
+    if (loginPassInput) loginPassInput.placeholder = t.loginPasswordPlace;
+
+    const forgotLink = document.getElementById('forgotLink');
+    if (forgotLink) forgotLink.textContent = t.forgotPass;
+
+    const loginBtn = document.getElementById('loginSubmitBtn');
+    if (loginBtn) loginBtn.textContent = t.loginBtn;
+
+    const dividerText = document.querySelectorAll('.auth-divider');
+    if (dividerText[0]) dividerText[0].textContent = t.orContinue;
+    if (dividerText[1]) dividerText[1].textContent = t.orContinue;
+
+    const guestLinks = document.querySelectorAll('.guest-link a');
+    if (guestLinks[0]) guestLinks[0].textContent = t.guestLink;
+    if (guestLinks[1]) guestLinks[1].textContent = t.guestLink;
+
+    // Register form
+    const regLabels = document.querySelectorAll('#registerForm .form-group label');
+    if (regLabels[0]) regLabels[0].textContent = t.regName;
+    if (regLabels[1]) regLabels[1].textContent = t.regEmail;
+    if (regLabels[2]) regLabels[2].textContent = t.regPassword;
+    if (regLabels[3]) regLabels[3].textContent = t.regConfirm;
+
+    const regNameInput = document.getElementById('regName');
+    if (regNameInput) regNameInput.placeholder = t.regNamePlace;
+
+    const regEmailInput = document.getElementById('regEmail');
+    if (regEmailInput) regEmailInput.placeholder = t.regEmailPlace;
+
+    const regPassInput = document.getElementById('regPassword');
+    if (regPassInput) regPassInput.placeholder = t.regPasswordPlace;
+
+    const regConfirmInput = document.getElementById('regConfirm');
+    if (regConfirmInput) regConfirmInput.placeholder = t.regConfirmPlace;
+
+    const regBtn = document.getElementById('registerSubmitBtn');
+    if (regBtn) regBtn.textContent = t.regBtn;
+
+    // Settings gear title
+    const gearBtn = document.getElementById('settingsGearBtn');
+    if (gearBtn) gearBtn.title = t.settingsTitle;
+}
+
+// ===== SETTINGS MODAL OPEN / CLOSE =====
+(function() {
+    const gearBtn = document.getElementById('settingsGearBtn');
+    const modal = document.getElementById('loginSettingsModal');
+    const closeBtn = document.getElementById('loginSettingsClose');
+
+    gearBtn.addEventListener('click', function() {
+        modal.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', function() {
+        modal.classList.remove('active');
+    });
+
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+})();
+
+// ===== LIGHT THEME TOGGLE =====
+(function() {
+    const lightThemeCheckbox = document.getElementById('loginLightTheme');
+    if (!lightThemeCheckbox) return;
+    const stored = localStorage.getItem('light-theme') === 'true';
+
+    function syncLoginTheme(isLight) {
+        document.body.classList.toggle('light-theme', isLight);
+        localStorage.setItem('light-theme', isLight);
+        lightThemeCheckbox.checked = isLight;
+    }
+
+    syncLoginTheme(stored);
+
+    lightThemeCheckbox.addEventListener('change', function() {
+        syncLoginTheme(this.checked);
+    });
+})();
+
+// ===== FONT SIZE CONTROLS =====
+(function() {
+    const decBtn = document.getElementById('loginFontDecrease');
+    const resetBtn = document.getElementById('loginFontReset');
+    const incBtn = document.getElementById('loginFontIncrease');
+    let currentSize = parseInt(localStorage.getItem('fontSize')) || 100;
+
+    function applyLoginFont() {
+        const scale = currentSize / 100;
+        document.body.style.zoom = scale;
+        localStorage.setItem('fontSize', currentSize);
+    }
+
+    applyLoginFont();
+
+    incBtn.addEventListener('click', function() {
+        if (currentSize < 150) { currentSize += 10; applyLoginFont(); }
+    });
+    decBtn.addEventListener('click', function() {
+        if (currentSize > 70) { currentSize -= 10; applyLoginFont(); }
+    });
+    resetBtn.addEventListener('click', function() {
+        currentSize = 100; applyLoginFont();
+    });
+})();
+
+// ===== ACCESSIBILITY TOGGLES =====
+(function() {
+    const hcToggle = document.getElementById('loginHighContrast');
+    const ulToggle = document.getElementById('loginUnderlineLinks');
+    const rmToggle = document.getElementById('loginReduceMotion');
+
+    function setBodyClass(cls, isOn) {
+        document.body.classList.toggle(cls, isOn);
+        localStorage.setItem(cls, isOn);
+    }
+
+    // Restore saved states
+    hcToggle.checked = localStorage.getItem('high-contrast') === 'true';
+    ulToggle.checked = localStorage.getItem('underline-links') === 'true';
+    rmToggle.checked = localStorage.getItem('reduce-motion') === 'true';
+    setBodyClass('high-contrast', hcToggle.checked);
+    setBodyClass('underline-links', ulToggle.checked);
+    setBodyClass('reduce-motion', rmToggle.checked);
+
+    hcToggle.addEventListener('change', function() { setBodyClass('high-contrast', this.checked); });
+    ulToggle.addEventListener('change', function() { setBodyClass('underline-links', this.checked); });
+    rmToggle.addEventListener('change', function() { setBodyClass('reduce-motion', this.checked); });
+})();
+
+// ===== LANGUAGE SELECTION =====
+(function() {
+    const langSelect = document.getElementById('loginLangSelect');
+    const savedLang = localStorage.getItem('language') || 'en';
+    langSelect.value = savedLang;
+
+    function applyLang(lang) {
+        localStorage.setItem('language', lang);
+        // Apply translations to all UI text
+        applyLoginLanguage(lang);
+        // Handle RTL for Arabic
+        if (lang === 'ar') {
+            document.documentElement.dir = 'rtl';
+            document.body.classList.add('rtl-lang');
+        } else {
+            document.documentElement.dir = 'ltr';
+            document.body.classList.remove('rtl-lang');
+        }
+    }
+
+    // Apply saved language on load
+    applyLang(savedLang);
+
+    langSelect.addEventListener('change', function() {
+        applyLang(this.value);
+    });
+})();
+
+// ===== ROLE SELECTION =====
+(function() {
+    const roleBtns = document.querySelectorAll('.role-btn');
+    const roleDisplay = document.getElementById('selectedRoleDisplay');
+
+    roleBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            roleBtns.forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            const roleName = this.querySelector('.role-label').textContent;
+            if (roleDisplay) roleDisplay.textContent = roleName;
+        });
+    });
+})();
+
+// ===== TAB SWITCHING (Login / Register) =====
+(function() {
+    const tabs = document.querySelectorAll('.auth-tab');
+    const forms = {
+        login: document.getElementById('loginForm'),
+        register: document.getElementById('registerForm')
+    };
+
+    tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            this.classList.add('active');
+            const target = this.getAttribute('data-tab');
+            Object.keys(forms).forEach(function(key) {
+                forms[key].classList.toggle('active', key === target);
+            });
+        });
+    });
+})();
+
+// ===== FORGOT PASSWORD =====
+document.getElementById('forgotLink')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    const lang = localStorage.getItem('language') || 'en';
+    alert(loginTranslations[lang].forgotAlert || loginTranslations.en.forgotAlert);
+});
+
+// ===== LOGIN SUBMIT =====
+document.getElementById('loginForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const lang = localStorage.getItem('language') || 'en';
+    const t = loginTranslations[lang] || loginTranslations.en;
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    if (!email || !password) {
+        alert(t.loginAlert);
+        return;
+    }
+    window.location.href = 'index.html';
+});
+
+// ===== REGISTER SUBMIT =====
+document.getElementById('registerForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const lang = localStorage.getItem('language') || 'en';
+    const t = loginTranslations[lang] || loginTranslations.en;
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
+
+    if (!name || !email || !password || !confirm) {
+        alert(t.regAlertFill);
+        return;
+    }
+    if (password.length < 8) {
+        alert(t.regAlertLength);
+        return;
+    }
+    if (password !== confirm) {
+        alert(t.regAlertMatch);
+        return;
+    }
+    window.location.href = 'index.html';
+});
+
+</script>
+</div>
+</body>
+</html>
