@@ -1,0 +1,5 @@
+# Amazon T-Level Hub — backend requirements
+# Single unified server (backend_server.py) handles all API endpoints:
+# applications, contact, feedback, and peer chatrooms.
+flask>=3.0
+flask-cors>=4.0

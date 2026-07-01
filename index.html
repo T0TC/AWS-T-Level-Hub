@@ -1,9 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <script>
+/*
+     * Amazon T-Level Hub — Shared Icon Library
+     * -----------------------------------------
+     * Replaces the site's old emoji icons (✕ 🔍 🏛️ 📄 🎓 💻 📖 ☁️ 🚀 👤 📊 💼
+     * 🎯 💬 👋 ⚠️ 🏥 🔬 🌐 ✓ etc.) with a single shared SVG sprite, in the same
+     * outline style already used for the course icons (24x24, 2px stroke,
+     * square caps/joins, colour via currentColor).
+     *
+     * The sprite is embedded inline below (not fetched from icons.svg) so it
+     * keeps working when pages are opened directly from disk. assets/icons.svg
+     * is kept as the canonical, human-editable source — if you change an icon,
+     * edit icons.svg first, then copy the <symbol> block(s) into ICON_SPRITE
+     * here so the two stay in sync.
+     *
+     * Usage:
+     *   1) Static HTML:      <i data-icon="search"></i>
+     *                         <i data-icon="check" data-size="16" data-color="#ff9900"></i>
+     *      icons.js auto-replaces every [data-icon] element on DOMContentLoaded,
+     *      and again whenever refreshIcons() is called (for content you build
+     *      dynamically after that, e.g. innerHTML re-renders).
+     *
+     *   2) From JavaScript:  el.innerHTML = Icon('rocket', { size: 16 });
+     *      Useful when building HTML strings/template literals at runtime
+     *      (e.g. resource link lists in resources.html).
+     */
+    
+    const ICON_SPRITE = `<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </symbol>
+    
+      <symbol id="icon-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </symbol>
+    
+      <symbol id="icon-bank" viewBox="0 0 24 24">
+        <polygon points="12 3 2 9 22 9"/>
+        <line x1="4" y1="9" x2="4" y2="19"/>
+        <line x1="8" y1="9" x2="8" y2="19"/>
+        <line x1="16" y1="9" x2="16" y2="19"/>
+        <line x1="20" y1="9" x2="20" y2="19"/>
+        <line x1="2" y1="22" x2="22" y2="22"/>
+      </symbol>
+    
+      <symbol id="icon-file" viewBox="0 0 24 24">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="8" y1="13" x2="16" y2="13"/>
+        <line x1="8" y1="17" x2="16" y2="17"/>
+      </symbol>
+    
+      <symbol id="icon-graduation-cap" viewBox="0 0 24 24">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+      </symbol>
+    
+      <symbol id="icon-monitor" viewBox="0 0 24 24">
+        <rect x="2" y="3" width="20" height="14" rx="0"/>
+        <polyline points="8 21 12 17 16 21"/>
+        <line x1="2" y1="17" x2="22" y2="17"/>
+      </symbol>
+    
+      <symbol id="icon-book" viewBox="0 0 24 24">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+      </symbol>
+    
+      <symbol id="icon-cloud" viewBox="0 0 24 24">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+      </symbol>
+    
+      <symbol id="icon-rocket" viewBox="0 0 24 24">
+        <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2"/>
+      </symbol>
+    
+      <symbol id="icon-user" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 21v-1a8 8 0 0 1 16 0v1"/>
+      </symbol>
+    
+      <symbol id="icon-bar-chart" viewBox="0 0 24 24">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+        <line x1="2" y1="20" x2="22" y2="20"/>
+      </symbol>
+    
+      <symbol id="icon-briefcase" viewBox="0 0 24 24">
+        <rect x="2" y="7" width="20" height="14" rx="0"/>
+        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        <line x1="12" y1="12" x2="12" y2="16"/>
+        <line x1="10" y1="14" x2="14" y2="14"/>
+      </symbol>
+    
+      <symbol id="icon-target" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="12" r="6"/>
+        <circle cx="12" cy="12" r="2"/>
+      </symbol>
+    
+      <symbol id="icon-message-circle" viewBox="0 0 24 24">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </symbol>
+    
+      <symbol id="icon-wave" viewBox="0 0 24 24">
+        <path d="M8 13V6a2 2 0 0 1 4 0v6"/>
+        <path d="M12 12V4a2 2 0 0 1 4 0v8"/>
+        <path d="M16 12.5V7a2 2 0 0 1 4 0v7c0 4-2.5 7-7 7h-1c-4 0-5.5-1-7-4l-2.3-4.5a1.7 1.7 0 0 1 .7-2.3 1.7 1.7 0 0 1 2.2.5L8 13"/>
+      </symbol>
+    
+      <symbol id="icon-alert-triangle" viewBox="0 0 24 24">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </symbol>
+    
+      <symbol id="icon-hospital" viewBox="0 0 24 24">
+        <rect x="4" y="2" width="16" height="20" rx="0"/>
+        <line x1="12" y1="8" x2="12" y2="14"/>
+        <line x1="9" y1="11" x2="15" y2="11"/>
+      </symbol>
+    
+      <symbol id="icon-flask" viewBox="0 0 24 24">
+        <path d="M9 2v6l-5 9a2 2 0 0 0 1.74 3h12.52A2 2 0 0 0 20 17l-5-9V2"/>
+        <line x1="8.5" y1="2" x2="15.5" y2="2"/>
+        <line x1="7" y1="16" x2="17" y2="16"/>
+      </symbol>
+    
+      <symbol id="icon-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </symbol>
+    
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"/>
+      </symbol>
+    
+      <symbol id="icon-dot" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8"/>
+      </symbol>
+    
+      <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+        <line x1="4" y1="12" x2="20" y2="12"/>
+        <polyline points="13 5 20 12 13 19"/>
+      </symbol>
+    
+      <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+        <line x1="20" y1="12" x2="4" y2="12"/>
+        <polyline points="11 5 4 12 11 19"/>
+      </symbol>
+    
+      <symbol id="icon-arrow-up-right" viewBox="0 0 24 24">
+        <line x1="7" y1="17" x2="17" y2="7"/>
+        <polyline points="7 7 17 7 17 17"/>
+      </symbol>
+    
+      <symbol id="icon-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </symbol>
+    
+      <symbol id="icon-moon" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </symbol>
+    
+      <symbol id="icon-star" viewBox="0 0 24 24">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </symbol>
+    
+      <symbol id="icon-thumbs-up" viewBox="0 0 24 24">
+        <path d="M7 11v10H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z"/>
+        <path d="M7 11l4-8a2 2 0 0 1 2 2v5h6a2 2 0 0 1 2 2l-1.5 7a2 2 0 0 1-2 2H10a3 3 0 0 1-3-3z"/>
+      </symbol>
+    
+      <symbol id="icon-thumbs-down" viewBox="0 0 24 24">
+        <path d="M17 13V3h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1z"/>
+        <path d="M17 13l-4 8a2 2 0 0 1-2-2v-5H5a2 2 0 0 1-2-2l1.5-7a2 2 0 0 1 2-2H14a3 3 0 0 1 3 3z"/>
+      </symbol>
+    
+    </svg>`;
+    
+    (function injectSprite() {
+        function inject() {
+            if (document.getElementById('shared-icon-sprite')) return;
+            const wrap = document.createElement('div');
+            wrap.id = 'shared-icon-sprite';
+            wrap.style.display = 'none';
+            wrap.innerHTML = ICON_SPRITE;
+            document.body.insertAdjacentElement('afterbegin', wrap);
+        }
+        if (document.body) inject();
+        else document.addEventListener('DOMContentLoaded', inject);
+    })();
+    
+    /**
+     * Build an inline <svg> string referencing a sprite symbol.
+     * @param {string} name - icon name, e.g. "search" (symbol id is "icon-search")
+     * @param {object} [opts]
+     * @param {number|string} [opts.size=20] - width & height in px
+     * @param {string} [opts.color='currentColor'] - stroke colour
+     * @param {string} [opts.fill='none'] - fill colour
+     * @param {string} [opts.className=''] - extra class names
+     */
+    function Icon(name, opts) {
+        opts = opts || {};
+        const size = opts.size || 20;
+        const color = opts.color || 'currentColor';
+        const fill = opts.fill || 'none';
+        const cls = 'icon' + (opts.className ? ' ' + opts.className : '');
+        return '<svg class="' + cls + '" width="' + size + '" height="' + size +
+            '" viewBox="0 0 24 24" fill="' + fill + '" stroke="' + color +
+            '" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">' +
+            '<use href="#icon-' + name + '"></use></svg>';
+    }
+    
+    /** Replace every [data-icon] element's content with its SVG icon. */
+    function refreshIcons(root) {
+        const scope = root || document;
+        scope.querySelectorAll('[data-icon]').forEach(function (el) {
+            const name = el.getAttribute('data-icon');
+            if (!name) return;
+            el.innerHTML = Icon(name, {
+                size: el.getAttribute('data-size') || undefined,
+                color: el.getAttribute('data-color') || undefined,
+                fill: el.getAttribute('data-fill') || undefined,
+                className: el.getAttribute('data-icon-class') || undefined,
+            });
+            el.removeAttribute('data-icon-rendered-pending');
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        refreshIcons();
+    });
+    
+    </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AWS School Portal</title>
+
+<script>
+// ===== SESSION GATE — redirect to login if not authenticated =====
+(function() {
+    if (localStorage.getItem('session-token') !== 'true') {
+        window.location.replace('login.html');
+    }
+})();
+</script>
 
 <link rel="stylesheet" href="style.css">
 <style>
@@ -31,7 +291,6 @@ section.cards {
     padding: 80px 50px 50px 50px !important;
 }
 
-/* The video element */
 .cards-video-bg {
     position: absolute;
     inset: 0;
@@ -41,7 +300,6 @@ section.cards {
     z-index: 0;
 }
 
-/* Dark tint overlay — standard "hero video" dimming */
 .cards-video-overlay {
     position: absolute;
     inset: 0;
@@ -49,7 +307,6 @@ section.cards {
     z-index: 1;
 }
 
-/* Cards sit above video layers */
 section.cards .card {
     position: relative;
     z-index: 2;
@@ -62,6 +319,283 @@ section.cards .card {
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
+
+/* ===== HIGH CONTRAST OVERRIDES ===== */
+body.high-contrast section.cards .card {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+body.high-contrast .info-section[style*="display:flex"] {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+body.high-contrast .info-section[style*="display:flex"] h2 { color: #ffff00 !important; }
+body.high-contrast .info-section[style*="display:flex"] video { display: none !important; }
+body.high-contrast .info-section[style*="display:flex"] div[style*="border-radius"] {
+    background: #111111 !important;
+    border: 2px solid #ffff00 !important;
+    min-height: 100px !important;
+}
+body.high-contrast .info-section[style*="display:flex"] .info-text { color: #ffffff !important; }
+body.high-contrast .info-section[style*="display:flex"] .info-text u { text-decoration-color: #ffff00 !important; }
+body.high-contrast .footer-aws-logo { filter: brightness(0) invert(1) !important; }
+body.high-contrast .footer-routes .footer-col h4 { color: #ffff00 !important; }
+body.high-contrast .footer-routes .footer-col p { color: #ffffff !important; }
+body.high-contrast .footer-legal a { color: #ffff00 !important; }
+body.high-contrast .footer-legal p { color: #cccccc !important; }
+
+/* ===== COURSE SIDE PANEL ===== */
+.side-panel-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    z-index: 1500;
+    transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.side-panel-overlay.active {
+    display: block;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.side-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 48%;
+    height: 100%;
+    background: #1a2738;
+    z-index: 1600;
+    overflow-y: auto;
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.6);
+    transform: translateX(105%);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+.side-panel.open {
+    transform: translateX(0);
+}
+
+.side-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 26px;
+    background: #243348;
+    border-bottom: 2px solid #146eb4;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.side-panel-header h2 {
+    font-size: 16px;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.4;
+    font-weight: 700;
+}
+.side-panel-close {
+    background: none;
+    border: none;
+    color: #a8b8cc;
+    font-size: 26px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+.side-panel-close:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.side-panel-body { padding: 22px 26px 32px; }
+
+.sp-tag {
+    display: inline-block;
+    background: rgba(20, 110, 180, 0.18);
+    color: #5aaee8;
+    border: 1px solid rgba(20, 110, 180, 0.35);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+.sp-desc {
+    font-size: 14px;
+    color: #a8b8cc;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+.sp-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+}
+.sp-stat {
+    background: #243348;
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+}
+.sp-stat .v {
+    font-size: 20px;
+    font-weight: 700;
+    color: #5aaee8;
+}
+.sp-stat .l {
+    font-size: 11px;
+    color: #7a8a9a;
+    margin-top: 4px;
+}
+.sp-section { margin-bottom: 18px; }
+.sp-section h3 {
+    font-size: 12px;
+    color: #7a8a9a;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    font-weight: 700;
+}
+.sp-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
+    background: #243348;
+    border-radius: 8px;
+    margin-bottom: 7px;
+    text-decoration: none;
+    color: #c0d0e0;
+    font-size: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
+}
+.sp-link:hover {
+    border-color: rgba(20, 110, 180, 0.45);
+    color: #ffffff;
+    transform: translateX(3px);
+}
+.sp-link.highlight {
+    border-color: rgba(20, 110, 180, 0.3);
+    background: rgba(20, 110, 180, 0.08);
+}
+.sp-link .li { font-size: 15px; flex-shrink: 0; }
+.sp-link .ll { flex: 1; line-height: 1.4; }
+.sp-link .la { color: #5a6a7a; font-size: 12px; }
+
+.sp-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+.sp-apply-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #146eb4;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 13px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+}
+.sp-apply-btn:hover {
+    background: #0f5a96;
+    transform: translateY(-1px);
+}
+.sp-apply-btn.secondary {
+    background: #243348;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.sp-apply-btn.secondary:hover {
+    background: #2d3f56;
+}
+
+@media (max-width: 700px) {
+    .side-panel { width: 100%; }
+}
+
+/* Light theme overrides */
+body.light-theme .side-panel {
+    background: linear-gradient(135deg, #f8e8ff 0%, #ffe8f0 30%, #e8f0ff 70%, #f0f8ff 100%);
+    background-attachment: fixed;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.12);
+}
+body.light-theme .side-panel-header {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.9);
+}
+body.light-theme .side-panel-header h2 { color: #232f3e; }
+body.light-theme .side-panel-close { color: #7a8a9a; }
+body.light-theme .side-panel-close:hover { color: #232f3e; background: rgba(35,47,62,0.08); }
+body.light-theme .sp-tag {
+    background: rgba(255,255,255,0.6);
+    color: #232f3e;
+    border-color: rgba(35,47,62,0.25);
+}
+body.light-theme .sp-desc { color: #444444; }
+body.light-theme .sp-stat {
+    background: rgba(255,255,255,0.75);
+    border-color: rgba(255,255,255,0.9);
+}
+body.light-theme .sp-stat .v { color: #232f3e; }
+body.light-theme .sp-stat .l { color: #7a8a9a; }
+body.light-theme .sp-section h3 {
+    color: #7a8a9a;
+    border-bottom-color: rgba(35,47,62,0.1);
+}
+body.light-theme .sp-link {
+    background: rgba(255,255,255,0.75);
+    color: #232f3e;
+    border-color: rgba(255,255,255,0.9);
+}
+body.light-theme .sp-link:hover {
+    border-color: rgba(35,47,62,0.4);
+    color: #232f3e;
+    box-shadow: 0 4px 12px rgba(35,47,62,0.12);
+    transform: translateX(3px);
+}
+body.light-theme .sp-link.highlight {
+    background: rgba(255,255,255,0.85);
+    border-color: rgba(35,47,62,0.3);
+}
+body.light-theme .sp-link .la { color: #aabbcc; }
+body.light-theme .sp-apply-btn {
+    background: #232f3e;
+    color: #ffffff;
+}
+body.light-theme .sp-apply-btn:hover { background: #1a252f; }
+body.light-theme .sp-apply-btn.secondary {
+    background: rgba(255,255,255,0.75);
+    color: #232f3e;
+    border: 1px solid rgba(35,47,62,0.25);
+}
+body.light-theme .sp-apply-btn.secondary:hover {
+    background: rgba(255,255,255,0.95);
+    border-color: rgba(35,47,62,0.4);
+    box-shadow: 0 4px 12px rgba(35,47,62,0.12);
+}
+
+
 </style>
 </head>
 <body>
@@ -71,24 +605,34 @@ section.cards .card {
 
     <header class="top-nav">
 
-        <div class="logo">
-
-    <img src="Amazon-Web-Services-AWS-Logo.png" alt="AWS">
-
-    <span class="site-title">
-        Amazon T-Level Hub
-    </span>
-
-</div>
+        <div class="logo" style="cursor:pointer;" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+            <img src="Amazon-Web-Services-AWS-Logo.png" alt="AWS">
+            <span class="site-title">Amazon T-Level Hub</span>
+        </div>
 
         <nav>
             <a href="#" id="homeBtn" data-i18n="home">Home</a>
             <a href="application.html" data-i18n="apply">Application</a>
             <a href="resources.html" data-i18n="resources">Resources</a>
-
+            <a href="chat.html">Discuss</a>
             <a href="#" id="settingsBtn" data-i18n="settings">Settings</a>
             <a href="#" id="contactsBtn" data-i18n="contacts">Contacts</a>
+            <a href="backend/admin/" id="adminNavBtn" style="display:none;">Admin</a>
         </nav>
+        <script>
+        (function () {
+            // Admin nav link only appears for users signed in with the
+            // Administrator role. This just reveals the link — the real
+            // access control happens at backend/admin/ (separate login,
+            // bcrypt password check, server-side session tokens).
+            var role = localStorage.getItem('selected-role');
+            var loggedIn = localStorage.getItem('session-token');
+            var btn = document.getElementById('adminNavBtn');
+            if (btn && loggedIn && role === 'administrator') {
+                btn.style.display = '';
+            }
+        })();
+        </script>
         
     </header>
 
@@ -161,28 +705,27 @@ section.cards .card {
         data-i18n-placeholder="searchPlaceholder"
     >
 
-    <div id="courseResults">
+    <div class="course-layout">
+        <div id="courseResults">
+            <div class="course-item" onclick="openCoursePanel('Digital Production, Design and Development', this)" data-i18n="courseDigitalProd">Digital Production, Design and Development</div>
+            <div class="course-item" onclick="openCoursePanel('Digital Support Services', this)" data-i18n="courseDigitalSupport">Digital Support Services</div>
+            <div class="course-item" onclick="openCoursePanel('Digital Business Services', this)" data-i18n="courseDigitalBusiness">Digital Business Services</div>
+            <div class="course-item" onclick="openCoursePanel('Education and Childcare', this)" data-i18n="courseEducation">Education and Childcare</div>
+            <div class="course-item" onclick="openCoursePanel('Health', this)" data-i18n="courseHealth">Health</div>
+            <div class="course-item" onclick="openCoursePanel('Healthcare Science', this)" data-i18n="courseHealthcareScience">Healthcare Science</div>
+            <div class="course-item" onclick="openCoursePanel('Building Services Engineering', this)" data-i18n="courseBuildingServices">Building Services Engineering</div>
+            <div class="course-item" onclick="openCoursePanel('Design, Surveying and Planning', this)" data-i18n="courseDesignSurveying">Design, Surveying and Planning</div>
+            <div class="course-item" onclick="openCoursePanel('Accounting', this)" data-i18n="courseAccounting">Accounting</div>
+            <div class="course-item" onclick="openCoursePanel('Finance', this)" data-i18n="courseFinance">Finance</div>
+        </div>
 
-        <div class="course-item" data-i18n="courseDigitalProd">Digital Production, Design and Development</div>
-
-        <div class="course-item" data-i18n="courseDigitalSupport">Digital Support Services</div>
-
-        <div class="course-item" data-i18n="courseDigitalBusiness">Digital Business Services</div>
-
-        <div class="course-item" data-i18n="courseEducation">Education and Childcare</div>
-
-        <div class="course-item" data-i18n="courseHealth">Health</div>
-
-        <div class="course-item" data-i18n="courseHealthcareScience">Healthcare Science</div>
-
-        <div class="course-item" data-i18n="courseBuildingServices">Building Services Engineering</div>
-
-        <div class="course-item" data-i18n="courseDesignSurveying">Design, Surveying and Planning</div>
-
-        <div class="course-item" data-i18n="courseAccounting">Accounting</div>
-
-        <div class="course-item" data-i18n="courseFinance">Finance</div>
-
+        <div class="inline-panel" id="inlinePanel">
+            <div class="inline-panel-header">
+                <h3 id="inlinePanelTitle">Course Info</h3>
+                <button class="inline-panel-close" onclick="closeCoursePanel()" aria-label="Close course details">×</button>
+            </div>
+            <div class="inline-panel-body" id="inlinePanelBody"></div>
+        </div>
     </div>
 
 </section>
@@ -413,6 +956,9 @@ section.cards .card {
             <select id="footerLangSelect" aria-label="Language">
                 <option value="en">English</option>
                 <option value="de">Deutsch</option>
+                <option value="hi">हिन्दी</option>
+                <option value="es">Español</option>
+                <option value="ar">العربية</option>
             </select>
     
             <select aria-label="Region">
@@ -483,6 +1029,9 @@ section.cards .card {
             <select id="languageSelect">
                 <option value="en">English</option>
                 <option value="de">Deutsch</option>
+                <option value="hi">हिन्दी</option>
+                <option value="es">Español</option>
+                <option value="ar">العربية</option>
             </select>
         </div>
 
@@ -511,7 +1060,7 @@ section.cards .card {
             </label>
             <label class="toggle-row">
                 <input type="checkbox" id="lightThemeToggle">
-                <span>Light theme (AWS style)</span>
+                <span>Light theme</span>
             </label>
         </div>
 
@@ -519,70 +1068,106 @@ section.cards .card {
 </div>
 
 <div class="modal-overlay" id="contactsOverlay">
-
     <div class="modal-box">
 
         <div class="modal-header">
-            <h2 data-i18n="contactsTitle">Contact Us</h2>
-
-            <button class="modal-close" id="closeContacts">
-                &times;
-            </button>
+            <h2 id="contactsModalTitle">Contact Us</h2>
+            <button class="modal-close" id="closeContacts">&times;</button>
         </div>
 
-        <div class="modal-section">
-
-            <label data-i18n="contactsEmail">Email Address</label>
-
-            <input
-                type="email"
-                id="contactEmail"
-                placeholder="Enter your email address"
-                data-i18n-placeholder="contactsEmailPlaceholder"
-            >
-
+        <!-- Tab switcher -->
+        <div style="display:flex;gap:0;margin-bottom:20px;background:rgba(0,0,0,0.06);border-radius:10px;padding:4px;width:fit-content;">
+            <button id="tabContact" onclick="switchContactTab('contact')" style="padding:8px 22px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;background:#232f3e;color:#fff;transition:.2s;font-family:Arial,sans-serif;">Contact Us</button>
+            <button id="tabFeedback" onclick="switchContactTab('feedback')" style="padding:8px 22px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;background:transparent;color:rgba(0,0,0,0.4);transition:.2s;font-family:Arial,sans-serif;">Feedback</button>
         </div>
 
-        <div class="modal-section">
-
-            <label data-i18n="contactsSubject">Subject</label>
-
-            <input
-                type="text"
-                id="contactSubject"
-                placeholder="What is your question about?"
-                data-i18n-placeholder="contactsSubjectPlaceholder"
-            >
-
+        <!-- Contact Form -->
+        <div id="contactForm">
+            <div class="modal-section">
+                <label>Email Address</label>
+                <input type="email" id="contactEmail" placeholder="Enter your email address">
+            </div>
+            <div class="modal-section">
+                <label>Subject</label>
+                <input type="text" id="contactSubject" placeholder="What is your question about?">
+            </div>
+            <div class="modal-section">
+                <label>Message</label>
+                <textarea id="contactMessage" rows="5" placeholder="Ask a question about T-Levels, industry placements, career pathways, applications, or support..."></textarea>
+            </div>
+            <div class="modal-section">
+                <button id="sendContactMessage">Submit Enquiry</button>
+            </div>
         </div>
 
-        <div class="modal-section">
-
-            <label data-i18n="contactsMessage">Message</label>
-
-            <textarea
-                id="contactMessage"
-                rows="6"
-                placeholder="Ask a question about T-Levels, industry placements, career pathways, applications, or support..."
-                data-i18n-placeholder="contactsMessagePlaceholder"
-            ></textarea>
-
-        </div>
-
-        <div class="modal-section">
-
-            <button id="sendContactMessage" data-i18n="contactsSubmit">
-                Submit Enquiry
-            </button>
-
+        <!-- Feedback Form -->
+        <div id="feedbackForm" style="display:none;">
+            <div class="modal-section">
+                <label>Your Name</label>
+                <input type="text" id="feedbackName" placeholder="Enter your name">
+            </div>
+            <div class="modal-section">
+                <label>Email Address</label>
+                <input type="email" id="feedbackEmail" placeholder="Enter your email address">
+            </div>
+            <div class="modal-section">
+                <label>Is this positive or negative feedback?</label>
+                <div style="display:flex;gap:10px;">
+                    <button type="button" id="feedbackTypeGood" onclick="setFeedbackType('good')" style="flex:1;padding:12px;border-radius:8px;border:2px solid #ccc;background:transparent;color:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:.2s;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;"><i data-icon="thumbs-up" data-size="18"></i> Good</button>
+                    <button type="button" id="feedbackTypeBad" onclick="setFeedbackType('bad')" style="flex:1;padding:12px;border-radius:8px;border:2px solid #ccc;background:transparent;color:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:.2s;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;"><i data-icon="thumbs-down" data-size="18"></i> Bad</button>
+                </div>
+            </div>
+            <div class="modal-section">
+                <label>What's this about?</label>
+                <select id="feedbackTopic" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;">
+                    <option value="">Select an option...</option>
+                    <option>Reporting an issue / bug</option>
+                    <option>Something I'm enjoying</option>
+                    <option>Suggestion for improvement</option>
+                    <option>Accessibility feedback</option>
+                    <option>General feedback</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="modal-section">
+                <label>Your Feedback</label>
+                <textarea id="feedbackMessage" rows="5" placeholder="Tell us what you think about the portal, what works well, or what could be improved..."></textarea>
+            </div>
+            <div class="modal-section">
+                <button id="sendFeedbackMessage">Submit Feedback</button>
+            </div>
         </div>
 
     </div>
-
 </div>
 
 <script src="script.js"></script>
 
+<script>
+function setFeedbackType(type) {
+    window.selectedFeedbackType = type;
+    var goodBtn = document.getElementById('feedbackTypeGood');
+    var badBtn = document.getElementById('feedbackTypeBad');
+    var isGood = type === 'good';
+    goodBtn.style.background = isGood ? '#067d62' : 'transparent';
+    goodBtn.style.color = isGood ? '#fff' : 'inherit';
+    goodBtn.style.borderColor = isGood ? '#067d62' : '#ccc';
+    badBtn.style.background = !isGood ? '#c40000' : 'transparent';
+    badBtn.style.color = !isGood ? '#fff' : 'inherit';
+    badBtn.style.borderColor = !isGood ? '#c40000' : '#ccc';
+}
+
+function switchContactTab(tab) {
+    var isContact = tab === 'contact';
+    document.getElementById('contactForm').style.display = isContact ? 'block' : 'none';
+    document.getElementById('feedbackForm').style.display = isContact ? 'none' : 'block';
+    document.getElementById('contactsModalTitle').textContent = isContact ? 'Contact Us' : 'Feedback';
+    document.getElementById('tabContact').style.background = isContact ? '#232f3e' : 'transparent';
+    document.getElementById('tabContact').style.color = isContact ? '#fff' : 'rgba(0,0,0,0.4)';
+    document.getElementById('tabFeedback').style.background = isContact ? 'transparent' : '#232f3e';
+    document.getElementById('tabFeedback').style.color = isContact ? 'rgba(0,0,0,0.4)' : '#fff';
+}
+</script>
 
 </body>
 </html>

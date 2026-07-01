@@ -208,6 +208,8 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .status-read { background: rgba(33,150,243,0.15); color: #2196f3; }
 .status-replied { background: rgba(76,175,80,0.15); color: var(--success); }
 .status-archived { background: rgba(158,158,158,0.15); color: #9e9e9e; }
+.status-new { background: rgba(255,152,0,0.15); color: var(--warning); }
+.status-reviewed { background: rgba(76,175,80,0.15); color: var(--success); }
 .status-received { background: rgba(255,152,0,0.15); color: var(--warning); }
 .status-reviewing { background: rgba(33,150,243,0.15); color: #2196f3; }
 .status-shortlisted { background: rgba(156,39,176,0.15); color: #9c27b0; }
@@ -360,6 +362,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         <a href="#" class="active" onclick="showSection('dashboard', this)">📊 Dashboard</a>
         <a href="#" onclick="showSection('applications', this)">📋 Applications</a>
         <a href="#" onclick="showSection('enquiries', this)">✉️ Enquiries</a>
+        <a href="#" onclick="showSection('feedback', this)">⭐ Feedback</a>
         <a href="#" onclick="showSection('stats', this)">📈 Reports</a>
         <a href="#" onclick="showSection('settings', this)">⚙️ Settings</a>
     </nav>
@@ -386,6 +389,8 @@ tr:hover td { background: rgba(255,255,255,0.02); }
             <div class="stat-card"><div class="stat-value" id="statShortlisted">-</div><div class="stat-label">Shortlisted</div></div>
             <div class="stat-card"><div class="stat-value" id="statOffered">-</div><div class="stat-label">Offers Made</div></div>
             <div class="stat-card"><div class="stat-value" id="statEnquiries">-</div><div class="stat-label">Unread Enquiries</div></div>
+            <div class="stat-card"><div class="stat-value" id="statFeedback">-</div><div class="stat-label">Feedback Received</div></div>
+            <div class="stat-card"><div class="stat-value" id="statAvgRating">-</div><div class="stat-label">Average Rating</div></div>
         </div>
     </div>
 
@@ -425,6 +430,36 @@ tr:hover td { background: rgba(255,255,255,0.02); }
             <div id="enquiriesTable">
                 <div class="loading">Loading enquiries...</div>
             </div>
+        </div>
+    </div>
+
+    <!-- Feedback Section -->
+    <div id="section-feedback" style="display:none;">
+        <div class="table-container">
+            <div class="table-header">
+                <h3>User Feedback</h3>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                    <select id="feedbackRatingFilter" onchange="loadFeedback()" style="padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;">
+                        <option value="">All Ratings</option>
+                        <option value="5">5 stars</option>
+                        <option value="4">4 stars</option>
+                        <option value="3">3 stars</option>
+                        <option value="2">2 stars</option>
+                        <option value="1">1 star</option>
+                    </select>
+                    <select id="feedbackStatusFilter" onchange="loadFeedback()" style="padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;">
+                        <option value="">All Statuses</option>
+                        <option value="new">New</option>
+                        <option value="reviewed">Reviewed</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                    <input type="text" class="search-input" id="feedbackSearchInput" placeholder="Search email, text..." onkeyup="loadFeedback()">
+                </div>
+            </div>
+            <div id="feedbackTable">
+                <div class="loading">Loading feedback...</div>
+            </div>
+            <div class="pagination" id="feedbackPagination"></div>
         </div>
     </div>
 
@@ -590,6 +625,7 @@ function showSection(section, el) {
         dashboard: 'Dashboard',
         applications: 'Applications',
         enquiries: 'Contact Enquiries',
+        feedback: 'User Feedback',
         stats: 'Reports & Analytics',
         settings: 'System Settings'
     };
@@ -598,6 +634,7 @@ function showSection(section, el) {
     
     if (section === 'applications') loadApplications();
     if (section === 'enquiries') loadEnquiries();
+    if (section === 'feedback') loadFeedback();
     if (section === 'stats') loadReportStats();
     if (section === 'dashboard') loadDashboardStats();
 }
@@ -605,12 +642,19 @@ function showSection(section, el) {
 // ===== DASHBOARD =====
 async function loadDashboardStats() {
     try {
-        const [appRes, enqRes] = await Promise.all([
+        const [appRes, enqRes, fbRes] = await Promise.all([
             fetch(API_BASE + 'api/admin_applications.php', { headers: authHeaders() }),
-            fetch(API_BASE + 'api/admin_enquiries.php?status=unread', { headers: authHeaders() })
+            fetch(API_BASE + 'api/admin_enquiries.php?status=unread', { headers: authHeaders() }),
+            fetch(API_BASE + 'api/admin_feedback.php', { headers: authHeaders() })
         ]);
         const appData = await appRes.json();
         const enqData = await enqRes.json();
+        const fbData = await fbRes.json();
+
+        if (!fbData.error && fbData.pagination) {
+            document.getElementById('statFeedback').textContent = fbData.pagination.total;
+            document.getElementById('statAvgRating').textContent = fbData.average_rating !== null ? fbData.average_rating + ' / 5' : '-';
+        }
 
         if (!appData.error && appData.pagination) {
             document.getElementById('statTotal').textContent = appData.pagination.total;
@@ -923,6 +967,170 @@ async function deleteEnquiry(id) {
         } else {
             closeModal();
             loadEnquiries();
+            loadDashboardStats();
+        }
+    } catch (err) {
+        alert('Connection error.');
+    }
+}
+
+// ===== FEEDBACK =====
+let currentFeedbackPage = 1;
+
+function ratingStars(rating) {
+    const r = parseInt(rating, 10) || 0;
+    return '★'.repeat(r) + '☆'.repeat(5 - r);
+}
+
+async function loadFeedback() {
+    const rating = document.getElementById('feedbackRatingFilter').value;
+    const status = document.getElementById('feedbackStatusFilter').value;
+    const search = document.getElementById('feedbackSearchInput').value.trim();
+
+    let url = API_BASE + 'api/admin_feedback.php?page=' + currentFeedbackPage + '&limit=15&sort_by=submitted_at&sort_order=DESC';
+    if (rating) url += '&rating=' + encodeURIComponent(rating);
+    if (status) url += '&status=' + encodeURIComponent(status);
+    if (search) url += '&search=' + encodeURIComponent(search);
+
+    try {
+        const res = await fetch(url, { headers: authHeaders() });
+        const data = await res.json();
+
+        if (data.error) {
+            document.getElementById('feedbackTable').innerHTML = '<div class="loading" style="color:var(--danger)">Error loading feedback.</div>';
+            return;
+        }
+
+        const feedback = data.feedback || [];
+        const pag = data.pagination || {};
+
+        if (feedback.length === 0) {
+            document.getElementById('feedbackTable').innerHTML = '<div class="loading">No feedback found.</div>';
+            document.getElementById('feedbackPagination').innerHTML = '';
+            return;
+        }
+
+        let html = `<table><thead><tr>
+            <th>Rating</th><th>Email</th><th>Feedback</th><th>Status</th><th>Date</th><th></th>
+        </tr></thead><tbody>`;
+
+        feedback.forEach(function(fb) {
+            const statusClass = 'status-' + fb.status;
+            const date = new Date(fb.submitted_at).toLocaleDateString();
+            const snippet = (fb.feedback_text || '').length > 80 ? fb.feedback_text.slice(0, 80) + '…' : (fb.feedback_text || '');
+            html += `<tr>
+                <td style="color:var(--accent);letter-spacing:1px;">${ratingStars(fb.rating)}</td>
+                <td style="font-size:12px;">${fb.email || 'Anonymous'}</td>
+                <td style="font-size:13px;">${snippet}</td>
+                <td><span class="status-badge status-${fb.status}">${fb.status}</span></td>
+                <td style="font-size:12px;">${date}</td>
+                <td><button class="action-btn" onclick="viewFeedback(${fb.id})">View</button></td>
+            </tr>`;
+        });
+
+        html += '</tbody></table>';
+        document.getElementById('feedbackTable').innerHTML = html;
+
+        let pagHtml = '';
+        if (pag.total_pages > 1) {
+            pagHtml = `<button ${currentFeedbackPage <= 1 ? 'disabled' : ''} onclick="changeFeedbackPage(${currentFeedbackPage - 1})">← Prev</button>
+                       <span class="page-info">Page ${pag.page} of ${pag.total_pages}</span>
+                       <button ${currentFeedbackPage >= pag.total_pages ? 'disabled' : ''} onclick="changeFeedbackPage(${currentFeedbackPage + 1})">Next →</button>`;
+        }
+        document.getElementById('feedbackPagination').innerHTML = pagHtml;
+
+    } catch (err) {
+        document.getElementById('feedbackTable').innerHTML = '<div class="loading" style="color:var(--danger)">Connection error.</div>';
+    }
+}
+
+function changeFeedbackPage(page) {
+    currentFeedbackPage = page;
+    loadFeedback();
+}
+
+async function viewFeedback(id) {
+    try {
+        const res = await fetch(API_BASE + 'api/admin_feedback.php?id=' + id, { headers: authHeaders() });
+        const data = await res.json();
+
+        if (data.error) {
+            alert('Error loading feedback details.');
+            return;
+        }
+
+        const fb = data.feedback;
+        document.getElementById('modalTitle').textContent = 'Feedback from ' + (fb.email || 'Anonymous');
+
+        let html = `<div class="detail-grid">
+            <div class="detail-item"><label>Rating</label><span style="color:var(--accent);letter-spacing:1px;">${ratingStars(fb.rating)}</span></div>
+            <div class="detail-item"><label>Email</label><span>${fb.email || 'Anonymous'}</span></div>
+            <div class="detail-item full"><label>Course / Area</label><span>${fb.course_name}</span></div>
+            <div class="detail-item full"><label>Feedback</label>
+                <p style="font-size:13px;line-height:1.6;color:var(--text);background:var(--bg);padding:12px;border-radius:6px;margin-top:4px;">${fb.feedback_text}</p>
+            </div>
+            <div class="detail-item"><label>Status</label><span class="status-badge status-${fb.status}">${fb.status}</span></div>
+            <div class="detail-item"><label>Submitted</label><span>${fb.submitted_at}</span></div>
+        </div>
+        <div class="modal-actions" style="flex-direction:column;margin-top:16px;">
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+                <label style="font-size:13px;">Update Status:</label>
+                <select id="feedbackStatus">
+                    <option value="new" ${fb.status === 'new' ? 'selected' : ''}>New</option>
+                    <option value="reviewed" ${fb.status === 'reviewed' ? 'selected' : ''}>Reviewed</option>
+                    <option value="archived" ${fb.status === 'archived' ? 'selected' : ''}>Archived</option>
+                </select>
+                <button class="save-btn" onclick="saveFeedbackStatus(${fb.id})">Save</button>
+                <button class="delete-btn" onclick="removeFeedback(${fb.id})">Delete</button>
+            </div>
+        </div>`;
+
+        document.getElementById('modalBody').innerHTML = html;
+        document.getElementById('detailModal').classList.add('active');
+
+    } catch (err) {
+        alert('Error loading feedback.');
+    }
+}
+
+async function saveFeedbackStatus(id) {
+    const status = document.getElementById('feedbackStatus').value;
+
+    try {
+        const res = await fetch(API_BASE + 'api/admin_feedback.php?id=' + id, {
+            method: 'PUT',
+            headers: authHeaders(),
+            body: JSON.stringify({ status: status })
+        });
+        const data = await res.json();
+
+        if (data.error) {
+            alert('Error: ' + data.message);
+        } else {
+            closeModal();
+            loadFeedback();
+            loadDashboardStats();
+        }
+    } catch (err) {
+        alert('Connection error.');
+    }
+}
+
+async function removeFeedback(id) {
+    if (!confirm('Are you sure you want to delete this feedback entry?')) return;
+
+    try {
+        const res = await fetch(API_BASE + 'api/admin_feedback.php?id=' + id, {
+            method: 'DELETE',
+            headers: authHeaders()
+        });
+        const data = await res.json();
+
+        if (data.error) {
+            alert('Error: ' + data.message);
+        } else {
+            closeModal();
+            loadFeedback();
             loadDashboardStats();
         }
     } catch (err) {

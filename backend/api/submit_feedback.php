@@ -67,10 +67,10 @@ try {
     Database::initializeTables();
 
     $stmt = $db->prepare("
-        INSERT INTO course_feedback (course_name, rating, feedback_text)
-        VALUES (?, ?, ?)
+        INSERT INTO course_feedback (course_name, email, rating, feedback_text)
+        VALUES (?, ?, ?, ?)
     ");
-    $stmt->execute(['General Portal Feedback', $rating, $feedback]);
+    $stmt->execute(['General Portal Feedback', $email, $rating, $feedback]);
 
     appLog("New feedback received from: {$email} - rating {$rating}/5");
 

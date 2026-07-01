@@ -1,6 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <script>
+/*
+     * Amazon T-Level Hub — Shared Icon Library
+     * -----------------------------------------
+     * Replaces the site's old emoji icons (✕ 🔍 🏛️ 📄 🎓 💻 📖 ☁️ 🚀 👤 📊 💼
+     * 🎯 💬 👋 ⚠️ 🏥 🔬 🌐 ✓ etc.) with a single shared SVG sprite, in the same
+     * outline style already used for the course icons (24x24, 2px stroke,
+     * square caps/joins, colour via currentColor).
+     *
+     * The sprite is embedded inline below (not fetched from icons.svg) so it
+     * keeps working when pages are opened directly from disk. assets/icons.svg
+     * is kept as the canonical, human-editable source — if you change an icon,
+     * edit icons.svg first, then copy the <symbol> block(s) into ICON_SPRITE
+     * here so the two stay in sync.
+     *
+     * Usage:
+     *   1) Static HTML:      <i data-icon="search"></i>
+     *                         <i data-icon="check" data-size="16" data-color="#ff9900"></i>
+     *      icons.js auto-replaces every [data-icon] element on DOMContentLoaded,
+     *      and again whenever refreshIcons() is called (for content you build
+     *      dynamically after that, e.g. innerHTML re-renders).
+     *
+     *   2) From JavaScript:  el.innerHTML = Icon('rocket', { size: 16 });
+     *      Useful when building HTML strings/template literals at runtime
+     *      (e.g. resource link lists in resources.html).
+     */
+    
+    const ICON_SPRITE = `<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </symbol>
+    
+      <symbol id="icon-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </symbol>
+    
+      <symbol id="icon-bank" viewBox="0 0 24 24">
+        <polygon points="12 3 2 9 22 9"/>
+        <line x1="4" y1="9" x2="4" y2="19"/>
+        <line x1="8" y1="9" x2="8" y2="19"/>
+        <line x1="16" y1="9" x2="16" y2="19"/>
+        <line x1="20" y1="9" x2="20" y2="19"/>
+        <line x1="2" y1="22" x2="22" y2="22"/>
+      </symbol>
+    
+      <symbol id="icon-file" viewBox="0 0 24 24">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="8" y1="13" x2="16" y2="13"/>
+        <line x1="8" y1="17" x2="16" y2="17"/>
+      </symbol>
+    
+      <symbol id="icon-graduation-cap" viewBox="0 0 24 24">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+      </symbol>
+    
+      <symbol id="icon-monitor" viewBox="0 0 24 24">
+        <rect x="2" y="3" width="20" height="14" rx="0"/>
+        <polyline points="8 21 12 17 16 21"/>
+        <line x1="2" y1="17" x2="22" y2="17"/>
+      </symbol>
+    
+      <symbol id="icon-book" viewBox="0 0 24 24">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+      </symbol>
+    
+      <symbol id="icon-cloud" viewBox="0 0 24 24">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+      </symbol>
+    
+      <symbol id="icon-rocket" viewBox="0 0 24 24">
+        <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2"/>
+      </symbol>
+    
+      <symbol id="icon-user" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 21v-1a8 8 0 0 1 16 0v1"/>
+      </symbol>
+    
+      <symbol id="icon-bar-chart" viewBox="0 0 24 24">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+        <line x1="2" y1="20" x2="22" y2="20"/>
+      </symbol>
+    
+      <symbol id="icon-briefcase" viewBox="0 0 24 24">
+        <rect x="2" y="7" width="20" height="14" rx="0"/>
+        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        <line x1="12" y1="12" x2="12" y2="16"/>
+        <line x1="10" y1="14" x2="14" y2="14"/>
+      </symbol>
+    
+      <symbol id="icon-target" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="12" r="6"/>
+        <circle cx="12" cy="12" r="2"/>
+      </symbol>
+    
+      <symbol id="icon-message-circle" viewBox="0 0 24 24">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </symbol>
+    
+      <symbol id="icon-wave" viewBox="0 0 24 24">
+        <path d="M8 13V6a2 2 0 0 1 4 0v6"/>
+        <path d="M12 12V4a2 2 0 0 1 4 0v8"/>
+        <path d="M16 12.5V7a2 2 0 0 1 4 0v7c0 4-2.5 7-7 7h-1c-4 0-5.5-1-7-4l-2.3-4.5a1.7 1.7 0 0 1 .7-2.3 1.7 1.7 0 0 1 2.2.5L8 13"/>
+      </symbol>
+    
+      <symbol id="icon-alert-triangle" viewBox="0 0 24 24">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </symbol>
+    
+      <symbol id="icon-hospital" viewBox="0 0 24 24">
+        <rect x="4" y="2" width="16" height="20" rx="0"/>
+        <line x1="12" y1="8" x2="12" y2="14"/>
+        <line x1="9" y1="11" x2="15" y2="11"/>
+      </symbol>
+    
+      <symbol id="icon-flask" viewBox="0 0 24 24">
+        <path d="M9 2v6l-5 9a2 2 0 0 0 1.74 3h12.52A2 2 0 0 0 20 17l-5-9V2"/>
+        <line x1="8.5" y1="2" x2="15.5" y2="2"/>
+        <line x1="7" y1="16" x2="17" y2="16"/>
+      </symbol>
+    
+      <symbol id="icon-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </symbol>
+    
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"/>
+      </symbol>
+    
+      <symbol id="icon-dot" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8"/>
+      </symbol>
+    
+      <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+        <line x1="4" y1="12" x2="20" y2="12"/>
+        <polyline points="13 5 20 12 13 19"/>
+      </symbol>
+    
+      <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+        <line x1="20" y1="12" x2="4" y2="12"/>
+        <polyline points="11 5 4 12 11 19"/>
+      </symbol>
+    
+      <symbol id="icon-arrow-up-right" viewBox="0 0 24 24">
+        <line x1="7" y1="17" x2="17" y2="7"/>
+        <polyline points="7 7 17 7 17 17"/>
+      </symbol>
+    
+      <symbol id="icon-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </symbol>
+    
+      <symbol id="icon-moon" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </symbol>
+    
+      <symbol id="icon-star" viewBox="0 0 24 24">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </symbol>
+    
+    </svg>`;
+    
+    (function injectSprite() {
+        function inject() {
+            if (document.getElementById('shared-icon-sprite')) return;
+            const wrap = document.createElement('div');
+            wrap.id = 'shared-icon-sprite';
+            wrap.style.display = 'none';
+            wrap.innerHTML = ICON_SPRITE;
+            document.body.insertAdjacentElement('afterbegin', wrap);
+        }
+        if (document.body) inject();
+        else document.addEventListener('DOMContentLoaded', inject);
+    })();
+    
+    /**
+     * Build an inline <svg> string referencing a sprite symbol.
+     * @param {string} name - icon name, e.g. "search" (symbol id is "icon-search")
+     * @param {object} [opts]
+     * @param {number|string} [opts.size=20] - width & height in px
+     * @param {string} [opts.color='currentColor'] - stroke colour
+     * @param {string} [opts.fill='none'] - fill colour
+     * @param {string} [opts.className=''] - extra class names
+     */
+    function Icon(name, opts) {
+        opts = opts || {};
+        const size = opts.size || 20;
+        const color = opts.color || 'currentColor';
+        const fill = opts.fill || 'none';
+        const cls = 'icon' + (opts.className ? ' ' + opts.className : '');
+        return '<svg class="' + cls + '" width="' + size + '" height="' + size +
+            '" viewBox="0 0 24 24" fill="' + fill + '" stroke="' + color +
+            '" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">' +
+            '<use href="#icon-' + name + '"></use></svg>';
+    }
+    
+    /** Replace every [data-icon] element's content with its SVG icon. */
+    function refreshIcons(root) {
+        const scope = root || document;
+        scope.querySelectorAll('[data-icon]').forEach(function (el) {
+            const name = el.getAttribute('data-icon');
+            if (!name) return;
+            el.innerHTML = Icon(name, {
+                size: el.getAttribute('data-size') || undefined,
+                color: el.getAttribute('data-color') || undefined,
+                fill: el.getAttribute('data-fill') || undefined,
+                className: el.getAttribute('data-icon-class') || undefined,
+            });
+            el.removeAttribute('data-icon-rendered-pending');
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        refreshIcons();
+    });
+    
+    </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AWS T-Level Portal — Sign In</title>
@@ -795,6 +1036,191 @@ body.light-theme .login-toggle-row span {
         padding: 20px 18px;
     }
 }
+/* ===== HIGH CONTRAST ===== */
+body.high-contrast .login-page {
+    background: #000000 !important;
+}
+body.high-contrast .login-container {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+body.high-contrast .login-roles {
+    background: #000000 !important;
+    border-right: 2px solid #ffff00 !important;
+}
+body.high-contrast .login-roles-title {
+    color: #ffff00 !important;
+}
+body.high-contrast .role-btn {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+body.high-contrast .role-btn:hover {
+    background: #111111 !important;
+    border-color: #ffff00 !important;
+    color: #ffff00 !important;
+    transform: none !important;
+}
+body.high-contrast .role-btn.active {
+    background: #ffff00 !important;
+    border-color: #ffff00 !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+}
+body.high-contrast .role-icon {
+    background: rgba(255,255,255,0.1) !important;
+}
+body.high-contrast .role-btn.active .role-icon {
+    background: rgba(0,0,0,0.2) !important;
+}
+body.high-contrast .role-btn .role-sub {
+    opacity: 0.7 !important;
+}
+body.high-contrast .auth-header span {
+    color: #ffff00 !important;
+}
+body.high-contrast .auth-header img {
+    filter: brightness(0) invert(1) !important;
+}
+body.high-contrast .auth-tabs {
+    background: #111111 !important;
+}
+body.high-contrast .auth-tab {
+    color: rgba(255,255,255,0.5) !important;
+}
+body.high-contrast .auth-tab.active {
+    background: #ffff00 !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+}
+body.high-contrast .auth-tab:not(.active):hover {
+    color: #ffffff !important;
+}
+body.high-contrast .form-group label {
+    color: #ffffff !important;
+}
+body.high-contrast .form-group input {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .form-group input::placeholder {
+    color: #888888 !important;
+}
+body.high-contrast .form-group input:focus {
+    border-color: #ffff00 !important;
+    box-shadow: 0 0 0 3px rgba(255,255,0,0.15) !important;
+}
+body.high-contrast .forgot-link {
+    color: #ffff00 !important;
+}
+body.high-contrast .auth-submit-btn {
+    background: #ffff00 !important;
+    color: #000000 !important;
+}
+body.high-contrast .auth-submit-btn:hover {
+    background: #cccc00 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+body.high-contrast .auth-divider {
+    color: rgba(255,255,255,0.4) !important;
+}
+body.high-contrast .auth-divider::before,
+body.high-contrast .auth-divider::after {
+    background: rgba(255,255,255,0.2) !important;
+}
+body.high-contrast .sso-btn {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+body.high-contrast .sso-btn:hover {
+    background: #111111 !important;
+    border-color: #ffff00 !important;
+    color: #ffff00 !important;
+}
+body.high-contrast .guest-link a {
+    color: rgba(255,255,255,0.5) !important;
+}
+body.high-contrast .guest-link a:hover {
+    color: #ffff00 !important;
+}
+body.high-contrast .selected-role-display {
+    color: rgba(255,255,255,0.5) !important;
+}
+body.high-contrast .selected-role-name {
+    color: #ffff00 !important;
+}
+body.high-contrast .login-roles > div:last-child div {
+    color: rgba(255,255,255,0.3) !important;
+}
+body.high-contrast .settings-gear-btn {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffff00 !important;
+    box-shadow: none !important;
+}
+body.high-contrast .settings-gear-btn:hover {
+    transform: none !important;
+    border-color: #ffff00 !important;
+    box-shadow: none !important;
+}
+body.high-contrast .login-settings-modal {
+    background: rgba(0,0,0,0.85) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+body.high-contrast .login-settings-box {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+}
+body.high-contrast .login-settings-header {
+    border-bottom-color: #ffff00 !important;
+}
+body.high-contrast .login-settings-header h2 {
+    color: #ffff00 !important;
+}
+body.high-contrast .login-settings-close {
+    color: #ffff00 !important;
+}
+body.high-contrast .login-settings-close:hover {
+    color: #ffffff !important;
+}
+body.high-contrast .login-settings-section h3 {
+    color: #ffff00 !important;
+}
+body.high-contrast .login-settings-section select {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .login-font-controls button {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .login-font-controls button:hover {
+    background: #ffff00 !important;
+    color: #000000 !important;
+    border-color: #ffff00 !important;
+}
+body.high-contrast .login-toggle-row span {
+    color: #ffffff !important;
+}
+body.high-contrast .login-toggle-row input[type="checkbox"] {
+    accent-color: #ffff00 !important;
+}
+body.high-contrast .login-page::after {
+    display: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -948,15 +1374,15 @@ body.light-theme .login-toggle-row span {
             <div class="auth-divider">or continue with</div>
 
             <div class="sso-buttons">
-                <button type="button" class="sso-btn">
+                <button type="button" class="sso-btn" id="loginGoogleBtn" data-provider="google">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                     Google
                 </button>
-                <button type="button" class="sso-btn">
+                <button type="button" class="sso-btn" id="loginGithubBtn" data-provider="github">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
                     GitHub
                 </button>
-                <button type="button" class="sso-btn">
+                <button type="button" class="sso-btn" id="loginMicrosoftBtn" data-provider="microsoft">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 23 23" fill="none"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="12" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="12" width="10" height="10" fill="#00A4EF"/><rect x="12" y="12" width="10" height="10" fill="#FFB900"/></svg>
                     Microsoft
                 </button>
@@ -990,15 +1416,15 @@ body.light-theme .login-toggle-row span {
             <div class="auth-divider">or continue with</div>
 
             <div class="sso-buttons">
-                <button type="button" class="sso-btn">
+                <button type="button" class="sso-btn" id="regGoogleBtn" data-provider="google">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                     Google
                 </button>
-                <button type="button" class="sso-btn">
+                <button type="button" class="sso-btn" id="regGithubBtn" data-provider="github">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
                     GitHub
                 </button>
-                <button type="button" class="sso-btn">
+                <button type="button" class="sso-btn" id="regMicrosoftBtn" data-provider="microsoft">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 23 23" fill="none"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="12" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="12" width="10" height="10" fill="#00A4EF"/><rect x="12" y="12" width="10" height="10" fill="#FFB900"/></svg>
                     Microsoft
                 </button>
@@ -1012,6 +1438,61 @@ body.light-theme .login-toggle-row span {
     </div>
 
 </div>
+
+<!-- ===== OAUTH LOADING OVERLAY ===== -->
+<div id="oauthOverlay" style="display:none; position:fixed; inset:0; z-index:9000; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); align-items:center; justify-content:center; flex-direction:column; gap:20px;">
+    <div style="width:52px; height:52px; border:3px solid rgba(255,153,0,0.2); border-top-color:#ff9900; border-radius:50%; animation:oauthSpin 0.8s linear infinite;"></div>
+    <div id="oauthOverlayText" style="color:#ffffff; font-size:16px; font-family:Arial,sans-serif; font-weight:600; letter-spacing:0.3px;">Redirecting to provider…</div>
+    <div style="color:rgba(255,255,255,0.4); font-size:13px; font-family:Arial,sans-serif;">You'll be brought back here after signing in</div>
+</div>
+
+<!-- ===== OAUTH CONFIG NOTICE MODAL ===== -->
+<div id="oauthConfigModal" style="display:none; position:fixed; inset:0; z-index:9100; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); align-items:center; justify-content:center;">
+    <div style="background:rgba(48,67,95,0.97); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:32px; max-width:420px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.6); font-family:Arial,sans-serif; color:#fff; position:relative;">
+        <div id="oauthModalIcon" style="font-size:36px; margin-bottom:14px;"></div>
+        <h3 id="oauthModalTitle" style="margin:0 0 10px; font-size:20px; font-weight:700;"></h3>
+        <p id="oauthModalDesc" style="margin:0 0 20px; font-size:14px; color:rgba(255,255,255,0.65); line-height:1.6;"></p>
+        <div style="background:rgba(0,0,0,0.3); border-radius:10px; padding:14px 16px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.06);">
+            <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.35); margin-bottom:8px;">Developer setup required</div>
+            <code id="oauthModalCode" style="font-size:12px; color:#ff9900; line-height:1.8; display:block; white-space:pre;"></code>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button id="oauthModalProceed" style="flex:1; padding:12px; border-radius:10px; border:none; background:#ff9900; color:#fff; font-size:14px; font-weight:700; cursor:pointer; font-family:Arial,sans-serif;">Continue anyway</button>
+            <button id="oauthModalCancel" style="flex:1; padding:12px; border-radius:10px; border:1.5px solid rgba(255,255,255,0.12); background:transparent; color:rgba(255,255,255,0.6); font-size:14px; cursor:pointer; font-family:Arial,sans-serif;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes oauthSpin { to { transform: rotate(360deg); } }
+.sso-btn.sso-loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+.sso-btn.sso-loading::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: oauthSpin 0.6s linear infinite;
+}
+body.light-theme #oauthConfigModal > div {
+    background: rgba(255,255,255,0.97) !important;
+    border-color: rgba(35,47,62,0.1) !important;
+    color: #232f3e !important;
+}
+body.light-theme #oauthModalTitle { color: #232f3e; }
+body.light-theme #oauthModalDesc { color: rgba(35,47,62,0.6) !important; }
+body.light-theme #oauthModalCode { color: #c7500a !important; }
+body.light-theme #oauthModalProceed { background: #232f3e !important; }
+</style>
 
 <script>
 // ===== LOGIN PAGE TRANSLATIONS =====
@@ -1533,6 +2014,10 @@ document.getElementById('loginForm')?.addEventListener('submit', function(e) {
         alert(t.loginAlert);
         return;
     }
+    localStorage.setItem('session-token', 'true');
+    localStorage.setItem('user-name', email.split('@')[0]);
+    localStorage.setItem('user-email', email);
+    localStorage.setItem('selected-role', localStorage.getItem('selected-role') || 'student');
     window.location.href = 'index.html';
 });
 
@@ -1558,8 +2043,290 @@ document.getElementById('registerForm')?.addEventListener('submit', function(e) 
         alert(t.regAlertMatch);
         return;
     }
+    localStorage.setItem('session-token', 'true');
+    localStorage.setItem('user-name', name);
+    localStorage.setItem('user-email', email);
+    localStorage.setItem('selected-role', localStorage.getItem('selected-role') || 'student');
     window.location.href = 'index.html';
 });
+
+// ===== GUEST ACCESS — set session token before navigating =====
+function startGuestSession() {
+    localStorage.setItem('session-token', 'true');
+    if (!localStorage.getItem('user-name')) {
+        localStorage.setItem('user-name', 'Guest' + Math.floor(1000 + Math.random() * 9000));
+    }
+    localStorage.setItem('selected-role', localStorage.getItem('selected-role') || 'student');
+}
+document.getElementById('guestContinue')?.addEventListener('click', startGuestSession);
+document.getElementById('guestContinue2')?.addEventListener('click', startGuestSession);
+
+// ===== OAUTH 2.0 SOCIAL LOGIN =====
+(function() {
+
+    // ── Configuration ──────────────────────────────────────────────────────────
+    // Replace these placeholder values with your real OAuth app credentials.
+    // Each provider requires you to register an app in their developer console
+    // and set the redirect URI to: window.location.origin + '/login.html'
+    const OAUTH_CONFIG = {
+        google: {
+            clientId:    'https://721644358630-tff75arf4ht0a7jp4ggcoteoirpr1ul6.apps.googleusercontent.com/',        // console.cloud.google.com
+            authUrl:     'https://accounts.google.com/o/oauth2/v2/auth',
+            scope:       'openid email profile',
+            responseType:'code',
+            icon:        Icon('dot', {color:'#4285F4', fill:'#4285F4'}),
+            name:        'Google',
+            setupSteps:  'console.cloud.google.com → APIs & Services\n→ Credentials → Create OAuth 2.0 Client ID\n→ Set redirect URI to your domain/login.html'
+        },
+        github: {
+            clientId:    'YOUR_GITHUB_CLIENT_ID',        // github.com/settings/apps
+            authUrl:     'https://github.com/login/oauth/authorize',
+            scope:       'read:user user:email',
+            responseType:'code',
+            icon:        Icon('dot', {color:'#181717', fill:'#181717'}),
+            name:        'GitHub',
+            setupSteps:  'github.com/settings/apps → New OAuth App\n→ Set Authorization callback URL\n→ to your domain/login.html'
+        },
+        microsoft: {
+            clientId:    'YOUR_MICROSOFT_CLIENT_ID',     // portal.azure.com
+            tenantId:    'common',                       // or your tenant ID
+            authUrl:     '',                             // built dynamically below
+            scope:       'openid email profile User.Read',
+            responseType:'code',
+            icon:        Icon('dot', {color:'#0078D4', fill:'#0078D4'}),
+            name:        'Microsoft',
+            setupSteps:  'portal.azure.com → Azure Active Directory\n→ App registrations → New registration\n→ Set redirect URI to your domain/login.html'
+        }
+    };
+
+    // ── Helpers ─────────────────────────────────────────────────────────────────
+
+    /** Generate a cryptographically random state string for CSRF protection */
+    function generateState() {
+        const arr = new Uint8Array(16);
+        crypto.getRandomValues(arr);
+        return Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    /** Build the full OAuth authorization URL for a given provider */
+    function buildAuthUrl(provider) {
+        const cfg = OAUTH_CONFIG[provider];
+        const state = generateState();
+        const role  = localStorage.getItem('selected-role') || 'student';
+
+        // Store state + context so we can verify on callback
+        sessionStorage.setItem('oauth_state',    state);
+        sessionStorage.setItem('oauth_provider', provider);
+        sessionStorage.setItem('oauth_role',     role);
+
+        const redirectUri = window.location.origin +
+            window.location.pathname.replace(/\/[^\/]*$/, '/login.html');
+
+        // Microsoft needs the tenant baked into the URL
+        let baseUrl = cfg.authUrl;
+        if (provider === 'microsoft') {
+            baseUrl = 'https://login.microsoftonline.com/' +
+                (cfg.tenantId || 'common') + '/oauth2/v2.0/authorize';
+        }
+
+        const params = new URLSearchParams({
+            client_id:     cfg.clientId,
+            redirect_uri:  redirectUri,
+            response_type: cfg.responseType,
+            scope:         cfg.scope,
+            state:         state
+        });
+
+        // Google: request access_type=offline for refresh tokens
+        if (provider === 'google') params.set('access_type', 'offline');
+
+        return baseUrl + '?' + params.toString();
+    }
+
+    /** Check whether a client ID is still a placeholder */
+    function isPlaceholder(provider) {
+        const id = OAUTH_CONFIG[provider].clientId;
+        return !id || id.startsWith('YOUR_');
+    }
+
+    // ── Loading overlay ──────────────────────────────────────────────────────────
+    const overlay = document.getElementById('oauthOverlay');
+    const overlayText = document.getElementById('oauthOverlayText');
+
+    function showOverlay(providerName) {
+        overlayText.textContent = 'Redirecting to ' + providerName + '…';
+        overlay.style.display = 'flex';
+    }
+    function hideOverlay() {
+        overlay.style.display = 'none';
+    }
+
+    // ── Config-notice modal ──────────────────────────────────────────────────────
+    const configModal    = document.getElementById('oauthConfigModal');
+    const modalIcon      = document.getElementById('oauthModalIcon');
+    const modalTitle     = document.getElementById('oauthModalTitle');
+    const modalDesc      = document.getElementById('oauthModalDesc');
+    const modalCode      = document.getElementById('oauthModalCode');
+    const proceedBtn     = document.getElementById('oauthModalProceed');
+    const cancelBtn      = document.getElementById('oauthModalCancel');
+    let   pendingProvider = null;
+
+    function showConfigModal(provider) {
+        const cfg = OAUTH_CONFIG[provider];
+        pendingProvider = provider;
+        modalIcon.innerHTML  = cfg.icon;
+        modalTitle.textContent = 'Connect ' + cfg.name + ' OAuth';
+        modalDesc.textContent  =
+            'The ' + cfg.name + ' OAuth app hasn\'t been configured yet. ' +
+            'You (the developer) need to register an app and add the Client ID ' +
+            'to OAUTH_CONFIG in login.html before this button will work for real users.';
+        modalCode.textContent  = cfg.setupSteps;
+        configModal.style.display = 'flex';
+    }
+    function hideConfigModal() {
+        configModal.style.display = 'none';
+        pendingProvider = null;
+    }
+
+    proceedBtn.addEventListener('click', function() {
+        if (!pendingProvider) return;
+        hideConfigModal();
+        triggerOAuth(pendingProvider);
+    });
+
+    cancelBtn.addEventListener('click', hideConfigModal);
+    configModal.addEventListener('click', function(e) {
+        if (e.target === configModal) hideConfigModal();
+    });
+
+    // ── Core OAuth trigger ───────────────────────────────────────────────────────
+    function triggerOAuth(provider) {
+        // Show loading state on all matching buttons
+        document.querySelectorAll('[data-provider="' + provider + '"]').forEach(function(btn) {
+            btn.classList.add('sso-loading');
+        });
+
+        showOverlay(OAUTH_CONFIG[provider].name);
+
+        // Small delay so the user sees the transition before the redirect
+        setTimeout(function() {
+            const url = buildAuthUrl(provider);
+            window.location.href = url;
+        }, 600);
+    }
+
+    // ── Button click handlers ────────────────────────────────────────────────────
+    document.querySelectorAll('[data-provider]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const provider = this.getAttribute('data-provider');
+            if (!OAUTH_CONFIG[provider]) return;
+
+            // Save which role was selected so we can restore it post-callback
+            const activeRole = document.querySelector('.role-btn.active');
+            if (activeRole) {
+                localStorage.setItem('selected-role', activeRole.getAttribute('data-role'));
+            }
+
+            if (isPlaceholder(provider)) {
+                // Developer hasn't set up credentials yet — show the notice
+                showConfigModal(provider);
+            } else {
+                triggerOAuth(provider);
+            }
+        });
+    });
+
+    // ── OAuth callback handler ───────────────────────────────────────────────────
+    // When the provider redirects back, the URL will contain ?code=...&state=...
+    // In a real app your backend would exchange the code for tokens here.
+    // This handler validates state, shows a success message, and logs the user in.
+    (function handleCallback() {
+        const params   = new URLSearchParams(window.location.search);
+        const code     = params.get('code');
+        const state    = params.get('state');
+        const error    = params.get('error');
+        const savedState    = sessionStorage.getItem('oauth_state');
+        const savedProvider = sessionStorage.getItem('oauth_provider');
+        const savedRole     = sessionStorage.getItem('oauth_role');
+
+        if (!code && !error) return; // Not a callback — normal page load
+
+        // Clean the URL immediately so the code isn't bookmarked
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        if (error) {
+            console.warn('OAuth error from provider:', error);
+            showOAuthToast('Sign-in was cancelled or failed. Please try again.', true);
+            return;
+        }
+
+        // CSRF state check
+        if (state !== savedState) {
+            console.error('OAuth state mismatch — possible CSRF attack');
+            showOAuthToast('Security check failed. Please try again.', true);
+            return;
+        }
+
+        // Clear session OAuth data
+        sessionStorage.removeItem('oauth_state');
+        sessionStorage.removeItem('oauth_provider');
+        sessionStorage.removeItem('oauth_role');
+
+        // Restore selected role
+        if (savedRole) {
+            localStorage.setItem('selected-role', savedRole);
+        }
+
+        const providerName = savedProvider
+            ? (OAUTH_CONFIG[savedProvider] || {}).name || savedProvider
+            : 'provider';
+
+        // ⚠️  In production: send `code` to your backend to exchange for tokens,
+        //     then store the session token returned by your server.
+        //     e.g.: fetch('/api/auth/oauth-callback', { method:'POST', body: JSON.stringify({ code, provider: savedProvider }) })
+        //           .then(r => r.json()).then(d => { localStorage.setItem('session-token', d.token); window.location.href = 'index.html'; });
+
+        // Simulation: treat the code as a successful login
+        localStorage.setItem('session-token', 'true');
+        localStorage.setItem('oauth-provider', providerName);
+        if (!localStorage.getItem('user-name')) {
+            localStorage.setItem('user-name', providerName + ' User');
+        }
+        localStorage.setItem('selected-role', localStorage.getItem('selected-role') || 'student');
+
+        showOAuthToast('Signed in with ' + providerName + '! Redirecting…', false);
+        setTimeout(function() { window.location.href = 'index.html'; }, 1800);
+    })();
+
+    // ── Toast notification ───────────────────────────────────────────────────────
+    function showOAuthToast(message, isError) {
+        const toast = document.createElement('div');
+        toast.style.cssText = [
+            'position:fixed', 'bottom:32px', 'left:50%',
+            'transform:translateX(-50%)',
+            'padding:14px 24px',
+            'border-radius:12px',
+            'font-family:Arial,sans-serif',
+            'font-size:14px',
+            'font-weight:600',
+            'color:#fff',
+            'z-index:9999',
+            'box-shadow:0 8px 32px rgba(0,0,0,0.4)',
+            'transition:opacity 0.4s ease',
+            'max-width:90vw',
+            'text-align:center',
+            isError
+                ? 'background:rgba(200,50,50,0.95)'
+                : 'background:rgba(30,130,80,0.95)'
+        ].join(';');
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(function() { toast.style.opacity = '0'; }, 3200);
+        setTimeout(function() { toast.remove(); }, 3600);
+    }
+
+})();
+// ── END OAUTH ────────────────────────────────────────────────────────────────
 
 </script>
 </div>

@@ -161,11 +161,24 @@ class Database {
             CREATE TABLE IF NOT EXISTS course_feedback (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 course_name TEXT NOT NULL,
+                email TEXT DEFAULT '',
                 rating INTEGER CHECK(rating >= 1 AND rating <= 5),
                 feedback_text TEXT DEFAULT '',
+                status TEXT DEFAULT 'new',
                 submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
+
+        // Migrate older installs that created course_feedback before the
+        // email/status columns existed. SQLite has no "ADD COLUMN IF NOT
+        // EXISTS", so we probe the schema and add columns only if missing.
+        $existingCols = array_column($db->query("PRAGMA table_info(course_feedback)")->fetchAll(), 'name');
+        if (!in_array('email', $existingCols, true)) {
+            $db->exec("ALTER TABLE course_feedback ADD COLUMN email TEXT DEFAULT ''");
+        }
+        if (!in_array('status', $existingCols, true)) {
+            $db->exec("ALTER TABLE course_feedback ADD COLUMN status TEXT DEFAULT 'new'");
+        }
     }
 
     /**

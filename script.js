@@ -1,5 +1,37 @@
-// Home button scrolls to top
+// ===== THEME TOGGLE (top right corner) =====
+(function() {
+    const themeBtn = document.getElementById('themeToggleBtn');
+    if (!themeBtn) return;
 
+    const stored = localStorage.getItem('light-theme') === 'true';
+
+    function updateThemeBtn(isLight) {
+        themeBtn.innerHTML = isLight ? Icon('sun', {size:18}) : Icon('moon', {size:18});
+        themeBtn.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+    }
+
+    // Sync with the settings modal checkbox (if it exists)
+    const lightThemeCheckbox = document.getElementById('lightThemeToggle');
+
+    function syncThemeState(isLight) {
+        document.body.classList.toggle('light-theme', isLight);
+        localStorage.setItem('light-theme', isLight);
+        updateThemeBtn(isLight);
+        if (lightThemeCheckbox) {
+            lightThemeCheckbox.checked = isLight;
+        }
+    }
+
+    // Apply initial state
+    syncThemeState(stored);
+
+    themeBtn.addEventListener('click', function() {
+        const nowLight = !document.body.classList.contains('light-theme');
+        syncThemeState(nowLight);
+    });
+})();
+
+// Home button scrolls to top
 document
 .getElementById("homeBtn")
 .addEventListener("click", function(e){
@@ -137,6 +169,9 @@ window.addEventListener("DOMContentLoaded", function () {
 // --- Language switching ---
 const languageSelect = document.getElementById("languageSelect");
 const footerLangSelect = document.getElementById("footerLangSelect");
+
+// RTL languages set
+const rtlLanguages = ["ar"];
 
 const translations = {
    en: {
@@ -463,9 +498,470 @@ const translations = {
         chatbotInputPlaceholder: "Geben Sie Ihre Frage ein...",
         chatbotWelcome: "Hallo! Ich bin der T-Level-Assistent. Fragen Sie mich alles zu T-Level-Kursen, Industriepraktika, Karrieremöglichkeiten, Bewerbungen und mehr."
 
+    },
+
+    // ===== HINDI =====
+    hi: {
+
+        // Nav
+        home: "होम",
+        apply: "आवेदन",
+        resources: "संसाधन",
+        chatbot: "चैटबॉट",
+        settings: "सेटिंग्स",
+        contacts: "संपर्क",
+
+        // Category bar
+        students: "छात्र",
+        parents: "अभिभावक",
+        teachers: "शिक्षक और स्कूल",
+        accessibility: "पहुंच-योग्यता",
+        administration: "प्रशासन",
+
+        // Card headings
+        tlevelCourses: "टी-लेवल कोर्स",
+        industryPlacements: "उद्योग प्लेसमेंट",
+        careerOpportunities: "कैरियर के अवसर",
+
+        // Card descriptions
+        cardDescCourses: "उपलब्ध टी-लेवल योग्यताओं, पाठ्यक्रम सामग्री और प्रगति पथों का अन्वेषण करें।",
+        cardDescPlacements: "वर्तमान प्लेसमेंट के अवसर खोजें और मूल्यवान कार्य अनुभव प्राप्त करें।",
+        cardDescCareers: "अपना टी-लेवल पूरा करने के बाद उपलब्ध करियर के बारे में जानें।",
+
+        // Card buttons
+        learnMore: "और जानें",
+
+        // Course search
+        searchPlaceholder: "टी-लेवल कोर्स खोजें...",
+
+        // Course items
+        courseDigitalProd: "डिजिटल प्रोडक्शन, डिज़ाइन और डेवलपमेंट",
+        courseDigitalSupport: "डिजिटल सपोर्ट सेवाएं",
+        courseDigitalBusiness: "डिजिटल व्यवसाय सेवाएं",
+        courseEducation: "शिक्षा और चाइल्डकेयर",
+        courseHealth: "स्वास्थ्य",
+        courseHealthcareScience: "हेल्थकेयर साइंस",
+        courseBuildingServices: "बिल्डिंग सर्विसेज इंजीनियरिंग",
+        courseDesignSurveying: "डिज़ाइन, सर्वेक्षण और योजना",
+        courseAccounting: "लेखांकन",
+        courseFinance: "वित्त",
+
+        // Placement cards
+        placementCloudTitle: "AWS क्लाउड सपोर्ट प्लेसमेंट",
+        placementCloudDesc: "क्लाउड इंफ्रास्ट्रक्चर और AWS सेवाओं का समर्थन करने का अनुभव प्राप्त करें।",
+        placementCloudLocation: "स्थान: लंदन",
+        placementDevTitle: "जूनियर सॉफ्टवेयर डेवलपर",
+        placementDevDesc: "वास्तविक एप्लिकेशन बनाने वाली डेवलपमेंट टीमों के साथ काम करें।",
+        placementDevLocation: "स्थान: मैनचेस्टर",
+        placementCyberTitle: "साइबर सुरक्षा सहायक",
+        placementCyberDesc: "सुरक्षा निगरानी और खतरे का पता लगाने के बारे में जानें।",
+        placementCyberLocation: "स्थान: बर्मिंघम",
+        placementHelpdeskTitle: "आईटी हेल्पडेस्क तकनीशियन",
+        placementHelpdeskDesc: "उपयोगकर्ताओं का समर्थन करें और आईटी सिस्टम बनाए रखें।",
+        placementHelpdeskLocation: "स्थान: लीड्स",
+
+        // Career cards
+        careerSoftwareTitle: "सॉफ्टवेयर डेवलपर",
+        careerSoftwareSalary: "औसत वेतन: £30,000 - £60,000",
+        careerSoftwareTlevel: "संबंधित टी-लेवल: डिजिटल प्रोडक्शन, डिज़ाइन और डेवलपमेंट",
+        careerCloudTitle: "क्लाउड इंजीनियर",
+        careerCloudSalary: "औसत वेतन: £35,000 - £70,000",
+        careerCloudTlevel: "संबंधित टी-लेवल: डिजिटल सपोर्ट सेवाएं",
+        careerCyberTitle: "साइबर सुरक्षा विश्लेषक",
+        careerCyberSalary: "औसत वेतन: £35,000 - £65,000",
+        careerCyberTlevel: "संबंधित टी-लेवल: डिजिटल व्यवसाय सेवाएं",
+        careerTeachingTitle: "शिक्षण सहायक",
+        careerTeachingSalary: "औसत वेतन: £20,000 - £30,000",
+        careerTeachingTlevel: "संबंधित टी-लेवल: शिक्षा और चाइल्डकेयर",
+        careerHealthcareTitle: "हेल्थकेयर सहायक",
+        careerHealthcareSalary: "औसत वेतन: £22,000 - £35,000",
+        careerHealthcareTlevel: "संबंधित टी-लेवल: स्वास्थ्य",
+        careerLabTitle: "प्रयोगशाला तकनीशियन",
+        careerLabSalary: "औसत वेतन: £25,000 - £40,000",
+        careerLabTlevel: "संबंधित टी-लेवल: हेल्थकेयर साइंस",
+
+        // Info section headings
+        headingStudents: "छात्र",
+        headingTeachers: "शिक्षक और स्कूल",
+        headingParents: "अभिभावक",
+        headingAccessibility: "पहुंच-योग्यता",
+        headingAdministration: "प्रशासन",
+
+        // Info section paragraphs
+        textStudents: "T-Levels इंग्लैंड की एक नई प्रकार की योग्यता है जो कक्षा शिक्षण को एक <u>महत्वपूर्ण उद्योग प्लेसमेंट</u> के साथ जोड़ती है, जिससे छात्रों को स्नातक होने से बहुत पहले <u>वास्तविक कार्य अनुभव</u> मिलता है। जर्मन छात्रों के लिए जो अबितुर या व्यावसायिक औसबिल्डुंग जैसी प्रणालियों के आदी हैं, T-Levels व्यावहारिक और शैक्षणिक शिक्षण का समान मिश्रण प्रदान करते हैं, लेकिन <u>यूके उद्योगों में सीधा मार्ग</u> के साथ।",
+        textTeachers: "यह खंड जर्मन स्कूलों और शिक्षकों के लिए डिज़ाइन किया गया है जो पहली बार छात्रों को <u>अंतर्राष्ट्रीय अध्ययन विकल्पों</u> पर सलाह दे रहे हैं। यह पाठ्यक्रम रूपरेखा, T-Levels और परिचित जर्मन योग्यताओं के बीच तुलना, और स्कूलों के लिए व्यावहारिक मार्गदर्शन प्रदान करता है।",
+        textParents: "कई जर्मन माता-पिता पहले T-Levels से परिचित नहीं होंगे, इसलिए यह खंड योग्यता में शामिल चीजों, इसे कैसे मान्यता दी जाती है, और विदेश में प्लेसमेंट के आसपास किस प्रकार की सहायता संरचना मौजूद है, के बारे में विश्वास और स्पष्टता बनाने पर केंद्रित है।",
+        textAccessibility: "चूंकि यह पोर्टल एक अंतर्राष्ट्रीय दर्शकों की सेवा करता है जो एक अपरिचित शिक्षा प्रणाली में नेविगेट कर रहे हैं, शुरू से ही भाषा और उपयोगिता बाधाओं को दूर करने के लिए पहुंच सुविधाएं बनाई गई हैं।",
+        textAdministration: "यह खंड छात्रों, अभिभावकों या स्कूलों के बजाय T-Level पोर्टल के संचालन और रखरखाव के लिए जिम्मेदार Amazon कर्मचारियों के लिए है।",
+
+        // Footer
+        footerGetToKnow: "T-Levels को जानें",
+        footerAbout: "T-Levels के बारे में",
+        footerWhyChoose: "T-Levels क्यों चुनें",
+        footerSuccess: "सफलता की कहानियां",
+        footerNews: "समाचार और अपडेट",
+        footerForSchools: "स्कूलों और शिक्षकों के लिए",
+        footerPartner: "हमारे साथ साझेदारी करें",
+        footerCurriculum: "पाठ्यक्रम संसाधन",
+        footerSchoolVisit: "स्कूल विज़िट बुक करें",
+        footerToolkit: "शिक्षक टूलकिट",
+        footerPlacements: "उद्योग प्लेसमेंट",
+        footerPlacementPartner: "प्लेसमेंट पार्टनर बनें",
+        footerGuidelines: "प्लेसमेंट दिशानिर्देश",
+        footerEmployerStories: "नियोक्ता सफलता की कहानियां",
+        footerFunding: "फंडिंग और प्रोत्साहन",
+        footerSupport: "सहायता",
+        footerFAQs: "सामान्य प्रश्न",
+        footerAppGuide: "आवेदन गाइड",
+        footerAdvisor: "सलाहकार से संपर्क करें",
+        footerHelp: "सहायता केंद्र",
+        footerPortal: "T-Level पोर्टल",
+        footerDigital: "डिजिटल",
+        footerDigitalDesc: "सॉफ्टवेयर, डेटा और इंफ्रास्ट्रक्चर",
+        footerConstruction: "निर्माण",
+        footerConstructionDesc: "डिज़ाइन, सर्वेक्षण और भवन सेवाएं",
+        footerHealthScience: "स्वास्थ्य और विज्ञान",
+        footerHealthScienceDesc: "हेल्थकेयर और प्रयोगशाला मार्ग",
+        footerEngineering: "इंजीनियरिंग",
+        footerEngineeringDesc: "विनिर्माण और नियंत्रण",
+        footerBusiness: "व्यवसाय",
+        footerBusinessDesc: "प्रबंधन और प्रशासन",
+        footerEducationChildcare: "शिक्षा और चाइल्डकेयर",
+        footerEducationChildcareDesc: "प्रारंभिक वर्ष और शिक्षण सहायता",
+        footerLegalFinance: "कानून और वित्त",
+        footerLegalFinanceDesc: "लेखांकन और कानूनी सेवाएं",
+        footerConditions: "उपयोग की शर्तें",
+        footerPrivacy: "गोपनीयता नीति",
+        footerAccessibility: "पहुंच-योग्यता विवरण",
+        footerCopyright: "© 2026 T-Level पोर्टल। केवल मार्गदर्शन के लिए — कोई आधिकारिक सरकारी संसाधन नहीं।",
+
+        // Settings modal
+        settingsTitle: "सेटिंग्स",
+        settingsLanguage: "भाषा",
+        settingsFontSize: "फ़ॉन्ट आकार",
+        settingsAccessibility: "पहुंच-योग्यता",
+        settingsHighContrast: "उच्च कंट्रास्ट मोड",
+        settingsUnderlineLinks: "सभी लिंक को रेखांकित करें",
+        settingsReduceMotion: "गति/एनिमेशन कम करें",
+        settingsFontReset: "रीसेट",
+
+        // Contacts modal
+        contactsTitle: "हमसे संपर्क करें",
+        contactsEmail: "ईमेल पता",
+        contactsEmailPlaceholder: "अपना ईमेल पता दर्ज करें",
+        contactsSubject: "विषय",
+        contactsSubjectPlaceholder: "आपका प्रश्न किस बारे में है?",
+        contactsMessage: "संदेश",
+        contactsMessagePlaceholder: "T-Levels, उद्योग प्लेसमेंट, करियर पथ, आवेदन या सहायता के बारे में प्रश्न पूछें...",
+        contactsSubmit: "पूछताछ सबमिट करें",
+        contactsAlertComplete: "कृपया सभी फ़ील्ड भरें।",
+        contactsAlertThanks: "आपकी पूछताछ के लिए धन्यवाद। T-Level सहायता टीम का एक सदस्य जल्द ही आपसे संपर्क करेगा।",
+
+        // Chatbot
+        chatbotTitle: "T-Level सहायक",
+        chatbotInputPlaceholder: "अपना प्रश्न टाइप करें...",
+        chatbotWelcome: "नमस्ते! मैं T-Level सहायक हूँ। मुझसे T-Level कोर्स, उद्योग प्लेसमेंट, करियर, आवेदन और अधिक के बारे में पूछें।"
+
+    },
+
+    // ===== SPANISH =====
+    es: {
+
+        home: "Inicio",
+        apply: "Solicitud",
+        resources: "Recursos",
+        chatbot: "Chatbot",
+        settings: "Ajustes",
+        contacts: "Contacto",
+
+        students: "Estudiantes",
+        parents: "Padres y Tutores",
+        teachers: "Profesores y Escuelas",
+        accessibility: "Accesibilidad",
+        administration: "Administración",
+
+        tlevelCourses: "Cursos T-Level",
+        industryPlacements: "Prácticas Industriales",
+        careerOpportunities: "Oportunidades Profesionales",
+
+        cardDescCourses: "Explore las calificaciones T-Level disponibles, el contenido de los cursos y las vías de progresión.",
+        cardDescPlacements: "Descubra oportunidades de prácticas actuales y adquiera una valiosa experiencia laboral.",
+        cardDescCareers: "Conozca las carreras disponibles después de completar su T-Level elegido.",
+
+        learnMore: "Más Información",
+        searchPlaceholder: "Buscar cursos T-Level...",
+
+        courseDigitalProd: "Producción Digital, Diseño y Desarrollo",
+        courseDigitalSupport: "Servicios de Soporte Digital",
+        courseDigitalBusiness: "Servicios Empresariales Digitales",
+        courseEducation: "Educación y Cuidado Infantil",
+        courseHealth: "Salud",
+        courseHealthcareScience: "Ciencias de la Salud",
+        courseBuildingServices: "Ingeniería de Servicios de Edificación",
+        courseDesignSurveying: "Diseño, Topografía y Planificación",
+        courseAccounting: "Contabilidad",
+        courseFinance: "Finanzas",
+
+        placementCloudTitle: "Práctica de Soporte AWS Cloud",
+        placementCloudDesc: "Obtenga experiencia apoyando infraestructura en la nube y servicios AWS.",
+        placementCloudLocation: "Ubicación: Londres",
+        placementDevTitle: "Desarrollador de Software Junior",
+        placementDevDesc: "Trabaje con equipos de desarrollo creando aplicaciones del mundo real.",
+        placementDevLocation: "Ubicación: Mánchester",
+        placementCyberTitle: "Asistente de Ciberseguridad",
+        placementCyberDesc: "Aprenda sobre monitoreo de seguridad y detección de amenazas.",
+        placementCyberLocation: "Ubicación: Birmingham",
+        placementHelpdeskTitle: "Técnico de Mesa de Ayuda TI",
+        placementHelpdeskDesc: "Apoye a usuarios y mantenga sistemas informáticos.",
+        placementHelpdeskLocation: "Ubicación: Leeds",
+
+        careerSoftwareTitle: "Desarrollador de Software",
+        careerSoftwareSalary: "Salario Promedio: £30,000 - £60,000",
+        careerSoftwareTlevel: "T-Level Relevante: Producción Digital, Diseño y Desarrollo",
+        careerCloudTitle: "Ingeniero en la Nube",
+        careerCloudSalary: "Salario Promedio: £35,000 - £70,000",
+        careerCloudTlevel: "T-Level Relevante: Servicios de Soporte Digital",
+        careerCyberTitle: "Analista de Ciberseguridad",
+        careerCyberSalary: "Salario Promedio: £35,000 - £65,000",
+        careerCyberTlevel: "T-Level Relevante: Servicios Empresariales Digitales",
+        careerTeachingTitle: "Asistente de Enseñanza",
+        careerTeachingSalary: "Salario Promedio: £20,000 - £30,000",
+        careerTeachingTlevel: "T-Level Relevante: Educación y Cuidado Infantil",
+        careerHealthcareTitle: "Asistente Sanitario",
+        careerHealthcareSalary: "Salario Promedio: £22,000 - £35,000",
+        careerHealthcareTlevel: "T-Level Relevante: Salud",
+        careerLabTitle: "Técnico de Laboratorio",
+        careerLabSalary: "Salario Promedio: £25,000 - £40,000",
+        careerLabTlevel: "T-Level Relevante: Ciencias de la Salud",
+
+        headingStudents: "Estudiantes",
+        headingTeachers: "Profesores y Escuelas",
+        headingParents: "Padres y Tutores",
+        headingAccessibility: "Accesibilidad",
+        headingAdministration: "Administración",
+
+        textStudents: "Los T-Levels son un nuevo tipo de calificación de Inglaterra que combinan el aprendizaje en el aula con <u>prácticas industriales sustanciales</u>, brindando a los estudiantes <u>experiencia laboral real</u> mucho antes de graduarse. Para estudiantes alemanes acostumbrados al Abitur o la formación vocacional Ausbildung, los T-Levels ofrecen una mezcla similar de aprendizaje práctico y académico, pero con una <u>ruta directa a las industrias del Reino Unido</u> como tecnología digital, salud, construcción e ingeniería.",
+        textTeachers: "Esta sección está diseñada para escuelas y educadores alemanes que puedan estar asesorando a estudiantes sobre <u>opciones de estudio internacional</u> por primera vez. Proporciona esquemas curriculares, comparaciones entre T-Levels y calificaciones alemanas familiares, y orientación práctica sobre cómo las escuelas pueden apoyar a los estudiantes interesados en postularse.",
+        textParents: "Muchos padres alemanes no habrán encontrado los T-Levels antes, por lo que esta sección se enfoca en generar confianza y claridad sobre lo que implica la calificación, cómo se reconoce y qué tipo de estructura de apoyo existe alrededor de una práctica en el extranjero.",
+        textAccessibility: "Dado que este portal atiende a una audiencia internacional que navega por un sistema educativo desconocido, las funciones de accesibilidad están integradas desde el principio para eliminar las barreras de idioma y usabilidad.",
+        textAdministration: "Esta sección está destinada al personal de Amazon responsable de ejecutar y mantener el portal T-Level, no para estudiantes, padres o escuelas.",
+
+        footerGetToKnow: "Conozca los T-Levels",
+        footerAbout: "Acerca de T-Levels",
+        footerWhyChoose: "Por Qué Elegir T-Levels",
+        footerSuccess: "Historias de Éxito",
+        footerNews: "Noticias y Actualizaciones",
+        footerForSchools: "Para Escuelas y Profesores",
+        footerPartner: "Asóciese Con Nosotros",
+        footerCurriculum: "Recursos Curriculares",
+        footerSchoolVisit: "Reserve una Visita Escolar",
+        footerToolkit: "Kit de Herramientas para Profesores",
+        footerPlacements: "Prácticas Industriales",
+        footerPlacementPartner: "Conviértase en Socio de Prácticas",
+        footerGuidelines: "Directrices de Prácticas",
+        footerEmployerStories: "Historias de Éxito de Empleadores",
+        footerFunding: "Financiación e Incentivos",
+        footerSupport: "Apoyo",
+        footerFAQs: "Preguntas Frecuentes",
+        footerAppGuide: "Guía de Solicitud",
+        footerAdvisor: "Contacte a un Asesor",
+        footerHelp: "Centro de Ayuda",
+        footerPortal: "Portal T-Level",
+        footerDigital: "Digital",
+        footerDigitalDesc: "Software, datos e infraestructura",
+        footerConstruction: "Construcción",
+        footerConstructionDesc: "Diseño, topografía y servicios de edificación",
+        footerHealthScience: "Salud y Ciencia",
+        footerHealthScienceDesc: "Rutas sanitarias y de laboratorio",
+        footerEngineering: "Ingeniería",
+        footerEngineeringDesc: "Fabricación y control",
+        footerBusiness: "Negocios",
+        footerBusinessDesc: "Gestión y administración",
+        footerEducationChildcare: "Educación y Cuidado Infantil",
+        footerEducationChildcareDesc: "Primera infancia y apoyo docente",
+        footerLegalFinance: "Legal y Finanzas",
+        footerLegalFinanceDesc: "Contabilidad y servicios legales",
+        footerConditions: "Condiciones de Uso",
+        footerPrivacy: "Aviso de Privacidad",
+        footerAccessibility: "Declaración de Accesibilidad",
+        footerCopyright: "© 2026 Portal T-Level. Solo como guía — no es un recurso oficial del gobierno.",
+
+        settingsTitle: "Ajustes",
+        settingsLanguage: "Idioma",
+        settingsFontSize: "Tamaño de Fuente",
+        settingsAccessibility: "Accesibilidad",
+        settingsHighContrast: "Modo de alto contraste",
+        settingsUnderlineLinks: "Subrayar todos los enlaces",
+        settingsReduceMotion: "Reducir movimiento/animaciones",
+        settingsFontReset: "Restablecer",
+
+        contactsTitle: "Contáctenos",
+        contactsEmail: "Dirección de Correo",
+        contactsEmailPlaceholder: "Ingrese su dirección de correo electrónico",
+        contactsSubject: "Asunto",
+        contactsSubjectPlaceholder: "¿Sobre qué trata su pregunta?",
+        contactsMessage: "Mensaje",
+        contactsMessagePlaceholder: "Haga una pregunta sobre T-Levels, prácticas industriales, carreras profesionales, solicitudes o asistencia...",
+        contactsSubmit: "Enviar Consulta",
+        contactsAlertComplete: "Por favor complete todos los campos.",
+        contactsAlertThanks: "Gracias por su consulta. Un miembro del equipo de soporte T-Level se pondrá en contacto con usted pronto.",
+
+        chatbotTitle: "Asistente T-Level",
+        chatbotInputPlaceholder: "Escriba su pregunta...",
+        chatbotWelcome: "¡Hola! Soy el asistente de T-Level. Pregúnteme cualquier cosa sobre cursos T-Level, prácticas industriales, carreras, solicitudes y más."
+
+    },
+
+    // ===== ARABIC (RTL) =====
+    ar: {
+
+        home: "الرئيسية",
+        apply: "التقديم",
+        resources: "الموارد",
+        chatbot: "المساعد",
+        settings: "الإعدادات",
+        contacts: "الاتصال",
+
+        students: "الطلاب",
+        parents: "أولياء الأمور",
+        teachers: "المعلمون والمدارس",
+        accessibility: "إمكانية الوصول",
+        administration: "الإدارة",
+
+        tlevelCourses: "دورات T-Level",
+        industryPlacements: "التدريب المهني",
+        careerOpportunities: "الفرص الوظيفية",
+
+        cardDescCourses: "استكشف مؤهلات T-Level المتاحة ومحتوى الدورة ومسارات التقدم.",
+        cardDescPlacements: "اكتشف فرص التدريب الحالية واحصل على خبرة عملية قيمة.",
+        cardDescCareers: "تعرف على الوظائف المتاحة بعد إكمال T-Level الذي اخترته.",
+
+        learnMore: "اعرف المزيد",
+        searchPlaceholder: "ابحث عن دورات T-Level...",
+
+        courseDigitalProd: "الإنتاج الرقمي والتصميم والتطوير",
+        courseDigitalSupport: "خدمات الدعم الرقمي",
+        courseDigitalBusiness: "خدمات الأعمال الرقمية",
+        courseEducation: "التعليم ورعاية الأطفال",
+        courseHealth: "الصحة",
+        courseHealthcareScience: "علوم الرعاية الصحية",
+        courseBuildingServices: "هندسة خدمات المباني",
+        courseDesignSurveying: "التصميم والمسح والتخطيط",
+        courseAccounting: "المحاسبة",
+        courseFinance: "المالية",
+
+        placementCloudTitle: "تدريب دعم AWS السحابي",
+        placementCloudDesc: "اكتسب خبرة في دعم البنية التحتية السحابية وخدمات AWS.",
+        placementCloudLocation: "الموقع: لندن",
+        placementDevTitle: "مطور برمجيات مبتدئ",
+        placementDevDesc: "اعمل مع فرق التطوير لبناء تطبيقات واقعية.",
+        placementDevLocation: "الموقع: مانشستر",
+        placementCyberTitle: "مساعد الأمن السيبراني",
+        placementCyberDesc: "تعلم مراقبة الأمن وكشف التهديدات.",
+        placementCyberLocation: "الموقع: برمنغهام",
+        placementHelpdeskTitle: "فني مكتب مساعدة تقنية المعلومات",
+        placementHelpdeskDesc: "ادعم المستخدمين وحافظ على أنظمة تقنية المعلومات.",
+        placementHelpdeskLocation: "الموقع: ليدز",
+
+        careerSoftwareTitle: "مطور برمجيات",
+        careerSoftwareSalary: "متوسط الراتب: £30,000 - £60,000",
+        careerSoftwareTlevel: "T-Level ذو الصلة: الإنتاج الرقمي والتصميم والتطوير",
+        careerCloudTitle: "مهندس سحابي",
+        careerCloudSalary: "متوسط الراتب: £35,000 - £70,000",
+        careerCloudTlevel: "T-Level ذو الصلة: خدمات الدعم الرقمي",
+        careerCyberTitle: "محلل أمن سيبراني",
+        careerCyberSalary: "متوسط الراتب: £35,000 - £65,000",
+        careerCyberTlevel: "T-Level ذو الصلة: خدمات الأعمال الرقمية",
+        careerTeachingTitle: "مساعد تدريس",
+        careerTeachingSalary: "متوسط الراتب: £20,000 - £30,000",
+        careerTeachingTlevel: "T-Level ذو الصلة: التعليم ورعاية الأطفال",
+        careerHealthcareTitle: "مساعد رعاية صحية",
+        careerHealthcareSalary: "متوسط الراتب: £22,000 - £35,000",
+        careerHealthcareTlevel: "T-Level ذو الصلة: الصحة",
+        careerLabTitle: "فني مختبر",
+        careerLabSalary: "متوسط الراتب: £25,000 - £40,000",
+        careerLabTlevel: "T-Level ذو الصلة: علوم الرعاية الصحية",
+
+        headingStudents: "الطلاب",
+        headingTeachers: "المعلمون والمدارس",
+        headingParents: "أولياء الأمور",
+        headingAccessibility: "إمكانية الوصول",
+        headingAdministration: "الإدارة",
+
+        textStudents: "T-Levels هي نوع جديد من المؤهلات من إنجلترا تجمع بين التعلم في الفصول الدراسية و<u>تدريب مهني كبير</u>، مما يمنح الطلاب <u>خبرة عمل حقيقية</u> قبل تخرجهم بوقت طويل. للطلاب الألمان المعتادين على أنظمة مثل Abitur أو Ausbildung المهني، تقدم T-Levels مزيجًا مشابهًا من التعلم العملي والأكاديمي، ولكن مع <u>طريق مباشر إلى الصناعات البريطانية</u> مثل التكنولوجيا الرقمية والرعاية الصحية والبناء والهندسة.",
+        textTeachers: "صُمم هذا القسم للمدارس والمعلمين الألمان الذين قد يقدمون المشورة للطلاب حول <u>خيارات الدراسة الدولية</u> لأول مرة. يوفر مخططات المناهج الدراسية، ومقارنات بين T-Levels والمؤهلات الألمانية المألوفة، وإرشادات عملية حول كيفية دعم المدارس للطلاب المهتمين بالتقديم.",
+        textParents: "لن يكون العديد من الآباء الألمان قد واجهوا T-Levels من قبل، لذا يركز هذا القسم على بناء الثقة والوضوح حول ما تنطوي عليه المؤهلات، وكيف يتم الاعتراف بها، ونوع هيكل الدعم الموجود حول التدريب في الخارج.",
+        textAccessibility: "نظرًا لأن هذا البوابة تخدم جمهورًا دوليًا يتنقل في نظام تعليمي غير مألوف، فإن ميزات إمكانية الوصول مدمجة منذ البداية لإزالة حواجز اللغة والاستخدام.",
+        textAdministration: "هذا القسم مخصص لموظفي Amazon المسؤولين عن تشغيل وصيانة بوابة T-Level وليس للطلاب أو أولياء الأمور أو المدارس.",
+
+        footerGetToKnow: "تعرف على T-Levels",
+        footerAbout: "حول T-Levels",
+        footerWhyChoose: "لماذا تختار T-Levels",
+        footerSuccess: "قصص النجاح",
+        footerNews: "الأخبار والتحديثات",
+        footerForSchools: "للمدارس والمعلمين",
+        footerPartner: "كن شريكًا لنا",
+        footerCurriculum: "موارد المناهج الدراسية",
+        footerSchoolVisit: "احجز زيارة مدرسية",
+        footerToolkit: "حقيبة أدوات المعلم",
+        footerPlacements: "التدريب المهني",
+        footerPlacementPartner: "كن شريك تدريب",
+        footerGuidelines: "إرشادات التدريب",
+        footerEmployerStories: "قصص نجاح أصحاب العمل",
+        footerFunding: "التمويل والحوافز",
+        footerSupport: "الدعم",
+        footerFAQs: "الأسئلة الشائعة",
+        footerAppGuide: "دليل التقديم",
+        footerAdvisor: "اتصل بمستشار",
+        footerHelp: "مركز المساعدة",
+        footerPortal: "بوابة T-Level",
+        footerDigital: "رقمي",
+        footerDigitalDesc: "البرمجيات والبيانات والبنية التحتية",
+        footerConstruction: "البناء",
+        footerConstructionDesc: "التصميم والمسح وخدمات المباني",
+        footerHealthScience: "الصحة والعلوم",
+        footerHealthScienceDesc: "مسارات الرعاية الصحية والمختبرات",
+        footerEngineering: "الهندسة",
+        footerEngineeringDesc: "التصنيع والتحكم",
+        footerBusiness: "الأعمال",
+        footerBusinessDesc: "الإدارة والإشراف",
+        footerEducationChildcare: "التعليم ورعاية الأطفال",
+        footerEducationChildcareDesc: "السنوات المبكرة ودعم التدريس",
+        footerLegalFinance: "القانون والمالية",
+        footerLegalFinanceDesc: "المحاسبة والخدمات القانونية",
+        footerConditions: "شروط الاستخدام",
+        footerPrivacy: "إشعار الخصوصية",
+        footerAccessibility: "بيان إمكانية الوصول",
+        footerCopyright: "© 2026 بوابة T-Level. للإرشاد فقط — ليس موردًا حكوميًا رسميًا.",
+
+        settingsTitle: "الإعدادات",
+        settingsLanguage: "اللغة",
+        settingsFontSize: "حجم الخط",
+        settingsAccessibility: "إمكانية الوصول",
+        settingsHighContrast: "وضع التباين العالي",
+        settingsUnderlineLinks: "تسطير جميع الروابط",
+        settingsReduceMotion: "تقليل الحركة/الرسوم المتحركة",
+        settingsFontReset: "إعادة تعيين",
+
+        contactsTitle: "اتصل بنا",
+        contactsEmail: "البريد الإلكتروني",
+        contactsEmailPlaceholder: "أدخل عنوان بريدك الإلكتروني",
+        contactsSubject: "الموضوع",
+        contactsSubjectPlaceholder: "عن ماذا يدور سؤالك؟",
+        contactsMessage: "الرسالة",
+        contactsMessagePlaceholder: "اطرح سؤالاً حول T-Levels أو التدريب المهني أو المسارات الوظيفية أو التقديم أو الدعم...",
+        contactsSubmit: "إرسال الاستفسار",
+        contactsAlertComplete: "يرجى ملء جميع الحقول.",
+        contactsAlertThanks: "شكرًا لك على استفسارك. سيتصل بك أحد أعضاء فريق دعم T-Level قريبًا.",
+
+        chatbotTitle: "مساعد T-Level",
+        chatbotInputPlaceholder: "اكتب سؤالك...",
+        chatbotWelcome: "مرحبًا! أنا مساعد T-Level. اسألني أي شيء عن دورات T-Level والتدريب المهني والوظائف والتقديم والمزيد."
+
     }
 };
 
+// ===== APPLY LANGUAGE & RTL =====
 function applyLanguage(lang) {
     // Update text content for elements with data-i18n
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
@@ -495,6 +991,15 @@ function applyLanguage(lang) {
     if (languageSelect) languageSelect.value = lang;
     if (footerLangSelect) footerLangSelect.value = lang;
 
+    // Handle RTL for Arabic
+    if (rtlLanguages.includes(lang)) {
+        document.documentElement.dir = "rtl";
+        document.body.classList.add("rtl-lang");
+    } else {
+        document.documentElement.dir = "ltr";
+        document.body.classList.remove("rtl-lang");
+    }
+
     localStorage.setItem("language", lang);
 }
 
@@ -516,6 +1021,172 @@ window.addEventListener("DOMContentLoaded", function () {
 
 const courseSearch =
 document.getElementById("courseSearch");
+
+// ===== COURSE SIDE PANEL DATA & LOGIC =====
+const courseData = {
+    'Digital Production, Design and Development': {
+        sector: 'Digital',
+        desc: 'Covers software development, data analytics, and digital design. You\'ll learn programming, project management, UI/UX, and emerging technologies.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£30–60k', l:'Starting Salary' },{ v:'45+ days', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-digital-production-design-and-development' },
+            { icon:Icon('graduation-cap', {size:18}), label:'CS50x – Free Intro to Computer Science', url:'https://cs50.harvard.edu/x/' },
+            { icon:Icon('cloud', {size:18}), label:'AWS Cloud Practitioner Essentials (Free)', url:'https://explore.skillbuilder.aws/learn/course/134/play/136402/aws-cloud-practitioner-essentials', highlight: true },
+            { icon:Icon('user', {size:18}), label:'Software Developer – Career Profile', url:'https://www.prospects.ac.uk/job-profiles/software-developer' },
+        ]
+    },
+    'Digital Support Services': {
+        sector: 'Digital',
+        desc: 'Focuses on IT infrastructure, networking, cyber security, and cloud computing. Ideal for IT technician, network engineer, or cloud support roles.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£35–70k', l:'Starting Salary' },{ v:'45+ days', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-digital-support-services' },
+            { icon:Icon('globe', {size:18}), label:'Cisco Networking Academy (Free)', url:'https://www.netacad.com/' },
+            { icon:Icon('cloud', {size:18}), label:'AWS Solutions Architect Path', url:'https://aws.amazon.com/certification/certified-solutions-architect-associate/', highlight: true },
+            { icon:Icon('user', {size:18}), label:'Cloud Engineer – Career Profile', url:'https://www.prospects.ac.uk/job-profiles/it-systems-engineer' },
+        ]
+    },
+    'Digital Business Services': {
+        sector: 'Digital',
+        desc: 'Covers data management, business analysis, and digital transformation. Great for data analytics, business intelligence, and digital project management.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£35–65k', l:'Starting Salary' },{ v:'45+ days', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-digital-business-services' },
+            { icon:Icon('graduation-cap', {size:18}), label:'Google Data Analytics Certificate', url:'https://www.coursera.org/professional-certificates/google-data-analytics' },
+            { icon:Icon('cloud', {size:18}), label:'AWS Data Analytics Fundamentals (Free)', url:'https://explore.skillbuilder.aws/learn/course/44/data-analytics-fundamentals', highlight: true },
+            { icon:Icon('user', {size:18}), label:'Data Analyst – Career Profile', url:'https://www.prospects.ac.uk/job-profiles/data-analyst' },
+        ]
+    },
+    'Education and Childcare': {
+        sector: 'Education',
+        desc: 'Prepares you for roles in early years education, teaching assistance, and childcare management with practical placement in schools or nurseries.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£20–30k', l:'Starting Salary' },{ v:'315 hrs', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-education-and-childcare' },
+            { icon:Icon('book', {size:18}), label:'EYFS Framework – Gov.uk', url:'https://www.gov.uk/government/publications/early-years-foundation-stage-framework' },
+            { icon:Icon('cloud', {size:18}), label:'AWS Educate – Free Cloud Learning', url:'https://aws.amazon.com/education/awseducate/', highlight: true },
+            { icon:Icon('user', {size:18}), label:'Teaching Assistant – Career Profile', url:'https://nationalcareers.service.gov.uk/job-profiles/teaching-assistant' },
+        ]
+    },
+    'Health': {
+        sector: 'Health & Science',
+        desc: 'Covers core healthcare concepts, anatomy, physiology, and patient care. For students pursuing nursing, paramedicine, or healthcare support careers.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£22–35k', l:'Starting Salary' },{ v:'315 hrs', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-health' },
+            { icon:Icon('hospital', {size:18}), label:'NHS – T-Level Placements in Health', url:'https://www.nhsemployers.org/articles/t-levels' },
+            { icon:Icon('cloud', {size:18}), label:'AWS Health AI Services', url:'https://aws.amazon.com/health/', highlight: true },
+            { icon:Icon('briefcase', {size:18}), label:'NHS Jobs – Healthcare Roles', url:'https://www.jobs.nhs.uk/' },
+        ]
+    },
+    'Healthcare Science': {
+        sector: 'Health & Science',
+        desc: 'Focuses on laboratory sciences, medical physics, and physiological sciences. Ideal for lab technician, clinical scientist, or biomedical roles.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£25–40k', l:'Starting Salary' },{ v:'315 hrs', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-healthcare-science' },
+            { icon:Icon('hospital', {size:18}), label:'NHS – Healthcare Science Careers', url:'https://www.healthcareers.nhs.uk/explore-roles/healthcare-science' },
+            { icon:Icon('cloud', {size:18}), label:'AWS for Healthcare', url:'https://aws.amazon.com/health/', highlight: true },
+            { icon:Icon('user', {size:18}), label:'Biomedical Scientist – Career Profile', url:'https://www.healthcareers.nhs.uk/explore-roles/healthcare-science/roles-healthcare-science/life-sciences/biomedical-scientist' },
+        ]
+    },
+    'Building Services Engineering': {
+        sector: 'Construction',
+        desc: 'Covers heating, ventilation, air conditioning, lighting, and energy systems. For careers in sustainable building services and construction.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£28–50k', l:'Starting Salary' },{ v:'315 hrs', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-building-services-engineering-for-construction' },
+            { icon:Icon('file', {size:18}), label:'CIBSE – Building Services Institution', url:'https://www.cibse.org/' },
+            { icon:Icon('cloud', {size:18}), label:'AWS IoT for Smart Buildings', url:'https://aws.amazon.com/iot/', highlight: true },
+            { icon:Icon('user', {size:18}), label:'Building Services Engineer – Career Profile', url:'https://www.prospects.ac.uk/job-profiles/building-services-engineer' },
+        ]
+    },
+    'Design, Surveying and Planning': {
+        sector: 'Construction',
+        desc: 'Teaches civil engineering, surveying, building design, and planning. Great for careers in construction, architecture, or property development.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£28–55k', l:'Starting Salary' },{ v:'315 hrs', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-design-surveying-and-planning-for-construction' },
+            { icon:Icon('file', {size:18}), label:'RICS – Chartered Surveyors', url:'https://www.rics.org/uk/join-and-access/learn/' },
+            { icon:Icon('cloud', {size:18}), label:'AWS Location Service – GIS & Mapping', url:'https://aws.amazon.com/location/', highlight: true },
+            { icon:Icon('user', {size:18}), label:'Civil Engineer – Career Profile', url:'https://www.prospects.ac.uk/job-profiles/civil-engineer' },
+        ]
+    },
+    'Accounting': {
+        sector: 'Legal & Finance',
+        desc: 'Training in financial accounting, management accounting, taxation, and bookkeeping. Ideal for accountancy, finance, or business careers.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£25–45k', l:'Starting Salary' },{ v:'315 hrs', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-accounting' },
+            { icon:Icon('file', {size:18}), label:'AAT – Accounting T-Level Resources', url:'https://www.aat.org.uk/t-levels' },
+            { icon:Icon('cloud', {size:18}), label:'AWS for Financial Services', url:'https://aws.amazon.com/financial-services/', highlight: true },
+            { icon:Icon('user', {size:18}), label:'Accountant – Career Profile', url:'https://nationalcareers.service.gov.uk/job-profiles/accountant' },
+        ]
+    },
+    'Finance': {
+        sector: 'Legal & Finance',
+        desc: 'Covers financial services, investment management, insurance, and risk. Opens doors to careers in banking, financial planning, and wealth management.',
+        stats: [{ v:'2 yrs', l:'Course Length' },{ v:'£28–60k', l:'Starting Salary' },{ v:'315 hrs', l:'Min Placement' },{ v:'3 A-Levels', l:'UCAS Equivalent' }],
+        links: [
+            { icon:Icon('bank', {size:18}), label:'Gov.uk – Official Overview', url:'https://www.gov.uk/guidance/t-level-technical-qualification-in-finance' },
+            { icon:Icon('book', {size:18}), label:'Investopedia – Financial Education', url:'https://www.investopedia.com/' },
+            { icon:Icon('cloud', {size:18}), label:'Amazon FinSpace – Financial Data', url:'https://aws.amazon.com/finspace/', highlight: true },
+            { icon:Icon('user', {size:18}), label:'Financial Adviser – Career Profile', url:'https://www.prospects.ac.uk/job-profiles/financial-adviser' },
+        ]
+    },
+};
+
+function openCoursePanel(courseName, el) {
+    const data = courseData[courseName];
+    if (!data) return;
+
+    if (el && el.classList.contains('active-course')) {
+        closeCoursePanel();
+        return;
+    }
+
+    document.querySelectorAll('.course-item').forEach(item => item.classList.remove('active-course'));
+    if (el) el.classList.add('active-course');
+
+    document.getElementById('courseResults').classList.add('shrink');
+
+    document.getElementById('inlinePanelTitle').textContent = courseName;
+
+    const statsHTML = data.stats.map(s =>
+        `<div class="sp-stat"><div class="v">${s.v}</div><div class="l">${s.l}</div></div>`
+    ).join('');
+
+    const linksHTML = data.links.map(l =>
+        `<a href="${l.url}" target="_blank" rel="noopener" class="sp-link${l.highlight ? ' highlight' : ''}">
+            <span class="li">${l.icon}</span>
+            <span class="ll">${l.label}</span>
+            <span class="la">↗</span>
+        </a>`
+    ).join('');
+
+    document.getElementById('inlinePanelBody').innerHTML = `
+        <div class="sp-tag">${data.sector}</div>
+        <p class="sp-desc">${data.desc}</p>
+        <div class="sp-stats">${statsHTML}</div>
+        <div class="sp-section"><h3>${Icon('book', {size:17})} Key Resources</h3>${linksHTML}</div>
+        <div class="sp-actions">
+            <a href="application.html" class="sp-apply-btn">${Icon('rocket', {size:15})} Apply for a Placement →</a>
+            <a href="resources.html" class="sp-apply-btn secondary">${Icon('book', {size:15})} View Full Resources →</a>
+        </div>
+    `;
+
+    document.getElementById('inlinePanel').classList.add('open');
+}
+
+function closeCoursePanel() {
+    document.getElementById('inlinePanel').classList.remove('open');
+    document.getElementById('courseResults').classList.remove('shrink');
+    document.querySelectorAll('.course-item').forEach(el => el.classList.remove('active-course'));
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeCoursePanel();
+});
 
 courseSearch.addEventListener("keyup", function(){
 
@@ -602,9 +1273,113 @@ document
     }
 
     const lang = localStorage.getItem("language") || "en";
-    alert(translations[lang].contactsAlertThanks);
+    const sendBtn = document.getElementById("sendContactMessage");
+    sendBtn.textContent = "Sending...";
+    sendBtn.disabled = true;
 
-    contactsOverlay.style.display = "none";
+    // Backend API base URL – uses the Python Flask server (backend_server.py)
+    const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? 'http://localhost:5000'
+        : '';
+
+    fetch(API_BASE + '/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, subject: subject, message: message })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.error) {
+            alert('Error: ' + data.message);
+            return;
+        }
+        alert(translations[lang].contactsAlertThanks);
+        contactsOverlay.style.display = "none";
+        document.getElementById("contactEmail").value = "";
+        document.getElementById("contactSubject").value = "";
+        document.getElementById("contactMessage").value = "";
+    })
+    .catch(function() {
+        alert('Connection error. Please try again.');
+    })
+    .finally(function() {
+        sendBtn.textContent = "Submit Enquiry";
+        sendBtn.disabled = false;
+    });
+
+});
+
+// ===== FEEDBACK FORM =====
+document
+.getElementById("sendFeedbackMessage")
+.addEventListener("click", function(){
+
+    const name =
+    document.getElementById("feedbackName").value;
+
+    const email =
+    document.getElementById("feedbackEmail").value;
+
+    const feedbackType = window.selectedFeedbackType || "";
+
+    const topic =
+    document.getElementById("feedbackTopic").value;
+
+    const message =
+    document.getElementById("feedbackMessage").value;
+
+    if(!name || !email || !feedbackType || !topic || !message){
+
+        const lang = localStorage.getItem("language") || "en";
+        alert(translations[lang].contactsAlertComplete);
+
+        return;
+    }
+
+    const lang = localStorage.getItem("language") || "en";
+    const sendBtn = document.getElementById("sendFeedbackMessage");
+    sendBtn.textContent = "Sending...";
+    sendBtn.disabled = true;
+
+    const typeLabel = feedbackType === 'good' ? 'Positive' : 'Negative';
+
+    // Backend API base URL – uses the Python Flask server (backend_server.py)
+    const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? 'http://localhost:5000'
+        : '';
+
+    fetch(API_BASE + '/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, rating: typeLabel, feedback: message })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.error) {
+            alert('Error: ' + data.message);
+            return;
+        }
+        alert(translations[lang].contactsAlertThanks);
+        contactsOverlay.style.display = "none";
+        document.getElementById("feedbackName").value = "";
+        document.getElementById("feedbackEmail").value = "";
+        document.getElementById("feedbackTopic").value = "";
+        document.getElementById("feedbackMessage").value = "";
+        window.selectedFeedbackType = "";
+        document.getElementById("feedbackTypeGood").style.background = "transparent";
+        document.getElementById("feedbackTypeGood").style.color = "inherit";
+        document.getElementById("feedbackTypeGood").style.borderColor = "#ccc";
+        document.getElementById("feedbackTypeBad").style.background = "transparent";
+        document.getElementById("feedbackTypeBad").style.color = "inherit";
+        document.getElementById("feedbackTypeBad").style.borderColor = "#ccc";
+    })
+    .catch(function() {
+        alert('Connection error. Please try again.');
+    })
+    .finally(function() {
+        sendBtn.textContent = "Submit Feedback";
+        sendBtn.disabled = false;
+    });
 
 });
 
@@ -979,4 +1754,3 @@ const revealObserver = new IntersectionObserver(function(entries) {
 revealSections.forEach(function(section) {
     revealObserver.observe(section);
 });
-

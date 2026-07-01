@@ -421,13 +421,345 @@ body.high-contrast a {
     color: #ffff00 !important;
 }
 
-body.underline-links a {
+body.high-contrast .logo img {
+    filter: brightness(0) invert(1) !important;
+}
+
+body.high-contrast .site-title {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .top-nav {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .top-nav nav a,
+body.high-contrast .site-title {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .category-bar {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .category-bar a {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .card,
+body.high-contrast .placement-card,
+body.high-contrast .career-card,
+body.high-contrast .course-item {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast .card h3,
+body.high-contrast .placement-card h3,
+body.high-contrast .career-card h3 {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .card button {
+    background: #ffff00 !important;
+    color: #000000 !important;
+    border: none !important;
+}
+
+body.high-contrast .info-section {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+body.high-contrast .info-section.visible {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+body.high-contrast .info-section h2 {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .info-text { color: #ffffff !important; }
+
+body.high-contrast .search-box {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .search-box::placeholder {
+    color: #cccccc !important;
+}
+
+body.high-contrast .site-footer,
+body.high-contrast .footer-legal {
+    background: #000000 !important;
+    border-top: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .footer-logo {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .footer-selectors select {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .footer-brand-bar {
+    border-color: #ffff00 !important;
+}
+
+body.high-contrast .footer-col h4 { color: #ffff00 !important; }
+body.high-contrast .footer-col a,
+body.high-contrast .footer-col p { color: #ffffff !important; }
+
+body.high-contrast .chatbot-toggle {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast .chatbot-toggle:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast .chatbot-header {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+    color: #ffff00 !important;
+}
+
+body.high-contrast .chatbot-header button {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .chatbot-message.user {
+    background: #ffff00 !important;
+    color: #000000 !important;
+}
+
+body.high-contrast .chatbot-input-area button {
+    background: #ffff00 !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .chatbot-input-area button:hover {
+    background: #cccc00 !important;
+    transform: none !important;
+}
+
+body.high-contrast .modal-overlay {
+    background: rgba(0, 0, 0, 0.85) !important;
+}
+
+body.high-contrast .modal-box {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast .modal-header {
+    border-bottom-color: #ffff00 !important;
+}
+
+body.high-contrast .modal-header h2 {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .modal-close {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .modal-section h3 {
+    color: #ffff00 !important;
+}
+
+body.high-contrast .modal-section select {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .font-controls button {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .font-controls button:hover {
+    background: #ffff00 !important;
+    color: #000000 !important;
+}
+
+body.high-contrast .toggle-row {
+    color: #ffffff !important;
+}
+
+body.high-contrast .toggle-row input[type="checkbox"] {
+    accent-color: #ffff00 !important;
+}
+
+body.high-contrast .theme-toggle-btn {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffff00 !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast .theme-toggle-btn:hover {
+    transform: none !important;
+    border-color: #ffff00 !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast .cards-video-bg {
+    display: none !important;
+}
+
+body.high-contrast .cards-video-overlay {
+    display: none !important;
+}
+
+body.high-contrast .course-item {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast .course-item:hover {
+    transform: none !important;
+    border-color: #ffff00 !important;
+    color: #ffff00 !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast .placement-card span {
+    background: #111111 !important;
+    color: #ffffff !important;
+    border: 1px solid #ffff00 !important;
+}
+
+body.underline-links a,
+body.underline-links button,
+body.underline-links .course-item,
+body.underline-links .card,
+body.underline-links .placement-card,
+body.underline-links .career-card,
+body.underline-links .sp-link,
+body.underline-links .sp-apply-btn,
+body.underline-links .category-bar a,
+body.underline-links .top-nav nav a,
+body.underline-links .footer-col a,
+body.underline-links .footer-legal a,
+body.underline-links .chatbot-toggle,
+body.underline-links .inline-panel-close,
+body.underline-links .modal-close,
+body.underline-links .theme-toggle-btn,
+body.underline-links .font-controls button,
+body.underline-links #sendContactMessage,
+body.underline-links #sendFeedbackMessage {
     text-decoration: underline !important;
 }
 
 body.reduce-motion * {
     animation: none !important;
     transition: none !important;
+}
+
+/* ===== RTL SUPPORT ===== */
+body.rtl-lang {
+    direction: rtl;
+    text-align: right;
+}
+
+body.rtl-lang .top-nav nav {
+    flex-direction: row-reverse;
+}
+
+body.rtl-lang .logo {
+    flex-direction: row-reverse;
+}
+
+body.rtl-lang .cards {
+    flex-direction: row-reverse !important;
+}
+
+body.rtl-lang .info-section[style*="display:flex"] {
+    flex-direction: row-reverse;
+}
+
+body.rtl-lang .chatbot-panel {
+    right: auto;
+    left: 24px;
+}
+
+body.rtl-lang .chatbot-toggle {
+    right: auto;
+    left: 16px;
+}
+
+body.rtl-lang .chatbot-message.bot {
+    align-self: flex-start;
+}
+
+body.rtl-lang .chatbot-message.user {
+    align-self: flex-end;
+}
+
+body.rtl-lang .category-bar {
+    flex-direction: row-reverse;
+}
+
+body.rtl-lang .footer-links {
+    flex-direction: row-reverse;
+}
+
+body.rtl-lang .footer-brand-bar {
+    flex-direction: row-reverse;
+}
+
+body.rtl-lang .footer-selectors {
+    direction: ltr;
+}
+
+body.rtl-lang .search-box {
+    text-align: right;
+}
+
+body.rtl-lang .placement-grid,
+body.rtl-lang .career-grid {
+    direction: rtl;
+}
+
+body.rtl-lang .form-grid {
+    direction: rtl;
+}
+
+body.rtl-lang .modal-box {
+    text-align: right;
+}
+
+body.rtl-lang .font-controls {
+    flex-direction: row-reverse;
+}
+
+body.rtl-lang .toggle-row {
+    flex-direction: row-reverse;
+}
+
+body.rtl-lang .steps-bar {
+    flex-direction: row-reverse;
 }
 
 .search-box{
@@ -460,6 +792,216 @@ body.reduce-motion * {
     border-color: rgba(255,153,0,.4);
     color: #ff9900;
 }
+
+.course-item.active-course {
+    border-color: #ff9900;
+    background: #3a5275;
+    color: #ff9900;
+    box-shadow: 0 8px 20px rgba(0,0,0,.3);
+}
+
+/* ===== COURSES: bars + inline popup layout ===== */
+
+.course-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+}
+
+#courseResults {
+    flex: 1 1 100%;
+    min-width: 0;
+    transition: flex-basis .45s ease, max-width .45s ease;
+}
+
+#courseResults.shrink {
+    flex: 1 1 50%;
+    max-width: 50%;
+}
+
+#courseResults.shrink .course-item {
+    padding: 14px 18px;
+    font-size: 15px;
+}
+
+.inline-panel {
+    flex: 0 1 0%;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    background: #30435f;
+    border: 1px solid rgba(255,153,0,.3);
+    border-radius: 14px;
+    transition: flex-basis .45s ease, max-width .45s ease, opacity .35s ease .1s, padding .45s ease;
+    padding: 0;
+}
+
+.inline-panel.open {
+    flex: 1 1 50%;
+    max-width: 50%;
+    opacity: 1;
+    padding: 25px 30px;
+}
+
+.inline-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.inline-panel-header h3 {
+    color: #ff9900;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.inline-panel-close {
+    background: rgba(255,255,255,.08);
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.inline-panel-close:hover {
+    background: #ff9900;
+    color: #232f3e;
+}
+
+.sp-tag {
+    display: inline-block;
+    background: rgba(255,153,0,.15);
+    color: #ff9900;
+    border: 1px solid rgba(255,153,0,.4);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.sp-desc {
+    line-height: 1.6;
+    color: rgba(255,255,255,.85);
+    margin-bottom: 20px;
+}
+
+.sp-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.sp-stat {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+}
+
+.sp-stat .v {
+    color: #ff9900;
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.sp-stat .l {
+    font-size: 12px;
+    color: rgba(255,255,255,.6);
+    margin-top: 4px;
+}
+
+.sp-section h3 {
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.sp-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    color: #fff;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.sp-link:hover {
+    border-color: #ff9900;
+    background: rgba(255,153,0,.08);
+}
+
+.sp-link.highlight {
+    border-color: rgba(255,153,0,.5);
+    background: rgba(255,153,0,.1);
+}
+
+.sp-link .ll { flex: 1; font-size: 14px; }
+.sp-link .la { opacity: .6; }
+
+.sp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.sp-apply-btn {
+    flex: 1 1 200px;
+    text-align: center;
+    background: #ff9900;
+    color: #232f3e;
+    font-weight: 700;
+    padding: 12px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.sp-apply-btn:hover {
+    background: #fff;
+}
+
+.sp-apply-btn.secondary {
+    background: transparent;
+    color: #ff9900;
+    border: 1px solid #ff9900;
+}
+
+.sp-apply-btn.secondary:hover {
+    background: rgba(255,153,0,.1);
+}
+
+@media (max-width: 900px) {
+    .course-layout {
+        flex-direction: column;
+    }
+    #courseResults.shrink {
+        flex-basis: auto;
+        max-width: 100%;
+    }
+    .inline-panel.open {
+        max-width: 100%;
+    }
+}
+
 
 .placement-grid,
 .career-grid{
@@ -540,7 +1082,8 @@ body.reduce-motion * {
     box-sizing:border-box;
 }
 
-#sendContactMessage{
+#sendContactMessage,
+#sendFeedbackMessage{
 
     background:#ff9900;
 
@@ -559,7 +1102,8 @@ body.reduce-motion * {
     transition:.3s;
 }
 
-#sendContactMessage:hover{
+#sendContactMessage:hover,
+#sendFeedbackMessage:hover{
 
     background:#e68a00;
 
@@ -894,6 +1438,84 @@ body.light-theme .course-item:hover {
     box-shadow: 0 8px 20px rgba(35,47,62,0.15) !important;
 }
 
+body.light-theme .course-item.active-course {
+    background: rgba(35,47,62,0.08) !important;
+    border-color: rgba(35,47,62,0.3) !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .inline-panel {
+    background: rgba(255,255,255,0.85) !important;
+    border: 1px solid rgba(35,47,62,0.15) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+body.light-theme .inline-panel-header {
+    border-bottom: 1px solid rgba(35,47,62,0.12) !important;
+}
+
+body.light-theme .inline-panel-header h3 {
+    color: #232f3e !important;
+}
+
+body.light-theme .inline-panel-close {
+    background: rgba(35,47,62,0.08) !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .inline-panel-close:hover {
+    background: #ff9900 !important;
+    color: #ffffff !important;
+}
+
+body.light-theme .sp-tag {
+    background: rgba(35,47,62,0.08) !important;
+    color: #232f3e !important;
+    border: 1px solid rgba(35,47,62,0.3) !important;
+}
+
+body.light-theme .sp-desc {
+    color: #333333 !important;
+}
+
+body.light-theme .sp-stat {
+    background: rgba(35,47,62,0.04) !important;
+    border: 1px solid rgba(35,47,62,0.1) !important;
+}
+
+body.light-theme .sp-stat .v {
+    color: #b86b00 !important;
+}
+
+body.light-theme .sp-stat .l {
+    color: rgba(35,47,62,0.65) !important;
+}
+
+body.light-theme .sp-section h3 {
+    color: #232f3e !important;
+}
+
+body.light-theme .sp-link {
+    background: rgba(35,47,62,0.03) !important;
+    border: 1px solid rgba(35,47,62,0.1) !important;
+    color: #232f3e !important;
+}
+
+body.light-theme .sp-link:hover {
+    border-color: #ff9900 !important;
+    background: rgba(255,153,0,0.08) !important;
+}
+
+body.light-theme .sp-link.highlight {
+    border-color: rgba(35,47,62,0.4) !important;
+    background: rgba(35,47,62,0.06) !important;
+}
+
+body.light-theme .sp-apply-btn.secondary {
+    color: #b86b00 !important;
+    border: 1px solid #ff9900 !important;
+}
+
 body.light-theme .placement-card,
 body.light-theme .career-card {
     background: rgba(255,255,255,0.75) !important;
@@ -983,12 +1605,60 @@ body.light-theme .chatbot-input-area button:hover {
     background: #1a252f !important;
 }
 
-body.light-theme #sendContactMessage {
+body.light-theme #sendContactMessage,
+body.light-theme #sendFeedbackMessage {
     background: #232f3e !important;
 }
 
-body.light-theme #sendContactMessage:hover {
+body.light-theme #sendContactMessage:hover,
+body.light-theme #sendFeedbackMessage:hover {
     background: #1a252f !important;
+}
+
+/* ===== THEME TOGGLE (top right corner) ===== */
+.theme-toggle-corner {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 5000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    background: rgba(48, 67, 95, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.08);
+    border-color: rgba(255, 153, 0, 0.4);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+body.light-theme .theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-color: rgba(35, 47, 62, 0.15) !important;
+    color: #232f3e !important;
+    box-shadow: 0 4px 16px rgba(35, 47, 62, 0.1) !important;
+}
+
+body.light-theme .theme-toggle-btn:hover {
+    border-color: rgba(35, 47, 62, 0.3) !important;
 }
 
 /* ===== DARK THEME GRADIENT ===== */
@@ -1022,3 +1692,246 @@ body:not(.light-theme) .course-item {
     background: rgba(48, 67, 95, 0.85) !important;
     backdrop-filter: blur(8px) !important;
 }
+
+/* ===== HIGH CONTRAST + LIGHT THEME OVERRIDES ===== */
+/* When both high-contrast and light-theme are active, high-contrast must win.
+   Placed last to ensure these take precedence. */
+body.high-contrast.light-theme {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast.light-theme a {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .logo img {
+    filter: brightness(0) invert(1) !important;
+}
+
+body.high-contrast.light-theme .site-title {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .top-nav {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+}
+
+body.high-contrast.light-theme .top-nav nav a,
+body.high-contrast.light-theme .site-title {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .category-bar {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast.light-theme .category-bar a {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .card,
+body.high-contrast.light-theme .placement-card,
+body.high-contrast.light-theme .career-card,
+body.high-contrast.light-theme .course-item {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast.light-theme .card h3,
+body.high-contrast.light-theme .placement-card h3,
+body.high-contrast.light-theme .career-card h3 {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .card button {
+    background: #ffff00 !important;
+    color: #000000 !important;
+}
+
+body.high-contrast.light-theme .info-section {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast.light-theme .info-section h2 {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .info-text {
+    color: #ffffff !important;
+}
+
+body.high-contrast.light-theme .search-box {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast.light-theme .search-box::placeholder {
+    color: #cccccc !important;
+}
+
+body.high-contrast.light-theme .site-footer,
+body.high-contrast.light-theme .footer-legal {
+    background: #000000 !important;
+    border-top: 2px solid #ffff00 !important;
+}
+
+body.high-contrast.light-theme .footer-logo {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .footer-selectors select {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast.light-theme .footer-brand-bar {
+    border-color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .footer-col h4 {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .footer-col a,
+body.high-contrast.light-theme .footer-col p {
+    color: #ffffff !important;
+}
+
+body.high-contrast.light-theme .chatbot-toggle {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast.light-theme .chatbot-header {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .chatbot-header button {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .chatbot-message.user {
+    background: #ffff00 !important;
+    color: #000000 !important;
+}
+
+body.high-contrast.light-theme .chatbot-input-area button {
+    background: #ffff00 !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast.light-theme .chatbot-input-area button:hover {
+    background: #cccc00 !important;
+}
+
+body.high-contrast.light-theme .modal-box {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast.light-theme .modal-header {
+    border-bottom-color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .modal-header h2 {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .modal-close {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .modal-section h3 {
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .modal-section select {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast.light-theme .font-controls button {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast.light-theme .font-controls button:hover {
+    background: #ffff00 !important;
+    color: #000000 !important;
+}
+
+body.high-contrast.light-theme .toggle-row {
+    color: #ffffff !important;
+}
+
+body.high-contrast.light-theme .theme-toggle-btn {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffff00 !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast.light-theme .cards-video-bg,
+body.high-contrast.light-theme .cards-video-overlay {
+    display: none !important;
+}
+
+body.high-contrast.light-theme .course-item:hover {
+    border-color: #ffff00 !important;
+    color: #ffff00 !important;
+}
+
+body.high-contrast.light-theme .placement-card span {
+    background: #111111 !important;
+    color: #ffffff !important;
+    border: 1px solid #ffff00 !important;
+}
+
+body.high-contrast.light-theme .chatbot-panel {
+    background: #000000;
+    border: 1px solid #ffffff;
+}
+
+body.high-contrast.light-theme .chatbot-messages {
+    background: #000000;
+}
+
+body.high-contrast.light-theme .chatbot-message.bot,
+body.high-contrast.light-theme .chatbot-message.typing {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.high-contrast.light-theme .chatbot-input-area {
+    background: #000000;
+    border-top-color: #555;
+}
+
+body.high-contrast.light-theme .chatbot-input-area input {
+    background: #1a1a1a;
+    color: white;
+    border-color: #555;
+}
+
+/* ===== Shared SVG icon helper (replaces old emoji icons) ===== */
+.icon {
+    display: inline-block;
+    vertical-align: -3px;
+    flex-shrink: 0;
+}
+
+body.high-contrast .icon { stroke: #ffff00 !important; }

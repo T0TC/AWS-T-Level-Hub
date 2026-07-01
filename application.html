@@ -1,6 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <script>
+/*
+     * Amazon T-Level Hub — Shared Icon Library
+     * -----------------------------------------
+     * Replaces the site's old emoji icons (✕ 🔍 🏛️ 📄 🎓 💻 📖 ☁️ 🚀 👤 📊 💼
+     * 🎯 💬 👋 ⚠️ 🏥 🔬 🌐 ✓ etc.) with a single shared SVG sprite, in the same
+     * outline style already used for the course icons (24x24, 2px stroke,
+     * square caps/joins, colour via currentColor).
+     *
+     * The sprite is embedded inline below (not fetched from icons.svg) so it
+     * keeps working when pages are opened directly from disk. assets/icons.svg
+     * is kept as the canonical, human-editable source — if you change an icon,
+     * edit icons.svg first, then copy the <symbol> block(s) into ICON_SPRITE
+     * here so the two stay in sync.
+     *
+     * Usage:
+     *   1) Static HTML:      <i data-icon="search"></i>
+     *                         <i data-icon="check" data-size="16" data-color="#ff9900"></i>
+     *      icons.js auto-replaces every [data-icon] element on DOMContentLoaded,
+     *      and again whenever refreshIcons() is called (for content you build
+     *      dynamically after that, e.g. innerHTML re-renders).
+     *
+     *   2) From JavaScript:  el.innerHTML = Icon('rocket', { size: 16 });
+     *      Useful when building HTML strings/template literals at runtime
+     *      (e.g. resource link lists in resources.html).
+     */
+    
+    const ICON_SPRITE = `<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </symbol>
+    
+      <symbol id="icon-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </symbol>
+    
+      <symbol id="icon-bank" viewBox="0 0 24 24">
+        <polygon points="12 3 2 9 22 9"/>
+        <line x1="4" y1="9" x2="4" y2="19"/>
+        <line x1="8" y1="9" x2="8" y2="19"/>
+        <line x1="16" y1="9" x2="16" y2="19"/>
+        <line x1="20" y1="9" x2="20" y2="19"/>
+        <line x1="2" y1="22" x2="22" y2="22"/>
+      </symbol>
+    
+      <symbol id="icon-file" viewBox="0 0 24 24">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="8" y1="13" x2="16" y2="13"/>
+        <line x1="8" y1="17" x2="16" y2="17"/>
+      </symbol>
+    
+      <symbol id="icon-graduation-cap" viewBox="0 0 24 24">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+      </symbol>
+    
+      <symbol id="icon-monitor" viewBox="0 0 24 24">
+        <rect x="2" y="3" width="20" height="14" rx="0"/>
+        <polyline points="8 21 12 17 16 21"/>
+        <line x1="2" y1="17" x2="22" y2="17"/>
+      </symbol>
+    
+      <symbol id="icon-book" viewBox="0 0 24 24">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+      </symbol>
+    
+      <symbol id="icon-cloud" viewBox="0 0 24 24">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+      </symbol>
+    
+      <symbol id="icon-rocket" viewBox="0 0 24 24">
+        <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2"/>
+      </symbol>
+    
+      <symbol id="icon-user" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 21v-1a8 8 0 0 1 16 0v1"/>
+      </symbol>
+    
+      <symbol id="icon-bar-chart" viewBox="0 0 24 24">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+        <line x1="2" y1="20" x2="22" y2="20"/>
+      </symbol>
+    
+      <symbol id="icon-briefcase" viewBox="0 0 24 24">
+        <rect x="2" y="7" width="20" height="14" rx="0"/>
+        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        <line x1="12" y1="12" x2="12" y2="16"/>
+        <line x1="10" y1="14" x2="14" y2="14"/>
+      </symbol>
+    
+      <symbol id="icon-target" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="12" r="6"/>
+        <circle cx="12" cy="12" r="2"/>
+      </symbol>
+    
+      <symbol id="icon-message-circle" viewBox="0 0 24 24">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </symbol>
+    
+      <symbol id="icon-wave" viewBox="0 0 24 24">
+        <path d="M8 13V6a2 2 0 0 1 4 0v6"/>
+        <path d="M12 12V4a2 2 0 0 1 4 0v8"/>
+        <path d="M16 12.5V7a2 2 0 0 1 4 0v7c0 4-2.5 7-7 7h-1c-4 0-5.5-1-7-4l-2.3-4.5a1.7 1.7 0 0 1 .7-2.3 1.7 1.7 0 0 1 2.2.5L8 13"/>
+      </symbol>
+    
+      <symbol id="icon-alert-triangle" viewBox="0 0 24 24">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </symbol>
+    
+      <symbol id="icon-hospital" viewBox="0 0 24 24">
+        <rect x="4" y="2" width="16" height="20" rx="0"/>
+        <line x1="12" y1="8" x2="12" y2="14"/>
+        <line x1="9" y1="11" x2="15" y2="11"/>
+      </symbol>
+    
+      <symbol id="icon-flask" viewBox="0 0 24 24">
+        <path d="M9 2v6l-5 9a2 2 0 0 0 1.74 3h12.52A2 2 0 0 0 20 17l-5-9V2"/>
+        <line x1="8.5" y1="2" x2="15.5" y2="2"/>
+        <line x1="7" y1="16" x2="17" y2="16"/>
+      </symbol>
+    
+      <symbol id="icon-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </symbol>
+    
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"/>
+      </symbol>
+    
+      <symbol id="icon-dot" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8"/>
+      </symbol>
+    
+      <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+        <line x1="4" y1="12" x2="20" y2="12"/>
+        <polyline points="13 5 20 12 13 19"/>
+      </symbol>
+    
+      <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+        <line x1="20" y1="12" x2="4" y2="12"/>
+        <polyline points="11 5 4 12 11 19"/>
+      </symbol>
+    
+      <symbol id="icon-arrow-up-right" viewBox="0 0 24 24">
+        <line x1="7" y1="17" x2="17" y2="7"/>
+        <polyline points="7 7 17 7 17 17"/>
+      </symbol>
+    
+      <symbol id="icon-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </symbol>
+    
+      <symbol id="icon-moon" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </symbol>
+    
+      <symbol id="icon-star" viewBox="0 0 24 24">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </symbol>
+    
+    </svg>`;
+    
+    (function injectSprite() {
+        function inject() {
+            if (document.getElementById('shared-icon-sprite')) return;
+            const wrap = document.createElement('div');
+            wrap.id = 'shared-icon-sprite';
+            wrap.style.display = 'none';
+            wrap.innerHTML = ICON_SPRITE;
+            document.body.insertAdjacentElement('afterbegin', wrap);
+        }
+        if (document.body) inject();
+        else document.addEventListener('DOMContentLoaded', inject);
+    })();
+    
+    /**
+     * Build an inline <svg> string referencing a sprite symbol.
+     * @param {string} name - icon name, e.g. "search" (symbol id is "icon-search")
+     * @param {object} [opts]
+     * @param {number|string} [opts.size=20] - width & height in px
+     * @param {string} [opts.color='currentColor'] - stroke colour
+     * @param {string} [opts.fill='none'] - fill colour
+     * @param {string} [opts.className=''] - extra class names
+     */
+    function Icon(name, opts) {
+        opts = opts || {};
+        const size = opts.size || 20;
+        const color = opts.color || 'currentColor';
+        const fill = opts.fill || 'none';
+        const cls = 'icon' + (opts.className ? ' ' + opts.className : '');
+        return '<svg class="' + cls + '" width="' + size + '" height="' + size +
+            '" viewBox="0 0 24 24" fill="' + fill + '" stroke="' + color +
+            '" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">' +
+            '<use href="#icon-' + name + '"></use></svg>';
+    }
+    
+    /** Replace every [data-icon] element's content with its SVG icon. */
+    function refreshIcons(root) {
+        const scope = root || document;
+        scope.querySelectorAll('[data-icon]').forEach(function (el) {
+            const name = el.getAttribute('data-icon');
+            if (!name) return;
+            el.innerHTML = Icon(name, {
+                size: el.getAttribute('data-size') || undefined,
+                color: el.getAttribute('data-color') || undefined,
+                fill: el.getAttribute('data-fill') || undefined,
+                className: el.getAttribute('data-icon-class') || undefined,
+            });
+            el.removeAttribute('data-icon-rendered-pending');
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        refreshIcons();
+    });
+    
+    </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Apply – Amazon T-Level Hub</title>
@@ -589,6 +830,17 @@ body.light-theme .btn-primary {
 
 body.light-theme .btn-primary:hover { background: #1a252f !important; }
 
+body.light-theme #sendContactMessage,
+body.light-theme #sendFeedbackMessage {
+    background: #232f3e !important;
+    color: #ffffff !important;
+}
+
+body.light-theme #sendContactMessage:hover,
+body.light-theme #sendFeedbackMessage:hover {
+    background: #1a252f !important;
+}
+
 body.light-theme .btn-secondary {
     color: #555555 !important;
     border-color: #cccccc !important;
@@ -668,50 +920,261 @@ body:not(.light-theme) .contact-icon svg {
     stroke: #ff9900 !important;
 }
 
+/* ===== HIGH CONTRAST ===== */
+body.high-contrast {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .top-nav {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+}
+body.high-contrast .top-nav nav a,
+body.high-contrast .site-title { color: #ffff00 !important; }
+body.high-contrast .hero {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffff00 !important;
+}
+body.high-contrast .hero h1,
+body.high-contrast .hero h1 span,
+body.high-contrast .hero p { color: #ffffff !important; }
+body.high-contrast .hero-tag {
+    background: #000000 !important;
+    color: #ffff00 !important;
+    border-color: #ffff00 !important;
+}
+body.high-contrast .form-card,
+body.high-contrast .sidebar-card {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .form-card h2 { color: #ffffff !important; }
+body.high-contrast .form-card .section-desc { color: #cccccc !important; }
+body.high-contrast .field label { color: #ffffff !important; }
+body.high-contrast .field input,
+body.high-contrast .field select,
+body.high-contrast .field textarea {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .course-option + label {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+body.high-contrast .course-option:checked + label {
+    border-color: #ffff00 !important;
+}
+body.high-contrast .course-name { color: #ffffff !important; }
+body.high-contrast .course-sector { color: #cccccc !important; }
+body.high-contrast .eligibility-box {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .eligibility-box strong { color: #ffff00 !important; }
+body.high-contrast .btn-primary {
+    background: #ffff00 !important;
+    color: #000000 !important;
+}
+body.high-contrast .btn-secondary {
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+}
+body.high-contrast .sidebar-card h3 { color: #ffff00 !important; }
+body.high-contrast .course-preview {
+    background: #111111 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .course-preview strong { color: #ffff00 !important; }
+body.high-contrast .timeline-list li { color: #ffffff !important; }
+body.high-contrast .timeline-dot { background: #ffff00 !important; }
+body.high-contrast .contact-item { color: #ffffff !important; }
+body.high-contrast .step-num {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+body.high-contrast .step.active .step-num {
+    background: #ffff00 !important;
+    border-color: #ffff00 !important;
+    color: #000000 !important;
+}
+body.high-contrast .step.done .step-num {
+    background: #00ff00 !important;
+    border-color: #00ff00 !important;
+    color: #000000 !important;
+}
+body.high-contrast .step-label { color: #cccccc !important; }
+body.high-contrast .step.active .step-label { color: #ffff00 !important; }
+body.high-contrast .site-footer {
+    background: #000000 !important;
+    border-top: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .check-row { color: #ffffff !important; }
+
+/* Additional high-contrast fixes */
+body.high-contrast .hero p { color: #ffffff !important; }
+body.high-contrast .hero-tag {
+    background: #000000 !important;
+    color: #ffff00 !important;
+    border-color: #ffff00 !important;
+}
+body.high-contrast .form-card h2 { color: #ffffff !important; }
+body.high-contrast .form-card .section-desc { color: #cccccc !important; }
+body.high-contrast .field label { color: #ffffff !important; }
+body.high-contrast .field input::placeholder,
+body.high-contrast .field textarea::placeholder { color: #888888 !important; }
+body.high-contrast .field select option { background: #000000 !important; color: #ffffff !important; }
+body.high-contrast .course-option + label {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+body.high-contrast .course-option + label:hover { border-color: #ffff00 !important; }
+body.high-contrast .course-option:checked + label {
+    border-color: #ffff00 !important;
+    background: rgba(255,255,0,0.1) !important;
+}
+body.high-contrast .course-name { color: #ffffff !important; }
+body.high-contrast .course-sector { color: #cccccc !important; }
+body.high-contrast .eligibility-box {
+    background: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .eligibility-box strong { color: #ffff00 !important; }
+body.high-contrast .btn-primary {
+    background: #ffff00 !important;
+    color: #000000 !important;
+}
+body.high-contrast .btn-primary:hover { background: #cccc00 !important; }
+body.high-contrast .btn-secondary {
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+}
+body.high-contrast .btn-secondary:hover { color: #ffff00 !important; border-color: #ffff00 !important; }
+body.high-contrast .sidebar-card h3 { color: #ffff00 !important; }
+body.high-contrast .sidebar-card h3 { border-bottom-color: rgba(255,255,255,0.2) !important; }
+body.high-contrast .course-preview {
+    background: #111111 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .course-preview strong { color: #ffff00 !important; }
+body.high-contrast .course-preview.has-content { color: #ffffff !important; }
+body.high-contrast .timeline-list li { color: #ffffff !important; }
+body.high-contrast .timeline-dot { background: #ffff00 !important; }
+body.high-contrast .contact-item { color: #ffffff !important; }
+body.high-contrast .step-num {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+body.high-contrast .step.active .step-num {
+    background: #ffff00 !important;
+    border-color: #ffff00 !important;
+    color: #000000 !important;
+}
+body.high-contrast .step.done .step-num {
+    background: #00ff00 !important;
+    border-color: #00ff00 !important;
+    color: #000000 !important;
+}
+body.high-contrast .step-label { color: #cccccc !important; }
+body.high-contrast .step.active .step-label { color: #ffff00 !important; }
+body.high-contrast .step:not(:last-child)::after { background: rgba(255,255,255,0.3) !important; }
+body.high-contrast .step.done:not(:last-child)::after { background: #ffff00 !important; }
+body.high-contrast .site-footer {
+    background: #000000 !important;
+    border-top: 2px solid #ffff00 !important;
+    color: #ffffff !important;
+}
+body.high-contrast .site-footer a { color: #ffff00 !important; }
+body.high-contrast .field.error input,
+body.high-contrast .field.error select,
+body.high-contrast .field.error textarea { border-color: #ff4444 !important; }
+body.high-contrast .field .error-msg { color: #ff6666 !important; }
+body.high-contrast #courseError { color: #ff6666 !important; }
+body.high-contrast #decError { color: #ff6666 !important; }
+body.high-contrast .success-icon {
+    background: rgba(0,255,0,0.2) !important;
+    border: 3px solid #00ff00 !important;
+}
+body.high-contrast .success-screen h2 { color: #ffffff !important; }
+body.high-contrast .success-screen p { color: #cccccc !important; }
+body.high-contrast .ref-box {
+    background: rgba(255,255,0,0.1) !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffff00 !important;
+}
+body.high-contrast .next-steps {
+    background: #111111 !important;
+    border: 2px solid #ffff00 !important;
+}
+body.high-contrast .next-steps h3 { color: #ffff00 !important; }
+body.high-contrast .next-steps li { color: #ffffff !important; }
+body.high-contrast .check-row input[type="checkbox"] { accent-color: #ffff00 !important; }
+body.high-contrast .course-icon svg { stroke: #ffff00 !important; }
+body.high-contrast .contact-icon svg { stroke: #ffff00 !important; }
+
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav class="top-nav">
-    <div class="logo">
+    <div class="logo" style="cursor:pointer;" onclick="window.location.href='index.html'">
         <img src="Amazon-Web-Services-AWS-Logo.png" alt="AWS">
         <span class="site-title">Amazon T-Level Hub</span>
     </div>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="application.html" class="active">Application</a>
-        <a href="resources.html">Resources</a>
-
-        <a href="#" id="settingsBtn">Settings</a>
-        <a href="#" id="contactsNavBtn">Contacts</a>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="application.html" class="active" data-i18n="apply">Application</a>
+        <a href="resources.html" data-i18n="resources">Resources</a>
+        <a href="chat.html">Discuss</a>
+        <a href="#" id="settingsBtn" data-i18n="settings">Settings</a>
+        <a href="#" id="contactsNavBtn" data-i18n="contacts">Contacts</a>
+        <a href="backend/admin/" id="adminNavBtn" style="display:none;">Admin</a>
     </nav>
 </nav>
+<script>
+(function () {
+    var role = localStorage.getItem('selected-role');
+    var loggedIn = localStorage.getItem('session-token');
+    var btn = document.getElementById('adminNavBtn');
+    if (btn && loggedIn && role === 'administrator') {
+        btn.style.display = '';
+    }
+})();
+</script>
 
 <!-- HERO -->
 <section class="hero">
-    <div class="hero-tag">T-Level Application</div>
-    <h1>Apply for Your <span>T-Level Placement</span></h1>
-    <p>Complete the form below to register your interest in an Amazon industry placement. Applications take around 10 minutes.</p>
+    <div class="hero-tag" data-i18n="heroTag">T-Level Application</div>
+    <h1 data-i18n-html="heroTitle">Apply for Your <span>T-Level Placement</span></h1>
+    <p data-i18n="heroDesc">Complete the form below to register your interest in an Amazon industry placement. Applications take around 10 minutes.</p>
 </section>
 
 <!-- STEPS -->
 <div class="steps-bar" id="stepsBar">
     <div class="step active" id="step-ind-1">
         <div class="step-num">1</div>
-        <div class="step-label">Your Details</div>
+        <div class="step-label" data-i18n="step1">Your Details</div>
     </div>
     <div class="step" id="step-ind-2">
         <div class="step-num">2</div>
-        <div class="step-label">T-Level Course</div>
+        <div class="step-label" data-i18n="step2">T-Level Course</div>
     </div>
     <div class="step" id="step-ind-3">
         <div class="step-num">3</div>
-        <div class="step-label">Placement Choices</div>
+        <div class="step-label" data-i18n="step3">Placement Choices</div>
     </div>
     <div class="step" id="step-ind-4">
         <div class="step-num">4</div>
-        <div class="step-label">Supporting Info</div>
+        <div class="step-label" data-i18n="step4">Supporting Info</div>
     </div>
 </div>
 
@@ -879,7 +1342,7 @@ body:not(.light-theme) .contact-icon svg {
 
                 </div>
 
-                <div id="courseError" style="display:none;color:#ef9a9a;font-size:13px;margin-top:10px;">⚠ Please select a T-Level course to continue.</div>
+                <div id="courseError" style="display:none;color:#ef9a9a;font-size:13px;margin-top:10px;"><i data-icon="alert-triangle" data-size="14"></i> Please select a T-Level course to continue.</div>
 
                 <div class="form-nav">
                     <button class="btn btn-secondary" onclick="goToPage(1)">← Back</button>
@@ -997,20 +1460,20 @@ body:not(.light-theme) .contact-icon svg {
                             <label class="check-row"><input type="checkbox" id="dec2"> I agree to the T-Level Hub Privacy Notice and Terms of Use</label>
                             <label class="check-row"><input type="checkbox" id="dec3"> I consent to Amazon contacting me about my application</label>
                         </div>
-                        <span id="decError" style="display:none;color:#ef9a9a;font-size:12px;margin-top:6px;">⚠ Please confirm all declarations to proceed.</span>
+                        <span id="decError" style="display:none;color:#ef9a9a;font-size:12px;margin-top:6px;"><i data-icon="alert-triangle" data-size="13"></i> Please confirm all declarations to proceed.</span>
                     </div>
                 </div>
 
                 <div class="form-nav">
                     <button class="btn btn-secondary" onclick="goToPage(3)">← Back</button>
-                    <button class="btn btn-primary" onclick="submitApplication()">Submit Application ✓</button>
+                    <button class="btn btn-primary" onclick="submitApplication()">Submit Application <i data-icon="check" data-size="15"></i></button>
                 </div>
             </div>
         </div>
 
         <!-- SUCCESS -->
         <div class="success-screen" id="successScreen">
-            <div class="success-icon">✓</div>
+            <div class="success-icon"><i data-icon="check" data-size="36" data-color="#4caf50"></i></div>
             <h2>Application Submitted!</h2>
             <p>Thank you for applying to the Amazon T-Level Hub. We've received your application and will be in touch within 5–7 working days.</p>
             <div class="ref-box" id="refCode">TLH-XXXXXX</div>
@@ -1035,14 +1498,14 @@ body:not(.light-theme) .contact-icon svg {
     <aside class="sidebar">
 
         <div class="sidebar-card">
-            <h3>Selected Course</h3>
+            <h3 data-i18n="sidebarCourse">Selected Course</h3>
             <div class="course-preview" id="coursePreview">
-                No course selected yet. Choose on the next step.
+                <span data-i18n="sidebarCourseNone">No course selected yet. Choose on the next step.</span>
             </div>
         </div>
 
         <div class="sidebar-card">
-            <h3>Application Timeline</h3>
+            <h3 data-i18n="sidebarTimeline">Application Timeline</h3>
             <ul class="timeline-list">
                 <li><span class="timeline-dot"></span>Applications open now – rolling intake</li>
                 <li><span class="timeline-dot"></span>Eligibility checks within 5 working days</li>
@@ -1053,11 +1516,11 @@ body:not(.light-theme) .contact-icon svg {
         </div>
 
         <div class="sidebar-card">
-            <h3>Need Help?</h3>
+            <h3 data-i18n="sidebarHelp">Need Help?</h3>
             <div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> tlevel@amazon.co.uk</div>
 <div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16.92z"/></svg></span> 0800 000 1234 (Mon–Fri, 9am–5pm)</div>
-<div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> Available in English & Deutsch</div>
-<div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span> Live chat via the Chatbot on the Hub homepage</div>
+<div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> <span data-i18n="sidebarHelpLang">Available in English & Deutsch</span></div>
+<div class="contact-item"><span class="contact-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9900" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span> <span data-i18n="sidebarHelpChat">Live chat via the Chatbot on the Hub homepage</span></div>
         </div>
 
     </aside>
@@ -1065,7 +1528,7 @@ body:not(.light-theme) .contact-icon svg {
 
 <!-- FOOTER -->
 <footer class="site-footer">
-    <p>© 2026 Amazon T-Level Hub. For guidance only — not an official government resource. &nbsp;|&nbsp; <a href="index.html">Back to Hub</a></p>
+    <p><span data-i18n="footerCopyright">© 2026 Amazon T-Level Hub. For guidance only — not an official government resource.</span> &nbsp;|&nbsp; <a href="index.html" data-i18n="footerBack">Back to Hub</a></p>
 </footer>
 
 <script>
@@ -1192,45 +1655,128 @@ function submitApplication() {
     }
     decErr.style.display = 'none';
 
-    // Hide form pages, show success
-    document.getElementById('page-4').classList.remove('active');
-    document.getElementById('stepsBar').style.display = 'none';
+    // Gather form data
+    const formData = {
+        first_name: document.getElementById('firstname').value.trim(),
+        last_name: document.getElementById('lastname').value.trim(),
+        date_of_birth: document.getElementById('dob').value,
+        nationality: document.getElementById('nationality').value,
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        country: document.getElementById('country').value,
+        school: document.getElementById('school').value.trim(),
+        year_of_study: document.getElementById('year').value,
+        tlevel_course: document.querySelector('.course-option:checked')?.value || '',
+        preferred_location: document.getElementById('location').value,
+        preferred_start: document.getElementById('start').value,
+        preferred_duration: document.getElementById('duration').value,
+        req_accommodation: document.getElementById('req-accommodation').checked,
+        req_transport: document.getElementById('req-transport').checked,
+        req_visa: document.getElementById('req-visa').checked,
+        req_language: document.getElementById('req-language').checked,
+        heard_from: document.getElementById('heardFrom').value,
+        motivation: document.getElementById('motivation').value.trim(),
+        skills: document.getElementById('skills').value.trim(),
+        additional_needs: document.getElementById('needs').value.trim(),
+        declarations_accurate: dec1,
+        declarations_privacy: dec2,
+        declarations_contact: dec3
+    };
 
-    const ref = 'TLH-' + Math.random().toString(36).substring(2, 8).toUpperCase();
-    document.getElementById('refCode').textContent = ref;
-    document.getElementById('successScreen').classList.add('active');
+    const submitBtn = document.querySelector('.form-card .btn-primary');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Submitting...';
+    submitBtn.disabled = true;
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Backend API base URL – uses the Python Flask server (backend_server.py)
+    const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? 'http://localhost:5000'
+        : '';
+
+    fetch(API_BASE + '/api/application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (data.error) {
+            var errMsg = data.message || 'An error occurred. Please try again.';
+            if (data.validation_errors) {
+                errMsg = data.validation_errors.join('\n');
+            }
+            alert('Error: ' + errMsg);
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            return;
+        }
+
+        // Show success with real reference number
+        document.getElementById('page-4').classList.remove('active');
+        document.getElementById('stepsBar').style.display = 'none';
+        document.getElementById('refCode').textContent = data.application.ref_number;
+        document.getElementById('successScreen').classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(function(err) {
+        alert('Connection error. Please check your internet and try again.');
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    });
 }
 </script>
 
 <!-- ===== CONTACTS MODAL ===== -->
 <div class="modal-overlay" id="contactsOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:2000;justify-content:center;align-items:center;">
-    <div class="modal-box" style="background:#ffffff;color:#232f3e;width:90%;max-width:420px;border-radius:8px;padding:25px 30px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+    <div style="background:#ffffff;color:#232f3e;width:90%;max-width:420px;border-radius:8px;padding:25px 30px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
         <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d5dbdb;padding-bottom:12px;margin-bottom:15px;">
-            <h2 style="margin:0;font-size:20px;">Contact Us</h2>
+            <h2 style="margin:0;font-size:20px;" id="contactsModalTitle">Contact Us</h2>
             <button id="closeContacts" style="background:none;border:none;font-size:26px;cursor:pointer;color:#232f3e;line-height:1;">&times;</button>
         </div>
-        <div style="margin-bottom:16px;">
-            <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Email Address</label>
-            <input type="email" id="contactEmail" placeholder="Enter your email address"
-                style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;">
+        <div style="display:flex;gap:0;margin-bottom:20px;background:rgba(0,0,0,0.06);border-radius:10px;padding:4px;width:fit-content;">
+            <button id="tabContact" onclick="switchContactTab('contact')" style="padding:8px 22px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;background:#232f3e;color:#fff;transition:.2s;font-family:Arial,sans-serif;">Contact Us</button>
+            <button id="tabFeedback" onclick="switchContactTab('feedback')" style="padding:8px 22px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;background:transparent;color:rgba(0,0,0,0.4);transition:.2s;font-family:Arial,sans-serif;">Feedback</button>
         </div>
-        <div style="margin-bottom:16px;">
-            <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Subject</label>
-            <input type="text" id="contactSubject" placeholder="What is your question about?"
-                style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;">
+        <div id="contactForm">
+            <div style="margin-bottom:16px;">
+                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Email Address</label>
+                <input type="email" id="contactEmail" placeholder="Enter your email address" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom:16px;">
+                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Subject</label>
+                <input type="text" id="contactSubject" placeholder="What is your question about?" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom:16px;">
+                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Message</label>
+                <textarea id="contactMessage" rows="5" placeholder="Ask a question about T-Levels, industry placements, career pathways, applications, or support..." style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;resize:vertical;font-family:Arial,sans-serif;"></textarea>
+            </div>
+            <div>
+                <button id="sendContactMessage" style="background:#ff9900;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:15px;">Submit Enquiry</button>
+            </div>
         </div>
-        <div style="margin-bottom:16px;">
-            <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Message</label>
-            <textarea id="contactMessage" rows="5" placeholder="Ask a question about T-Levels, industry placements, career pathways, applications, or support..."
-                style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;resize:vertical;font-family:Arial,sans-serif;"></textarea>
-        </div>
-        <div>
-            <button id="sendContactMessage"
-                style="background:#ff9900;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:15px;transition:.3s;">
-                Submit Enquiry
-            </button>
+        <div id="feedbackForm" style="display:none;">
+            <div style="margin-bottom:16px;">
+                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Email Address</label>
+                <input type="email" id="feedbackEmail" placeholder="Enter your email address" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom:16px;">
+                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">How would you rate your experience?</label>
+                <select id="feedbackRating" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;">
+                    <option value="">Select a rating...</option>
+                    <option>⭐ Poor</option>
+                    <option>⭐⭐ Fair</option>
+                    <option>⭐⭐⭐ Good</option>
+                    <option>⭐⭐⭐⭐ Very Good</option>
+                    <option>⭐⭐⭐⭐⭐ Excellent</option>
+                </select>
+            </div>
+            <div style="margin-bottom:16px;">
+                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Your Feedback</label>
+                <textarea id="feedbackMessage" rows="5" placeholder="Tell us what you think about the portal, what works well, or what could be improved..." style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px;box-sizing:border-box;resize:vertical;font-family:Arial,sans-serif;"></textarea>
+            </div>
+            <div>
+                <button id="sendFeedbackMessage" style="background:#ff9900;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:15px;">Submit Feedback</button>
+            </div>
         </div>
     </div>
 </div>
@@ -1243,32 +1789,310 @@ function submitApplication() {
             <button id="closeSettings" style="background:none;border:none;font-size:26px;cursor:pointer;color:#232f3e;line-height:1;">&times;</button>
         </div>
         <div style="margin-bottom:20px;">
-            <h3 style="font-size:16px;margin-bottom:10px;">Font Size</h3>
+            <h3 style="font-size:16px;margin-bottom:10px;" data-i18n="settingsLanguage">Language</h3>
+            <select id="languageSelect" style="width:100%;padding:10px 12px;border-radius:6px;border:1px solid #ccc;font-size:15px;background:#fff;">
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+                <option value="hi">हिन्दी</option>
+                <option value="es">Español</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+        <div style="margin-bottom:20px;">
+            <h3 style="font-size:16px;margin-bottom:10px;" data-i18n="settingsFontSize">Font Size</h3>
             <div style="display:flex;gap:10px;">
                 <button id="fontDecrease" style="min-width:70px;padding:8px 12px;border-radius:6px;cursor:pointer;border:1px solid #ccc;">−</button>
-                <button id="fontReset" style="min-width:70px;padding:8px 12px;border-radius:6px;cursor:pointer;border:1px solid #ccc;">Reset</button>
+                <button id="fontReset" style="min-width:70px;padding:8px 12px;border-radius:6px;cursor:pointer;border:1px solid #ccc;" data-i18n="settingsFontReset">Reset</button>
                 <button id="fontIncrease" style="min-width:70px;padding:8px 12px;border-radius:6px;cursor:pointer;border:1px solid #ccc;">+</button>
             </div>
         </div>
         <div style="margin-bottom:20px;">
-            <h3 style="font-size:16px;margin-bottom:10px;">Accessibility</h3>
+            <h3 style="font-size:16px;margin-bottom:10px;" data-i18n="settingsAccessibility">Accessibility</h3>
             <label style="display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;">
-                <input type="checkbox" id="highContrastToggle" style="width:18px;height:18px;"> High contrast mode
+                <input type="checkbox" id="highContrastToggle" style="width:18px;height:18px;"> <span data-i18n="settingsHighContrast">High contrast mode</span>
             </label>
             <label style="display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;">
-                <input type="checkbox" id="underlineLinksToggle" style="width:18px;height:18px;"> Underline all links
+                <input type="checkbox" id="underlineLinksToggle" style="width:18px;height:18px;"> <span data-i18n="settingsUnderlineLinks">Underline all links</span>
             </label>
             <label style="display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:10px;">
-                <input type="checkbox" id="reduceMotionToggle" style="width:18px;height:18px;"> Reduce motion/animations
+                <input type="checkbox" id="reduceMotionToggle" style="width:18px;height:18px;"> <span data-i18n="settingsReduceMotion">Reduce motion/animations</span>
             </label>
             <label style="display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer;">
-                <input type="checkbox" id="lightThemeToggle" style="width:18px;height:18px;"> Light theme (AWS style)
+                <input type="checkbox" id="lightThemeToggle" style="width:18px;height:18px;"> <span>Light theme</span>
             </label>
         </div>
     </div>
 </div>
 
-<script>
+    <script>
+// ===== LANGUAGE SWITCHING =====
+const rtlLanguages = ["ar"];
+const translations = {
+   en: {
+        home: "Home",
+        apply: "Application",
+        resources: "Resources",
+        settings: "Settings",
+        contacts: "Contacts",
+        settingsTitle: "Settings",
+        settingsLanguage: "Language",
+        settingsFontSize: "Font Size",
+        settingsFontReset: "Reset",
+        settingsAccessibility: "Accessibility",
+        settingsHighContrast: "High contrast mode",
+        settingsUnderlineLinks: "Underline all links",
+        settingsReduceMotion: "Reduce motion/animations",
+        contactsTitle: "Contact Us",
+        contactsEmail: "Email Address",
+        contactsEmailPlaceholder: "Enter your email address",
+        contactsSubject: "Subject",
+        contactsSubjectPlaceholder: "What is your question about?",
+        contactsMessage: "Message",
+        contactsMessagePlaceholder: "Ask a question about T-Levels, industry placements, career pathways, applications, or support...",
+        contactsSubmit: "Submit Enquiry",
+        contactsAlertComplete: "Please complete all fields.",
+        contactsAlertThanks: "Thank you for your enquiry. A member of the T-Level support team will contact you shortly.",
+        footerCopyright: "© 2026 Amazon T-Level Hub. For guidance only — not an official government resource.",
+        footerBack: "Back to Hub",
+        heroTag: "T-Level Application",
+        heroTitle: "Apply for Your <span>T-Level Placement</span>",
+        heroDesc: "Complete the form below to register your interest in an Amazon industry placement. Applications take around 10 minutes.",
+        step1: "Your Details",
+        step2: "T-Level Course",
+        step3: "Placement Choices",
+        step4: "Supporting Info",
+        sidebarCourse: "Selected Course",
+        sidebarCourseNone: "No course selected yet. Choose on the next step.",
+        sidebarTimeline: "Application Timeline",
+        sidebarHelp: "Need Help?",
+        sidebarHelpChat: "Live chat via the Chatbot on the Hub homepage",
+        sidebarHelpLang: "Available in English & Deutsch",
+        nextBtn: "Next",
+        backBtn: "Back",
+        submitBtn: "Submit Application",
+        eligibilityNote: "T-Levels are open to students aged 16–19. You'll typically need 5 GCSEs at grade 4+ (or equivalent) including English and Maths."
+    },
+    de: {
+        home: "Startseite",
+        apply: "Bewerbung",
+        resources: "Ressourcen",
+        settings: "Einstellungen",
+        contacts: "Kontakt",
+        settingsTitle: "Einstellungen",
+        settingsLanguage: "Sprache",
+        settingsFontSize: "Schriftgröße",
+        settingsFontReset: "Zurücksetzen",
+        settingsAccessibility: "Barrierefreiheit",
+        settingsHighContrast: "Kontrastmodus",
+        settingsUnderlineLinks: "Alle Links unterstreichen",
+        settingsReduceMotion: "Bewegung/Animationen reduzieren",
+        contactsTitle: "Kontakt",
+        contactsEmail: "E-Mail-Adresse",
+        contactsEmailPlaceholder: "Geben Sie Ihre E-Mail-Adresse ein",
+        contactsSubject: "Betreff",
+        contactsSubjectPlaceholder: "Worum geht es bei Ihrer Frage?",
+        contactsMessage: "Nachricht",
+        contactsMessagePlaceholder: "Stellen Sie eine Frage zu T-Levels, Praktikumsplätzen, Karrierewegen, Bewerbungen oder Unterstützung...",
+        contactsSubmit: "Anfrage Senden",
+        contactsAlertComplete: "Bitte füllen Sie alle Felder aus.",
+        contactsAlertThanks: "Vielen Dank für Ihre Anfrage. Ein Mitglied des T-Level-Supportteams wird sich in Kürze bei Ihnen melden.",
+        footerCopyright: "© 2026 Amazon T-Level Hub. Nur zur Orientierung — keine offizielle Regierungsressource.",
+        footerBack: "Zurück zum Hub",
+        heroTag: "T-Level-Bewerbung",
+        heroTitle: "Bewerben Sie sich für Ihr <span>T-Level-Praktikum</span>",
+        heroDesc: "Füllen Sie das untenstehende Formular aus, um Ihr Interesse an einem Amazon-Praktikum zu bekunden. Die Bewerbung dauert ca. 10 Minuten.",
+        step1: "Ihre Daten",
+        step2: "T-Level-Kurs",
+        step3: "Praktikumswahl",
+        step4: "Zusatzinformationen",
+        sidebarCourse: "Ausgewählter Kurs",
+        sidebarCourseNone: "Noch kein Kurs ausgewählt. Wählen Sie im nächsten Schritt.",
+        sidebarTimeline: "Bewerbungszeitplan",
+        sidebarHelp: "Hilfe benötigt?",
+        sidebarHelpChat: "Live-Chat über den Chatbot auf der Hub-Startseite",
+        sidebarHelpLang: "Verfügbar auf Englisch & Deutsch",
+        nextBtn: "Weiter",
+        backBtn: "Zurück",
+        submitBtn: "Bewerbung Einreichen",
+        eligibilityNote: "T-Levels stehen Schülern im Alter von 16–19 Jahren offen. In der Regel benötigen Sie 5 GCSEs ab Note 4 (oder gleichwertig) inklusive Englisch und Mathe."
+    },
+    hi: {
+        home: "होम",
+        apply: "आवेदन",
+        resources: "संसाधन",
+        settings: "सेटिंग्स",
+        contacts: "संपर्क",
+        settingsTitle: "सेटिंग्स",
+        settingsLanguage: "भाषा",
+        settingsFontSize: "फ़ॉन्ट आकार",
+        settingsFontReset: "रीसेट",
+        settingsAccessibility: "पहुंच-योग्यता",
+        settingsHighContrast: "उच्च कंट्रास्ट मोड",
+        settingsUnderlineLinks: "सभी लिंक को रेखांकित करें",
+        settingsReduceMotion: "गति/एनिमेशन कम करें",
+        contactsTitle: "हमसे संपर्क करें",
+        contactsEmail: "ईमेल पता",
+        contactsEmailPlaceholder: "अपना ईमेल पता दर्ज करें",
+        contactsSubject: "विषय",
+        contactsSubjectPlaceholder: "आपका प्रश्न किस बारे में है?",
+        contactsMessage: "संदेश",
+        contactsMessagePlaceholder: "T-Levels, उद्योग प्लेसमेंट, करियर पथ, आवेदन या सहायता के बारे में प्रश्न पूछें...",
+        contactsSubmit: "पूछताछ सबमिट करें",
+        contactsAlertComplete: "कृपया सभी फ़ील्ड भरें।",
+        contactsAlertThanks: "आपकी पूछताछ के लिए धन्यवाद। T-Level सहायता टीम का एक सदस्य जल्द ही आपसे संपर्क करेगा।",
+        footerCopyright: "© 2026 Amazon T-Level Hub. केवल मार्गदर्शन के लिए — कोई आधिकारिक सरकारी संसाधन नहीं।",
+        footerBack: "हब पर वापस जाएं",
+        heroTag: "T-Level आवेदन",
+        heroTitle: "अपने <span>T-Level प्लेसमेंट</span> के लिए आवेदन करें",
+        heroDesc: "Amazon उद्योग प्लेसमेंट में अपनी रुचि दर्ज करने के लिए नीचे दिया गया फॉर्म भरें। आवेदन में लगभग 10 मिनट लगते हैं।",
+        step1: "आपका विवरण",
+        step2: "T-Level कोर्स",
+        step3: "प्लेसमेंट विकल्प",
+        step4: "सहायक जानकारी",
+        sidebarCourse: "चयनित कोर्स",
+        sidebarCourseNone: "अभी तक कोई कोर्स चयनित नहीं। अगले चरण में चुनें।",
+        sidebarTimeline: "आवेदन समयरेखा",
+        sidebarHelp: "सहायता चाहिए?",
+        sidebarHelpChat: "हब होमपेज पर चैटबॉट के माध्यम से लाइव चैट",
+        sidebarHelpLang: "अंग्रेजी और हिंदी में उपलब्ध",
+        nextBtn: "अगला",
+        backBtn: "वापस",
+        submitBtn: "आवेदन जमा करें",
+        eligibilityNote: "T-Levels 16-19 वर्ष की आयु के छात्रों के लिए खुले हैं। आपको आमतौर पर अंग्रेजी और गणित सहित ग्रेड 4+ पर 5 GCSEs (या समकक्ष) की आवश्यकता होगी।"
+    },
+    es: {
+        home: "Inicio",
+        apply: "Solicitud",
+        resources: "Recursos",
+        settings: "Ajustes",
+        contacts: "Contacto",
+        settingsTitle: "Ajustes",
+        settingsLanguage: "Idioma",
+        settingsFontSize: "Tamaño de Fuente",
+        settingsFontReset: "Restablecer",
+        settingsAccessibility: "Accesibilidad",
+        settingsHighContrast: "Modo de alto contraste",
+        settingsUnderlineLinks: "Subrayar todos los enlaces",
+        settingsReduceMotion: "Reducir movimiento/animaciones",
+        contactsTitle: "Contáctenos",
+        contactsEmail: "Dirección de Correo",
+        contactsEmailPlaceholder: "Ingrese su dirección de correo electrónico",
+        contactsSubject: "Asunto",
+        contactsSubjectPlaceholder: "¿Sobre qué trata su pregunta?",
+        contactsMessage: "Mensaje",
+        contactsMessagePlaceholder: "Haga una pregunta sobre T-Levels, prácticas industriales, carreras profesionales, solicitudes o asistencia...",
+        contactsSubmit: "Enviar Consulta",
+        contactsAlertComplete: "Por favor complete todos los campos.",
+        contactsAlertThanks: "Gracias por su consulta. Un miembro del equipo de soporte T-Level se pondrá en contacto con usted pronto.",
+        footerCopyright: "© 2026 Amazon T-Level Hub. Solo como guía — no es un recurso oficial del gobierno.",
+        footerBack: "Volver al Hub",
+        heroTag: "Solicitud T-Level",
+        heroTitle: "Solicite su <span>Colocación T-Level</span>",
+        heroDesc: "Complete el formulario a continuación para registrar su interés en una colocación industrial de Amazon. La solicitud toma unos 10 minutos.",
+        step1: "Sus Datos",
+        step2: "Curso T-Level",
+        step3: "Preferencias",
+        step4: "Información Adicional",
+        sidebarCourse: "Curso Seleccionado",
+        sidebarCourseNone: "Aún no hay curso seleccionado. Elija en el siguiente paso.",
+        sidebarTimeline: "Cronograma de Solicitud",
+        sidebarHelp: "¿Necesita Ayuda?",
+        sidebarHelpChat: "Chat en vivo a través del Chatbot en la página de inicio del Hub",
+        sidebarHelpLang: "Disponible en Inglés y Español",
+        nextBtn: "Siguiente",
+        backBtn: "Atrás",
+        submitBtn: "Enviar Solicitud",
+        eligibilityNote: "Los T-Levels están abiertos a estudiantes de 16 a 19 años. Normalmente necesitarás 5 GCSEs en grado 4+ (o equivalente) incluyendo Inglés y Matemáticas."
+    },
+    ar: {
+        home: "الرئيسية",
+        apply: "التقديم",
+        resources: "الموارد",
+        settings: "الإعدادات",
+        contacts: "الاتصال",
+        settingsTitle: "الإعدادات",
+        settingsLanguage: "اللغة",
+        settingsFontSize: "حجم الخط",
+        settingsFontReset: "إعادة تعيين",
+        settingsAccessibility: "إمكانية الوصول",
+        settingsHighContrast: "وضع التباين العالي",
+        settingsUnderlineLinks: "تسطير جميع الروابط",
+        settingsReduceMotion: "تقليل الحركة/الرسوم المتحركة",
+        contactsTitle: "اتصل بنا",
+        contactsEmail: "البريد الإلكتروني",
+        contactsEmailPlaceholder: "أدخل عنوان بريدك الإلكتروني",
+        contactsSubject: "الموضوع",
+        contactsSubjectPlaceholder: "عن ماذا يدور سؤالك؟",
+        contactsMessage: "الرسالة",
+        contactsMessagePlaceholder: "اطرح سؤالاً حول T-Levels أو التدريب المهني أو المسارات الوظيفية أو التقديم أو الدعم...",
+        contactsSubmit: "إرسال الاستفسار",
+        contactsAlertComplete: "يرجى ملء جميع الحقول.",
+        contactsAlertThanks: "شكرًا لك على استفسارك. سيتصل بك أحد أعضاء فريق دعم T-Level قريبًا.",
+        footerCopyright: "© 2026 Amazon T-Level Hub. للإرشاد فقط — ليس موردًا حكوميًا رسميًا.",
+        footerBack: "العودة إلى المركز",
+        heroTag: "تقديم T-Level",
+        heroTitle: "تقديم طلب <span>تدريب T-Level</span>",
+        heroDesc: "أكمل النموذج أدناه لتسجيل اهتمامك بالتدريب المهني في Amazon. يستغرق التقديم حوالي 10 دقائق.",
+        step1: "بياناتك الشخصية",
+        step2: "دورة T-Level",
+        step3: "خيارات التدريب",
+        step4: "معلومات داعمة",
+        sidebarCourse: "الدورة المختارة",
+        sidebarCourseNone: "لم يتم اختيار دورة بعد. اختر في الخطوة التالية.",
+        sidebarTimeline: "الجدول الزمني للتقديم",
+        sidebarHelp: "هل تحتاج مساعدة؟",
+        sidebarHelpChat: "دردشة مباشرة عبر المساعد في الصفحة الرئيسية للمركز",
+        sidebarHelpLang: "متاح باللغتين الإنجليزية والعربية",
+        nextBtn: "التالي",
+        backBtn: "رجوع",
+        submitBtn: "إرسال الطلب",
+        eligibilityNote: "T-Levels مفتوحة للطلاب الذين تتراوح أعمارهم بين 16 و19 عامًا. ستحتاج عادةً إلى 5 شهادات GCSE بدرجة 4+ (أو ما يعادلها) بما في ذلك اللغة الإنجليزية والرياضيات."
+    }
+};
+
+const languageSelect = document.getElementById('languageSelect');
+
+function applyLanguage(lang) {
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang] && translations[lang][key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if (translations[lang] && translations[lang][key]) {
+            el.placeholder = translations[lang][key];
+        }
+    });
+    document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
+        const key = el.getAttribute("data-i18n-html");
+        if (translations[lang] && translations[lang][key]) {
+            el.innerHTML = translations[lang][key];
+        }
+    });
+    if (languageSelect) languageSelect.value = lang;
+    if (rtlLanguages.includes(lang)) {
+        document.documentElement.dir = "rtl";
+        document.body.classList.add("rtl-lang");
+    } else {
+        document.documentElement.dir = "ltr";
+        document.body.classList.remove("rtl-lang");
+    }
+    localStorage.setItem("language", lang);
+}
+
+if (languageSelect) {
+    languageSelect.addEventListener('change', function () {
+        applyLanguage(this.value);
+    });
+}
+
+window.addEventListener("DOMContentLoaded", function () {
+    const savedLang = localStorage.getItem("language") || "en";
+    applyLanguage(savedLang);
+});
+
 // ===== APPLICATION MODALS (Settings + Contacts) =====
 (function() {
     // ---- Settings Modal ----
@@ -1405,16 +2229,84 @@ if (!lt) document.body.classList.remove('light-theme');
             var subject = document.getElementById('contactSubject').value;
             var message = document.getElementById('contactMessage').value;
             if (!email || !subject || !message) {
+                alert(translations[localStorage.getItem('language')||'en'].contactsAlertComplete || 'Please complete all fields.');
+                return;
+            }
+            // Submit to backend
+            sendBtn.textContent = 'Sending...';
+            sendBtn.disabled = true;
+            const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+                ? 'http://localhost:5000'
+                : '';
+            fetch(API_BASE + '/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, subject: subject, message: message })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    alert('Error: ' + data.message);
+                    return;
+                }
+                alert(translations[localStorage.getItem('language')||'en'].contactsAlertThanks || 'Thank you for your enquiry. A member of the T-Level support team will contact you shortly.');
+                contactsOverlay.style.display = 'none';
+                document.getElementById('contactEmail').value = '';
+                document.getElementById('contactSubject').value = '';
+                document.getElementById('contactMessage').value = '';
+            })
+            .catch(function() {
+                alert('Connection error. Please try again.');
+            })
+            .finally(function() {
+                sendBtn.textContent = 'Submit Enquiry';
+                sendBtn.disabled = false;
+            });
+        });
+    }
+    // ---- Feedback Form ----
+    var feedbackSendBtn = document.getElementById('sendFeedbackMessage');
+    if (feedbackSendBtn) {
+        feedbackSendBtn.addEventListener('click', function() {
+            var email = document.getElementById('feedbackEmail').value;
+            var rating = document.getElementById('feedbackRating').value;
+            var feedback = document.getElementById('feedbackMessage').value;
+            if (!email || !rating || !feedback) {
                 alert('Please complete all fields.');
                 return;
             }
-            alert('Thank you for your enquiry. A member of the T-Level support team will contact you shortly.');
-            contactsOverlay.style.display = 'none';
-            document.getElementById('contactEmail').value = '';
-            document.getElementById('contactSubject').value = '';
-            document.getElementById('contactMessage').value = '';
+            feedbackSendBtn.textContent = 'Sending...';
+            feedbackSendBtn.disabled = true;
+            const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+                ? 'http://localhost:5000'
+                : '';
+            fetch(API_BASE + '/api/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, rating: rating, feedback: feedback })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    alert('Error: ' + data.message);
+                    return;
+                }
+                alert('Thank you for your feedback! Your input helps us improve the portal.');
+                document.getElementById('feedbackEmail').value = '';
+                document.getElementById('feedbackRating').value = '';
+                document.getElementById('feedbackMessage').value = '';
+                contactsOverlay.style.display = 'none';
+            })
+            .catch(function() {
+                alert('Connection error. Please try again.');
+            })
+            .finally(function() {
+                feedbackSendBtn.textContent = 'Submit Feedback';
+                feedbackSendBtn.disabled = false;
+            });
         });
     }
+
     // Apply light theme on page load
 (function() {
     if (localStorage.getItem('light-theme') === 'true') {
@@ -1423,6 +2315,18 @@ if (!lt) document.body.classList.remove('light-theme');
 })();
 
 })();
+
+function switchContactTab(tab) {
+    var isContact = tab === 'contact';
+    document.getElementById('contactForm').style.display = isContact ? 'block' : 'none';
+    document.getElementById('feedbackForm').style.display = isContact ? 'none' : 'block';
+    document.getElementById('contactsModalTitle').textContent = isContact ? 'Contact Us' : 'Feedback';
+    document.getElementById('tabContact').style.background = isContact ? '#232f3e' : 'transparent';
+    document.getElementById('tabContact').style.color = isContact ? '#fff' : 'rgba(0,0,0,0.4)';
+    document.getElementById('tabFeedback').style.background = isContact ? 'transparent' : '#232f3e';
+    document.getElementById('tabFeedback').style.color = isContact ? 'rgba(0,0,0,0.4)' : '#fff';
+}
+
 </script>
 
 </body>
